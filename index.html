@@ -1,28 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Japan Honeymoon Itinerary (Updated)</title>
+    <title id="doc-title">日本蜜月之旅</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Custom Scrollbar for a cleaner look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Chart Container Specifics as per requirements */
+        /* Chart Container Specifics */
         .chart-container {
             position: relative;
             width: 100%;
@@ -33,30 +24,34 @@
             max-height: 400px;
         }
         @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+            .chart-container { height: 350px; }
         }
         
         /* Smooth scrolling for anchor links */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
-        .timeline-line {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 10px;
-            bottom: 0;
-            width: 2px;
-            background-color: #e2e8f0;
+        /* No scrollbar for the day tabs */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Timeline Placeholder Block (Replacing Image) */
+        .timeline-placeholder {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2e8f0; /* slate-200 */
+            color: #475569; /* slate-600 */
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            border: 1px dashed #94a3b8;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-700 font-sans antialiased">
-
-    <!-- Chosen Palette: Rose & Slate (Soft, Romantic, Professional) -->
 
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200">
@@ -64,24 +59,30 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex-shrink-0 flex items-center gap-2">
                     <span class="text-2xl">🌸</span>
-                    <span class="font-bold text-xl text-slate-800 tracking-tight">Japan<span class="text-rose-500">Honeymoon</span></span>
+                    <span class="font-bold text-xl text-slate-800 tracking-tight" data-i18n="nav_title">日本蜜月之旅</span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#overview" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Overview</a>
-                    <a href="#itinerary" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Daily Itinerary</a>
-                    <a href="#food" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Food Map</a>
-                    <a href="#logistics" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Logistics</a>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#overview" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_overview">概览</a>
+                        <a href="#itinerary" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_itinerary">每日行程</a>
+                        <a href="#food" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_food">美食地图</a>
+                        <a href="#logistics" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors" data-i18n="nav_logistics">后勤信息</a>
+                    </div>
+                    <!-- Language Toggle -->
+                    <button id="lang-toggle-btn" class="flex items-center justify-center h-10 w-24 px-3 text-sm font-medium rounded-full text-white bg-indigo-500 hover:bg-indigo-600 transition-colors">
+                        English
+                    </button>
+                    <!-- Mobile menu button placeholder (simplified for this scope) -->
+                    <button id="mobile-menu-btn" class="md:hidden text-slate-600 text-xl">☰</button>
                 </div>
-                <!-- Mobile menu button placeholder (simplified for this scope) -->
-                <button id="mobile-menu-btn" class="md:hidden text-slate-600 text-xl">☰</button>
             </div>
         </div>
         <!-- Mobile Menu (Hidden by default, toggled via JS) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#overview" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium">Overview</a>
-                <a href="#itinerary" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium">Itinerary</a>
-                <a href="#food" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium">Food</a>
+                <a href="#overview" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium" data-i18n="nav_overview">概览</a>
+                <a href="#itinerary" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium" data-i18n="nav_itinerary">行程</a>
+                <a href="#food" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium" data-i18n="nav_food">美食</a>
             </div>
         </div>
     </nav>
@@ -92,21 +93,21 @@
             <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
                 <div class="sm:text-center lg:text-left">
                     <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
-                        <span class="block xl:inline">7 Days of Zen in</span>
-                        <span class="block text-rose-500 xl:inline">Tokyo, Kyoto & Osaka</span>
+                        <span class="block xl:inline" data-i18n="hero_main_1">7 Days of Zen in</span>
+                        <span class="block text-rose-500 xl:inline" data-i18n="hero_main_2">Tokyo, Kyoto & Osaka</span>
                     </h1>
-                    <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                        A curated honeymoon experience balancing must-see sights with relaxed moments, adjusted for your early Day 7 departure.
+                    <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" data-i18n="hero_subtitle">
+                        为您精心策划的蜜月体验，已根据您第7天提早的航班时间调整。
                     </p>
                     <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
                         <div class="rounded-md shadow">
-                            <a href="#itinerary" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-rose-500 hover:bg-rose-600 md:py-4 md:text-lg transition-all">
-                                Start Journey
+                            <a href="#itinerary" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-rose-500 hover:bg-rose-600 md:py-4 md:text-lg transition-all" data-i18n="btn_start">
+                                开启旅程
                             </a>
                         </div>
                         <div class="mt-3 sm:mt-0 sm:ml-3">
-                            <a href="#checklist" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-rose-700 bg-rose-100 hover:bg-rose-200 md:py-4 md:text-lg transition-all">
-                                Pre-trip Check
+                            <a href="#checklist" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-rose-700 bg-rose-100 hover:bg-rose-200 md:py-4 md:text-lg transition-all" data-i18n="btn_check">
+                                行前清单
                             </a>
                         </div>
                     </div>
@@ -124,32 +125,32 @@
         <section id="overview" class="py-12 bg-slate-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
-                    <h2 class="text-base text-rose-600 font-semibold tracking-wide uppercase">Trip Analytics</h2>
-                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                        At a Glance
+                    <h2 class="text-base text-rose-600 font-semibold tracking-wide uppercase" data-i18n="section_analytics">行程分析</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl" data-i18n="section_glance">
+                        一览无余
                     </p>
-                    <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto">
-                        A breakdown of your estimated budget allocation (RM 8,000 Total) and the balance between adventure and relaxation.
+                    <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto" data-i18n="section_analytics_subtitle">
+                        您预估的预算分配 (总计 RM 8,000) 以及冒险与休闲的平衡。
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <!-- Chart 1: Budget Breakdown -->
                     <div class="bg-white p-6 rounded-xl shadow-lg">
-                        <h3 class="text-lg font-medium text-slate-900 mb-4 text-center">Estimated Budget Allocation (MYR)</h3>
+                        <h3 class="text-lg font-medium text-slate-900 mb-4 text-center" data-i18n="section_budget">预估预算分配 (MYR)</h3>
                         <div class="chart-container">
                             <canvas id="budgetChart"></canvas>
                         </div>
-                        <p class="text-xs text-center text-slate-400 mt-2">*Estimates based on current exchange rates.</p>
+                        <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_1">*基于当前汇率的估算。</p>
                     </div>
 
                     <!-- Chart 2: Cost vs Time Analysis -->
                     <div class="bg-white p-6 rounded-xl shadow-lg">
-                        <h3 class="text-lg font-medium text-slate-900 mb-4 text-center">Cost vs. Time Spent Analysis</h3>
+                        <h3 class="text-lg font-medium text-slate-900 mb-4 text-center" data-i18n="section_cost_time">成本与时间分析</h3>
                         <div class="chart-container">
                             <canvas id="comparisonChart"></canvas>
                         </div>
-                         <p class="text-xs text-center text-slate-400 mt-2">High cost usually means theme parks or luxury dining.</p>
+                         <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_2">高成本通常指主题乐园或豪华餐饮。</p>
                     </div>
                 </div>
             </div>
@@ -160,9 +161,9 @@
         <section id="itinerary" class="py-16 bg-white">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-extrabold text-slate-900">Your Daily Itinerary</h2>
+                    <h2 class="text-3xl font-extrabold text-slate-900" data-i18n="section_daily_itinerary">您的每日行程安排</h2>
                     <p class="mt-4 text-lg text-slate-500">
-                        March 28 - April 03 | Tokyo • Kyoto • Osaka
+                        3月28日 - 4月03日 | 东京 • 京都 • 大阪
                     </p>
                 </div>
 
@@ -183,16 +184,16 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="md:flex md:items-center md:justify-between mb-8">
                     <div class="flex-1 min-w-0">
-                        <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">
-                            Gourmet Map 🍜
+                        <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate" data-i18n="food_map_title">
+                            美食地图 🍜
                         </h2>
-                        <p class="mt-1 text-sm text-slate-500">Curated spots for your must-try foods.</p>
+                        <p class="mt-1 text-sm text-slate-500" data-i18n="food_map_subtitle">为您精选的必尝美食地点。</p>
                     </div>
                     <div class="mt-4 flex md:mt-0 md:ml-4 bg-white p-1 rounded-lg shadow-sm">
-                        <button onclick="filterFood('all')" class="food-filter active px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-colors bg-rose-100 text-rose-700">All</button>
-                        <button onclick="filterFood('main')" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors">Main Meal</button>
-                        <button onclick="filterFood('snack')" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors">Street Food</button>
-                        <button onclick="filterFood('cafe')" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors">Cafe</button>
+                        <button onclick="filterFood('all', event)" class="food-filter active px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-colors bg-rose-100 text-rose-700" data-i18n="food_filter_all">全部</button>
+                        <button onclick="filterFood('main', event)" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors" data-i18n="food_filter_main">主餐</button>
+                        <button onclick="filterFood('snack', event)" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors" data-i18n="food_filter_snack">街头美食</button>
+                        <button onclick="filterFood('cafe', event)" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors" data-i18n="food_filter_cafe">咖啡/甜点</button>
                     </div>
                 </div>
 
@@ -205,53 +206,53 @@
         <!-- Section: Logistics & Accommodation -->
         <section id="logistics" class="py-16 bg-white border-t border-slate-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl font-extrabold text-slate-900 mb-8 text-center">Accommodation & Transport</h2>
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-8 text-center" data-i18n="logistics_title">住宿与交通</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Accommodation -->
                     <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:shadow-md transition-shadow">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                            <span class="mr-2">🏨</span> Recommended Stays
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center" data-i18n="logistics_stays">
+                            <span class="mr-2">🏨</span> 推荐住宿
                         </h3>
                         <div class="space-y-4">
                             <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <span class="text-xs font-bold text-rose-500 uppercase">Tokyo (3 Nights)</span>
+                                <span class="text-xs font-bold text-rose-500 uppercase" data-i18n="logistics_tokyo">东京 (3晚)</span>
                                 <h4 class="font-semibold text-lg">Hotel Gracery Shinjuku</h4>
-                                <p class="text-sm text-slate-600">Central location, famous for the Godzilla head. Close to transport.</p>
+                                <p class="text-sm text-slate-600" data-i18n="logistics_tokyo_desc">位置中心，以哥斯拉头闻名。靠近交通枢纽。</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <span class="text-xs font-bold text-rose-500 uppercase">Kyoto (1 Night)</span>
+                                <span class="text-xs font-bold text-rose-500 uppercase" data-i18n="logistics_kyoto">京都 (1晚)</span>
                                 <h4 class="font-semibold text-lg">Cross Hotel Kyoto</h4>
-                                <p class="text-sm text-slate-600">Stylish, modern, and walking distance to Gion/Pontocho.</p>
+                                <p class="text-sm text-slate-600" data-i18n="logistics_kyoto_desc">时尚、现代，步行可至祗园/先斗町。</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <span class="text-xs font-bold text-rose-500 uppercase">Osaka (2 Nights)</span>
+                                <span class="text-xs font-bold text-rose-500 uppercase" data-i18n="logistics_osaka">大阪 (2晚)</span>
                                 <h4 class="font-semibold text-lg">The Park Front Hotel</h4>
-                                <p class="text-sm text-slate-600">Directly in front of USJ. Perfect for an early start.</p>
+                                <p class="text-sm text-slate-600" data-i18n="logistics_osaka_desc">正对USJ。非常适合早起游玩。</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Transport -->
                     <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:shadow-md transition-shadow">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                            <span class="mr-2">🚅</span> Inter-City Travel
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center" data-i18n="logistics_transport">
+                            <span class="mr-2">🚅</span> 城际交通
                         </h3>
                         <div class="space-y-4">
                             <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-500">
-                                <h4 class="font-semibold">Tokyo → Kyoto</h4>
-                                <p class="text-sm text-slate-600 mt-1"><strong>Shinkansen Hikari/Nozomi</strong></p>
-                                <p class="text-xs text-slate-500">~2 Hours 15 Mins. Reserve seats on right side (E) for Mt Fuji view.</p>
+                                <h4 class="font-semibold" data-i18n="logistics_shinkansen_to_kyoto">东京 → 京都</h4>
+                                <p class="text-sm text-slate-600 mt-1"><strong>新干线 光号/希望号</strong></p>
+                                <p class="text-xs text-slate-500" data-i18n="logistics_shinkansen_to_kyoto_desc">约 2 小时 15 分钟。预订右侧（E座）座位可欣赏富士山景观。</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-500">
-                                <h4 class="font-semibold">Kyoto → Osaka</h4>
-                                <p class="text-sm text-slate-600 mt-1"><strong>JR Special Rapid Service</strong></p>
-                                <p class="text-xs text-slate-500">~30 Mins. Regular commuter train, no reservation needed.</p>
+                                <h4 class="font-semibold" data-i18n="logistics_kyoto_to_osaka">京都 → 大阪</h4>
+                                <p class="text-sm text-slate-600 mt-1"><strong>JR新快速列车</strong></p>
+                                <p class="text-xs text-slate-500" data-i18n="logistics_kyoto_to_osaka_desc">约 30 分钟。普通通勤列车，无需预订。</p>
                             </div>
                              <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-500">
-                                <h4 class="font-semibold">City Travel: IC Card</h4>
-                                <p class="text-sm text-slate-600 mt-1"><strong>Suica or Pasmo (Apple Pay)</strong></p>
-                                <p class="text-xs text-slate-500">Load ~RM300 equivalent onto your phone for subway/convenience stores.</p>
+                                <h4 class="font-semibold" data-i18n="logistics_ic_card">城市交通：IC卡</h4>
+                                <p class="text-sm text-slate-600 mt-1"><strong>Suica 或 Pasmo (Apple Pay)</strong></p>
+                                <p class="text-xs text-slate-500" data-i18n="logistics_ic_detail">向手机充值约 RM300 等值金额，用于地铁/便利店。</p>
                             </div>
                         </div>
                     </div>
@@ -262,23 +263,23 @@
         <!-- Section: Pre-Trip Checklist -->
         <section id="checklist" class="py-12 bg-slate-900 text-white">
             <div class="max-w-3xl mx-auto px-4 text-center">
-                <h2 class="text-2xl font-bold mb-6">Pre-Flight Checklist ✅</h2>
+                <h2 class="text-2xl font-bold mb-6" data-i18n="checklist_title">行前清单 ✅</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
                     <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
                         <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
-                        <span>Visit Japan Web (Customs/Immigration)</span>
+                        <span data-i18n="checklist_vjw">Visit Japan Web (海关/入境)</span>
                     </label>
                     <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
                         <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
-                        <span>USJ Express Pass (Buy 2 months ahead!)</span>
+                        <span data-i18n="checklist_usj">USJ 快速通行证 (提前2个月购买!)</span>
                     </label>
                     <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
                         <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
-                        <span>Shinkansen Tickets (SmartEx App)</span>
+                        <span data-i18n="checklist_shinkansen">新干线车票 (SmartEx App)</span>
                     </label>
                     <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
                         <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
-                        <span>Travel Insurance</span>
+                        <span data-i18n="checklist_insurance">旅行保险</span>
                     </label>
                 </div>
             </div>
@@ -287,14 +288,135 @@
 
     <footer class="bg-white border-t border-slate-200 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-slate-400 text-sm">© 2025 Japan Honeymoon Planner. Have a safe trip!</p>
+            <p class="text-slate-400 text-sm" data-i18n="footer">© 2025 日本蜜月旅行计划。祝您旅途愉快！</p>
         </div>
     </footer>
     
     <script>
-        // --- DATA ---
+        let currentLang = 'cn';
+        let budgetChartInstance = null;
+        let comparisonChartInstance = null;
+
+        // --- Data Definitions (Chinese and English) ---
         
-        const itineraryData = [
+        const translationMap = {
+            nav_title: { cn: "日本蜜月之旅", en: "Japan Honeymoon Itinerary" },
+            nav_overview: { cn: "概览", en: "Overview" },
+            nav_itinerary: { cn: "每日行程", en: "Daily Itinerary" },
+            nav_food: { cn: "美食地图", en: "Food Map" },
+            nav_logistics: { cn: "后勤信息", en: "Logistics" },
+            hero_main_1: { cn: "七日禅意之旅：", en: "7 Days of Zen in" },
+            hero_main_2: { cn: "东京、京都与大阪", en: "Tokyo, Kyoto & Osaka" },
+            hero_subtitle: { cn: "为您精心策划的蜜月体验，已根据您第7天提早的航班时间调整。", en: "Your curated honeymoon experience, adjusted for your Day 7 early flight." },
+            btn_start: { cn: "开启旅程", en: "Start the Journey" },
+            btn_check: { cn: "行前清单", en: "Pre-Trip Checklist" },
+            section_analytics: { cn: "行程分析", en: "TRIP ANALYTICS" },
+            section_glance: { cn: "一览无余", en: "At a Glance" },
+            section_analytics_subtitle: { cn: "您预估的预算分配 (总计 RM 8,000) 以及冒险与休闲的平衡。", en: "Estimated budget distribution (Total RM 8,000) and balance of adventure vs. relaxation." },
+            section_budget: { cn: "预估预算分配 (MYR)", en: "Estimated Budget Breakdown (MYR)" },
+            chart_note_1: { cn: "*基于当前汇率的估算。", en: "*Estimates based on current exchange rates." },
+            section_cost_time: { cn: "成本与时间分析", en: "Cost vs. Time Analysis" },
+            chart_note_2: { cn: "高成本通常指主题乐园或豪华餐饮。", en: "High cost usually refers to theme parks or luxury dining." },
+            section_daily_itinerary: { cn: "您的每日行程安排", en: "Your Daily Itinerary" },
+            food_map_title: { cn: "美食地图 🍜", en: "Food Map 🍜" },
+            food_map_subtitle: { cn: "为您精选的必尝美食地点。", en: "Curated must-try dining locations." },
+            food_filter_all: { cn: "全部", en: "All" },
+            food_filter_main: { cn: "主餐", en: "Main Course" },
+            food_filter_snack: { cn: "街头美食", en: "Street Food" },
+            food_filter_cafe: { cn: "咖啡/甜点", en: "Cafe/Dessert" },
+            logistics_title: { cn: "住宿与交通", en: "Accommodation & Transport" },
+            logistics_stays: { cn: "推荐住宿", en: "Recommended Stays" },
+            logistics_tokyo: { cn: "东京 (3晚)", en: "TOKYO (3 Nights)" },
+            logistics_tokyo_desc: { cn: "位置中心，以哥斯拉头闻名。靠近交通枢纽。", en: "Central location, famous for the Godzilla head. Close to major transport hubs." },
+            logistics_kyoto: { cn: "京都 (1晚)", en: "KYOTO (1 Night)" },
+            logistics_kyoto_desc: { cn: "时尚、现代，步行可至祗园/先斗町。", en: "Stylish, modern, walking distance to Gion/Pontocho." },
+            logistics_osaka: { cn: "大阪 (2晚)", en: "OSAKA (2 Nights)" },
+            logistics_osaka_desc: { cn: "正对USJ。非常适合早起游玩。", en: "Directly opposite USJ. Great for early starts." },
+            logistics_transport: { cn: "城际交通", en: "Inter-City Transport" },
+            logistics_shinkansen_to_kyoto: { cn: "东京 → 京都", en: "Tokyo → Kyoto" },
+            logistics_shinkansen_to_kyoto_desc: { cn: "约 2 小时 15 分钟。预订右侧（E座）座位可欣赏富士山景观。", en: "Approx. 2 hrs 15 mins. Book a right-side (E seat) for potential Fuji view." },
+            logistics_kyoto_to_osaka: { cn: "京都 → 大阪", en: "Kyoto → Osaka" },
+            logistics_kyoto_to_osaka_desc: { cn: "约 30 分钟。普通通勤列车，无需预订。", en: "Approx. 30 mins. Regular commuter train, no reservation needed." },
+            logistics_ic_card: { cn: "城市交通：IC卡", en: "City Transport: IC Card" },
+            logistics_ic_detail: { cn: "向手机充值约 RM300 等值金额，用于地铁/便利店。", en: "Load ~RM300 equivalent onto phone for subway/convenience stores." },
+            checklist_title: { cn: "行前清单 ✅", en: "Pre-Trip Checklist ✅" },
+            checklist_vjw: { cn: "Visit Japan Web (海关/入境)", en: "Visit Japan Web (Customs/Immigration)" },
+            checklist_usj: { cn: "USJ 快速通行证 (提前2个月购买!)", en: "USJ Express Pass (Book 2 months ahead!)" },
+            checklist_shinkansen: { cn: "新干线车票 (SmartEx App)", en: "Shinkansen Tickets (SmartEx App)" },
+            checklist_insurance: { cn: "旅行保险", en: "Travel Insurance" },
+            footer: { cn: "© 2025 日本蜜月旅行计划。祝您旅途愉快！", en: "© 2025 Japan Honeymoon Planner. Have a wonderful trip!" },
+        };
+
+        const itineraryDataCN = [
+            {
+                day: 1, date: "3月28日", title: "吉隆坡出发与抵达东京 (深夜)", location: "东京 (新宿)",
+                events: [
+                    { time: "待定", title: "从吉隆坡出发", desc: "享受您的航班！根据实际航班时间，查询抵达机场 (NRT/HND) 的火车时刻表 (NEX/Skyliner)。", icon: "✈️", transport: "飞机", duration: "7小时", link: "https://www.narita-airport.jp/ch/access/train" },
+                    { time: "20:00-22:50", title: "抵达与清关", desc: "办理海关和入境手续。领取预订物品（如 WiFi 等）。", icon: "🛂", transport: "海关", duration: "1小时", link: "https://www.narita-airport.jp/ch/access" },
+                    { time: "22:00-00:30", title: "乘火车/出租车前往新宿", desc: "搭乘最快的交通工具前往新宿。请注意，大多数特快列车在晚上 11 点左右停运。", icon: "🚅", transport: "火车/出租车", duration: "1.5小时", link: "https://goo.gl/maps/ShinjukuStation" },
+                    { time: "23:30-01:30", title: "入住酒店与休息", desc: "入住 Hotel Gracery。长途旅行后尽量休息。", icon: "🏨", transport: "步行", duration: "1小时", link: "https://goo.gl/maps/ShinjukuHotel" }
+                ]
+            },
+            {
+                day: 2, date: "3月29日", title: "古老与现代的东京：文化与霓虹", location: "东京 (浅草/新宿)",
+                events: [
+                    { time: "09:00", title: "浅草寺", desc: "从东京最古老的寺庙开始新的一天。抽一支御神签（求签）。", icon: "⛩️", transport: "地铁", duration: "2小时", link: "https://goo.gl/maps/Sensoji" },
+                    { time: "11:30", title: "仲见世商店街与午餐", desc: "在当地餐馆吃午餐前，品尝波罗面包和炸馒头。", icon: "🍘", transport: "步行", duration: "1.5小时", link: "https://goo.gl/maps/Nakamise" },
+                    { time: "14:30", title: "明治神宫", desc: "参观供奉明治天皇的宁静森林神社。一片宁静的净土。", icon: "🌳", transport: "地铁", duration: "1.5小时", link: "https://goo.gl/maps/MeijiJingu" },
+                    { time: "17:30", title: "回忆横丁 (Omoide Yokocho)", desc: "经典‘小便横丁’，享用日式烤串晚餐，感受经典的东京夜生活氛围。", icon: "🍢", transport: "步行", duration: "2小时", link: "https://goo.gl/maps/OmoideYokocho" },
+                    { time: "19:30", title: "新宿十字路口与歌舞伎町", desc: "观看 3D 猫咪广告牌和新宿璀璨的霓虹灯。", icon: "🌃", transport: "步行", duration: "1小时", link: "https://goo.gl/maps/Kabukicho" }
+                ]
+            },
+            {
+                day: 3, date: "3月30日", title: "艺术、美景与富士山一日游", location: "东京 (台场) 与河口湖",
+                events: [
+                    { time: "08:30", title: "TeamLab Planets", desc: "*务必提前预订上午时段*。沉浸在数字艺术之中。", icon: "✨", transport: "火车", duration: "2小时", link: "https://goo.gl/maps/TeamLabPlanets" },
+                    { time: "11:30", title: "午餐与准备", desc: "快速午餐并准备搭乘 2 小时的火车前往河口湖地区。", icon: "🍱", transport: "火车", duration: "2.5小时", link: "https://goo.gl/maps/ShinjukuStation" },
+                    { time: "14:30", title: "忠灵塔 (Chureito Pagoda)", desc: "标志性的宝塔和富士山美景。爬上 400 级台阶可拍到最佳照片。", icon: "🗻", transport: "火车/步行", duration: "2小时", link: "https://goo.gl/maps/Chureito" },
+                    { time: "18:00", title: "返回东京", desc: "搭乘富士特快列车返回。抵达新宿后享用晚餐。", icon: "🚅", transport: "火车", duration: "2小时", link: "https://goo.gl/maps/Tokyo" }
+                ]
+            },
+            {
+                day: 4, date: "3月31日", title: "新干线与京都神社", location: "东京 -> 京都",
+                events: [
+                    { time: "09:00", title: "新干线前往京都", desc: "买一份车站便当 (Ekiben) 作为早餐。尽量选择靠窗座位 (E) 以欣赏富士山景色。", icon: "🍱", transport: "新干线", duration: "2.5小时", link: "https://goo.gl/maps/KyotoStation" },
+                    { time: "13:00", title: "伏见稻荷大社", desc: "数千座朱红色鸟居。爬到半山腰可获得绝佳的拍照地点。", icon: "⛩️", transport: "JR列车", duration: "2.5小时", link: "https://goo.gl/maps/FushimiInari" },
+                    { time: "16:30", title: "入住与放松", desc: "入住您的京都酒店，休息片刻。", icon: "🏨", transport: "地铁", duration: "1小时", link: "https://goo.gl/maps/KyotoHotel" },
+                    { time: "19:00", title: "先斗町晚餐", desc: "在鸭川旁的狭窄小巷，以传统和现代餐饮选择而闻名，氛围十足。", icon: "🏮", transport: "步行", duration: "2小时", link: "https://goo.gl/maps/Pontocho" }
+                ]
+            },
+            {
+                day: 5, date: "4月01日", title: "京都宁静、大阪城与道顿堀", location: "京都 -> 大阪",
+                events: [
+                    { time: "07:30", title: "清水寺", desc: "提早出发至关重要，以便在没有人群的情况下看到著名的木制舞台。", icon: "🏯", transport: "巴士/出租车", duration: "2小时", link: "https://goo.gl/maps/Kiyomizudera" },
+                    { time: "10:00", title: "二年坂/三年坂", desc: "沿着保存完好的街道从寺庙步行。找一家咖啡馆休息。", icon: "☕", transport: "步行", duration: "1.5小时", link: "https://goo.gl/maps/Ninenzaka" },
+                    { time: "12:00", title: "哲学之道与午餐", desc: "沿着樱花树成荫的运河散步。在祇园附近快速午餐。", icon: "🌸", transport: "巴士", duration: "2小时", link: "https://goo.gl/maps/PhilosophersPath" },
+                    { time: "14:30", title: "前往大阪", desc: "从京都站前往大阪站。", icon: "🚆", transport: "JR线", duration: "1小时", link: "https://goo.gl/maps/OsakaStation" },
+                    { time: "15:30", title: "大阪城 (搬迁)", desc: "快速参观城堡庭院和外观拍照。", icon: "🏰", transport: "地铁", duration: "1.5小时", link: "https://goo.gl/maps/OsakaCastle" },
+                    { time: "17:00", title: "入住 USJ 地区酒店", desc: "前往环球影城 (Universal City) 地区并入住 The Park Front Hotel。", icon: "🏨", transport: "JR线", duration: "1.5小时", link: "https://goo.gl/maps/USJHotel" },
+                    { time: "19:30", title: "道顿堀之乐", desc: "标志性的格力高人广告牌、街头美食和充满活力的夜生活。", icon: "🐙", transport: "地铁", duration: "3小时", link: "https://goo.gl/maps/Dotonbori" }
+                ]
+            },
+            {
+                day: 6, date: "4月02日", title: "日本环球影城 (USJ)", location: "大阪 (USJ)",
+                events: [
+                    { time: "08:00", title: "USJ 入园", desc: "提早抵达，直奔超级任天堂世界 (Super Nintendo World)（确保您有区域入场券或快速通行证）。", icon: "🍄", transport: "步行", duration: "全天", link: "https://goo.gl/maps/USJ" },
+                    { time: "12:00", title: "魔法世界午餐", desc: "在哈利波特主题区享用午餐和黄油啤酒。", icon: "🪄", transport: "步行", duration: "2小时", link: "https://goo.gl/maps/USJ" },
+                    { time: "17:00", title: "主题游乐设施", desc: "享受剩余的主题游乐设施（侏罗纪公园、蜘蛛侠等）。", icon: "🎢", transport: "步行", duration: "3小时", link: "https://goo.gl/maps/USJ" },
+                    { time: "20:00", title: "CityWalk 晚餐", desc: "在公园大门外的 CityWalk 享受轻松的晚餐。", icon: "🍔", transport: "步行", duration: "1.5小时", link: "https://goo.gl/maps/CityWalkOsaka" }
+                ]
+            },
+            {
+                day: 7, date: "4月03日", title: "大阪出发 → 吉隆坡 (早班机)", location: "大阪 (KIX) → 吉隆坡",
+                events: [
+                    { time: "06:00", title: "退房与前往机场", desc: "从 USJ 地区搭乘 JR 快速线前往关西国际机场 (KIX)。提早前往以避免拥堵。", icon: "🚖", transport: "JR线", duration: "1.5小时", link: "https://goo.gl/maps/KIX" },
+                    { time: "08:00", title: "办理登机手续与离境", desc: "办理登机手续，通过安检，并享受最后一刻的购物。", icon: "🛍️", transport: "值机", duration: "2小时", link: "https://www.kansai-airport.or.jp/cn/" },
+                    { time: "10:30", title: "返回吉隆坡", desc: "希望您带着美好的回忆和照片满载而归！", icon: "👋", transport: "飞机", duration: "6.5小时", link: "" }
+                ]
+            }
+        ];
+
+        const itineraryDataEN = [
             {
                 day: 1, date: "Mar 28", title: "KUL Departure & Tokyo Arrival (Late)", location: "Tokyo (Shinjuku)",
                 events: [
@@ -354,146 +476,222 @@
                 ]
             },
             {
-                day: 7, date: "Apr 03", title: "Early Departure (10:55 AM Flight)", location: "Osaka -> KUL",
+                day: 7, date: "Apr 03", title: "Osaka Departure → KUL (Early Flight)", location: "Osaka (KIX) → KUL",
                 events: [
-                    { time: "06:45", title: "Breakfast & Check-out", desc: "Quick breakfast and ensure all luggage is ready for immediate departure.", icon: "☕", transport: "Walk", duration: "30m", link: "" },
-                    { time: "07:15", title: "Train to KIX", desc: "Take the Haruka Express or Nankai Rapid from Tennoji or Namba to Kansai Airport (KIX). Allow 1 hour for travel time.", icon: "🚄", transport: "Train", duration: "1h 15m", link: "https://goo.gl/maps/KIX" },
-                    { time: "08:45", title: "Airport Check-in & Security", desc: "Arrive at KIX. You must be at the airport 2 hours before your 10:55 AM flight.", icon: "🛂", transport: "Check-in", duration: "2h", link: "" },
-                    { time: "10:55", title: "Depart for KUL", desc: "Sayonara Japan! Safe travels home.", icon: "👋", transport: "Plane", duration: "-", link: "" }
+                    { time: "06:00", title: "Check-out & Travel to KIX", desc: "Take the JR Rapid Line from USJ area to Kansai International Airport (KIX). Leave early to avoid delays.", icon: "🚖", transport: "JR Line", duration: "1.5h", link: "https://goo.gl/maps/KIX" },
+                    { time: "08:00", title: "Check-in & Departure", desc: "Check in, clear security, and enjoy some last-minute duty-free shopping.", icon: "🛍️", transport: "Check-in", duration: "2h", link: "https://www.kansai-airport.or.jp/en/" },
+                    { time: "10:30", title: "Return to KUL", desc: "Hope you enjoyed the trip and return home with wonderful memories and photos!", icon: "👋", transport: "Plane", duration: "6.5h", link: "" }
                 ]
             }
         ];
 
-        const foodData = [
-            { name: "Ichiran Ramen", type: "main", desc: "Famous solo booths. Customize your richness.", cat: "Ramen", loc: "Shinjuku/Osaka", map: "https://goo.gl/maps/Ichiran" },
-            { name: "Kura Sushi", type: "main", desc: "Fun conveyor belt sushi. Cheap and decent quality.", cat: "Sushi", loc: "Everywhere", map: "https://goo.gl/maps/KuraSushi" },
-            { name: "Takoyaki Wanaka", type: "snack", desc: "Crispy octopus balls. Osaka staple.", cat: "Street Food", loc: "Dotonbori", map: "https://goo.gl/maps/Wanaka" },
-            { name: "Matcha House", type: "cafe", desc: "Famous Tiramisu Matcha.", cat: "Dessert", loc: "Kyoto", map: "https://goo.gl/maps/MatchaHouse" },
-            { name: "Kushikatsu Daruma", type: "main", desc: "Deep fried skewers. No double dipping!", cat: "Fried", loc: "Osaka", map: "https://goo.gl/maps/Daruma" },
-            { name: "Melon Pan", type: "snack", desc: "Freshly baked sweet bread.", cat: "Bakery", loc: "Asakusa", map: "https://goo.gl/maps/AsakusaMelon" },
-            { name: "Hoto Fudo", type: "main", desc: "Hearty pumpkin noodles near Fuji.", cat: "Noodle", loc: "Kawaguchiko", map: "https://goo.gl/maps/HotoFudo" },
-            { name: "% Arabica", type: "cafe", desc: "Best coffee with a view.", cat: "Cafe", loc: "Kyoto Arashiyama", map: "https://goo.gl/maps/Arabica" }
+        const foodDataCN = [
+            { name: "一兰拉面 (新宿)", city: "东京", category: "main", desc: "著名的浓郁猪骨汤底。推荐单人隔间体验。", icon: "🍜" },
+            { name: "筑地市场 (场外)", city: "东京", category: "main", desc: "新鲜的海鲜盖饭、玉子烧（鸡蛋卷）和各种街头小吃。", icon: "🍣" },
+            { name: "章鱼烧 (たこやき)", city: "大阪", category: "snack", desc: "大阪的标志性街头美食。道顿堀有许多著名的摊位。", icon: "🐙" },
+            { name: "抹茶甜点", city: "京都", category: "cafe", desc: "在祗园或二年坂寻找一家茶屋，品尝抹茶冰淇淋或蕨饼。", icon: "🍵" },
+            { name: "蓬莱 551 (豚包)", city: "大阪", category: "snack", desc: "巨大且多汁的肉包，大阪的排队美食。", icon: "🥟" },
+            { name: "日式炸串 (串カツ)", city: "大阪", category: "main", desc: "将肉和蔬菜串起来油炸，配上甜酱。", icon: "🍤" }
         ];
 
-        // --- APP LOGIC ---
+        const foodDataEN = [
+            { name: "Ichiran Ramen (Shinjuku)", city: "Tokyo", category: "main", desc: "Famous for its rich tonkotsu broth. Recommended for the unique solo dining booths.", icon: "🍜" },
+            { name: "Tsukiji Outer Market", city: "Tokyo", category: "main", desc: "Fresh seafood bowls, Tamagoyaki (egg roll), and various street snacks.", icon: "🍣" },
+            { name: "Takoyaki (Octopus Balls)", city: "Osaka", category: "snack", desc: "Osaka's iconic street food. Many famous stalls in Dotonbori.", icon: "🐙" },
+            { name: "Matcha Desserts", city: "Kyoto", category: "cafe", desc: "Find a teahouse in Gion or Ninenzaka for Matcha ice cream or Warabi mochi.", icon: "🍵" },
+            { name: "551 Horai (Pork Buns)", city: "Osaka", category: "snack", desc: "Giant, juicy pork buns. A must-queue food item in Osaka.", icon: "🥟" },
+            { name: "Kushikatsu (Fried Skewers)", city: "Osaka", category: "main", desc: "Skewered and deep-fried meat and vegetables with sweet sauce.", icon: "🍤" }
+        ];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initDayTabs();
-            renderItinerary(0); // Show Day 1 by default
-            renderFood('all'); // Show all food
-            initCharts();
-            initMobileMenu();
-        });
+        const chartLabelsCN = ["交通", "住宿", "餐饮", "娱乐/门票", "购物"];
+        const chartLabelsEN = ["Transport", "Accommodation", "Food", "Entertainment/Tickets", "Shopping"];
 
-        // 1. Itinerary Logic
-        function initDayTabs() {
-            const container = document.getElementById('day-tabs');
-            itineraryData.forEach((day, index) => {
-                const btn = document.createElement('button');
-                btn.className = `day-tab flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all border border-slate-200 ${index === 0 ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`;
-                btn.innerText = `Day ${day.day}`;
-                btn.onclick = () => {
-                    // Update active state
-                    document.querySelectorAll('.day-tab').forEach(b => {
-                        b.classList.remove('bg-rose-500', 'text-white', 'shadow-md');
-                        b.classList.add('bg-white', 'text-slate-600');
-                    });
-                    btn.classList.remove('bg-white', 'text-slate-600');
-                    btn.classList.add('bg-rose-500', 'text-white', 'shadow-md');
-                    renderItinerary(index);
-                };
-                container.appendChild(btn);
-            });
-        }
+        // --- Core Functions ---
 
-        function renderItinerary(index) {
-            const day = itineraryData[index];
-            const content = document.getElementById('itinerary-content');
-            
-            let eventsHtml = day.events.map((evt, i) => `
-                <div class="relative pl-8 sm:pl-12 py-4 group hover:bg-white hover:rounded-lg hover:shadow-sm transition-all p-2">
-                    <!-- Timeline Line & Dot -->
-                    <div class="absolute left-[9px] top-6 w-3 h-3 bg-rose-400 rounded-full border-2 border-white ring-2 ring-rose-100"></div>
-                    <div class="absolute left-[15px] top-0 bottom-0 w-[2px] bg-slate-200 ${i === day.events.length - 1 ? 'h-1/2' : ''} ${i === 0 ? 'top-1/2' : ''}"></div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                        <div class="flex-1">
-                            <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-200 text-slate-600 mb-1">${evt.time}</span>
-                            <h4 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                <span>${evt.icon}</span> ${evt.title}
-                            </h4>
-                            <p class="text-slate-600 text-sm mt-1">${evt.desc}</p>
-                            
-                            <div class="flex items-center gap-4 mt-2 text-xs text-slate-500">
-                                <span class="flex items-center gap-1">🚌 ${evt.transport}</span>
-                                <span class="flex items-center gap-1">⏱️ ${evt.duration}</span>
-                            </div>
-                        </div>
-                        <div class="mt-2 sm:mt-0">
-                             ${evt.link ? `<a href="${evt.link}" target="_blank" class="inline-flex items-center gap-1 text-xs font-medium text-rose-500 hover:text-rose-700 border border-rose-200 px-3 py-1 rounded-full hover:bg-rose-50 transition">📍 Map</a>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            content.innerHTML = `
-                <div class="animate-fade-in">
-                    <div class="flex items-end justify-between border-b border-slate-200 pb-4 mb-4">
-                        <div>
-                            <h3 class="text-2xl font-bold text-slate-800">${day.title}</h3>
-                            <p class="text-rose-500 font-medium">📍 ${day.location} &nbsp;|&nbsp; 📅 ${day.date}</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        ${eventsHtml}
-                    </div>
-                </div>
-            `;
-        }
-
-        // 2. Food Logic
-        function filterFood(type) {
-            // Update buttons
-            document.querySelectorAll('.food-filter').forEach(btn => {
-                btn.classList.remove('bg-rose-100', 'text-rose-700');
-                if(event.target === btn) {
-                    btn.classList.add('bg-rose-100', 'text-rose-700');
+        function updateContent(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translationMap[key] && translationMap[key][lang]) {
+                    element.textContent = translationMap[key][lang];
                 }
             });
 
-            renderFood(type);
+            // Update title
+            document.getElementById('doc-title').textContent = translationMap.nav_title[lang];
+
+            // Update Food Filters (since text is dynamically set)
+            document.querySelectorAll('.food-filter').forEach(btn => {
+                const key = btn.getAttribute('data-i18n');
+                if (translationMap[key] && translationMap[key][lang]) {
+                    btn.textContent = translationMap[key][lang];
+                }
+            });
+            
+            // Re-render itinerary and charts
+            renderDayTabs(lang);
+            renderCharts(lang);
+            renderFoodGrid('all'); // Re-render food grid with current filter
         }
 
-        function renderFood(type) {
-            const grid = document.getElementById('food-grid');
-            const filtered = type === 'all' ? foodData : foodData.filter(f => f.type === type);
+        function toggleLanguage() {
+            currentLang = currentLang === 'cn' ? 'en' : 'cn';
+            const button = document.getElementById('lang-toggle-btn');
+            
+            if (currentLang === 'cn') {
+                button.textContent = "English";
+                document.documentElement.lang = 'zh-CN';
+            } else {
+                button.textContent = "中文";
+                document.documentElement.lang = 'en';
+            }
+            updateContent(currentLang);
+        }
 
-            grid.innerHTML = filtered.map(item => `
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-5 border border-slate-100">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-rose-50 text-rose-600 mb-2">${item.cat}</span>
-                            <h4 class="font-bold text-slate-800 text-lg">${item.name}</h4>
-                            <p class="text-xs text-slate-500 mb-2">📍 ${item.loc}</p>
+        // --- Itinerary Functions ---
+
+        function renderDayTabs(lang) {
+            const data = lang === 'cn' ? itineraryDataCN : itineraryDataEN;
+            const container = document.getElementById('day-tabs');
+            container.innerHTML = '';
+            
+            data.forEach((dayData, index) => {
+                const isActive = index === 0; // Default to Day 1 active
+                const button = document.createElement('button');
+                button.className = `px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap ${
+                    isActive ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
+                }`;
+                button.textContent = `${data[index].day === 7 ? data[index].date : '第' + dayData.day + '天'} (${dayData.location.split(' ').pop().replace(')', '')})`;
+                button.setAttribute('data-day-index', index);
+                button.onclick = () => {
+                    document.querySelectorAll('#day-tabs button').forEach(btn => {
+                        btn.className = 'px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100';
+                    });
+                    button.className = 'px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap bg-rose-500 text-white shadow-md';
+                    renderItineraryTimeline(index);
+                };
+                container.appendChild(button);
+
+                if (isActive) {
+                    renderItineraryTimeline(index);
+                }
+            });
+        }
+
+        function renderItineraryTimeline(dayIndex) {
+            const data = currentLang === 'cn' ? itineraryDataCN : itineraryDataEN;
+            const dayData = data[dayIndex];
+            const container = document.getElementById('itinerary-content');
+            
+            let timelineHtml = `
+                <div class="mb-6 border-b pb-4">
+                    <h3 class="text-2xl font-bold text-slate-900">${dayData.title}</h3>
+                    <p class="text-sm text-slate-500">${dayData.date} | ${dayData.location}</p>
+                </div>
+            `;
+
+            timelineHtml += `
+                <div class="space-y-8 relative">
+                    <!-- Vertical Line -->
+                    <div class="absolute w-0.5 bg-rose-200 left-3 top-0 bottom-0 md:left-1/2 md:transform md:-translate-x-1/2"></div>
+            `;
+
+            dayData.events.forEach((event, index) => {
+                // Determine if event is left or right in desktop view
+                const isLeft = index % 2 === 0;
+                
+                timelineHtml += `
+                    <div class="relative flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-start w-full">
+                        
+                        <!-- Icon Circle -->
+                        <div class="absolute top-0 left-0 md:left-1/2 md:transform md:-translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full bg-rose-500 text-white z-10 shadow-lg ring-4 ring-slate-50">
+                            ${event.icon}
+                        </div>
+                        
+                        <!-- Content Panel (Left/Right positioning) -->
+                        <div class="flex-1 ${isLeft ? 'pr-8 md:text-right md:pr-12' : 'pl-8 md:text-left md:pl-12'}">
+                            <div class="${isLeft ? 'ml-6 md:ml-0' : 'mr-6 md:mr-0'} bg-white p-4 rounded-xl shadow-md border border-slate-100 transition-all hover:shadow-lg">
+                                <p class="text-xs font-semibold uppercase text-rose-500">${event.time} (${event.duration})</p>
+                                <h4 class="mt-1 text-lg font-bold text-slate-900">${event.title}</h4>
+                                <p class="mt-2 text-sm text-slate-600">${event.desc}</p>
+                                
+                                <div class="mt-4">
+                                    <div class="timeline-placeholder">
+                                        Location Visual: ${event.title}
+                                    </div>
+                                    ${event.link ? `<a href="${event.link}" target="_blank" class="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+                                        ${event.transport} &rarr; 地图/链接
+                                    </a>` : ''}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-sm text-slate-600 mb-4 line-clamp-2">${item.desc}</p>
-                    <a href="${item.map}" target="_blank" class="block w-full text-center py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">Open in Maps</a>
-                </div>
-            `).join('');
+                `;
+            });
+
+            timelineHtml += `</div>`;
+            container.innerHTML = timelineHtml;
         }
 
-        // 3. Charts Logic
-        function initCharts() {
+        // --- Food Functions ---
+
+        function renderFoodGrid(filter) {
+            const data = currentLang === 'cn' ? foodDataCN : foodDataEN;
+            const container = document.getElementById('food-grid');
+            container.innerHTML = '';
+
+            const filteredData = filter === 'all' ? data : data.filter(item => item.category === filter);
+
+            filteredData.forEach(item => {
+                const categoryClass = {
+                    main: 'bg-indigo-100 text-indigo-700',
+                    snack: 'bg-yellow-100 text-yellow-700',
+                    cafe: 'bg-green-100 text-green-700'
+                }[item.category] || 'bg-slate-100 text-slate-700';
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow";
+                card.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="text-3xl">${item.icon}</div>
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full ${categoryClass}">${item.city}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">${item.name}</h3>
+                        <p class="mt-2 text-sm text-slate-600">${item.desc}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterFood(filter, event) {
+            document.querySelectorAll('.food-filter').forEach(btn => {
+                btn.classList.remove('bg-rose-100', 'text-rose-700');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+            event.target.classList.add('bg-rose-100', 'text-rose-700');
+            event.target.classList.remove('bg-white', 'text-slate-700');
+            renderFoodGrid(filter);
+        }
+        
+        // --- Chart Functions ---
+        
+        function renderCharts(lang) {
+            const labels = lang === 'cn' ? chartLabelsCN : chartLabelsEN;
+            const budgetData = [1000, 2000, 1500, 3000, 500]; // Total RM 8000
+            const comparisonData = [3, 2, 4, 5, 1]; // Arbitrary rating 1-5 for Cost/Time Balance
+
             // Budget Chart (Doughnut)
-            const ctxBudget = document.getElementById('budgetChart').getContext('2d');
-            new Chart(ctxBudget, {
+            const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+            if (budgetChartInstance) { budgetChartInstance.destroy(); }
+            budgetChartInstance = new Chart(budgetCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Flights', 'Accommodation', 'Transport', 'Food/Dining', 'Activities'],
+                    labels: labels,
                     datasets: [{
-                        data: [2500, 2800, 1000, 1200, 500], // Estimated based on RM8k
-                        backgroundColor: ['#e2e8f0', '#f43f5e', '#6366f1', '#fbbf24', '#10b981'],
+                        data: budgetData,
+                        backgroundColor: ['#f43f5e', '#6366f1', '#10b981', '#f59e0b', '#06b6d4'],
+                        hoverOffset: 16,
                         borderWidth: 0
                     }]
                 },
@@ -501,11 +699,12 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ` RM ${context.raw}`;
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#475569',
+                                font: {
+                                    size: 12
                                 }
                             }
                         }
@@ -513,59 +712,60 @@
                 }
             });
 
-            // Cost vs Time (Bar)
-            const ctxComp = document.getElementById('comparisonChart').getContext('2d');
-            new Chart(ctxComp, {
+            // Comparison Chart (Bar)
+            const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+            if (comparisonChartInstance) { comparisonChartInstance.destroy(); }
+            comparisonChartInstance = new Chart(comparisonCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Senso-ji', 'TeamLab', 'Mt Fuji Trip', 'USJ', 'Kyoto Temples', 'Food/Relax'],
+                    labels: labels,
                     datasets: [{
-                        label: 'Estimated Cost (MYR)',
-                        data: [0, 120, 300, 350, 50, 200], // Approx ticket/food costs
-                        backgroundColor: '#f43f5e',
-                        yAxisID: 'y',
-                    }, {
-                        label: 'Time Spent (Hours)',
-                        data: [2, 3, 8, 10, 4, 3],
-                        backgroundColor: '#cbd5e1',
-                        yAxisID: 'y1',
+                        label: lang === 'cn' ? '成本/时间平衡 (1-5)' : 'Cost/Time Balance (1-5)',
+                        data: comparisonData,
+                        backgroundColor: '#fb7185', // rose-400
+                        borderRadius: 8,
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
                     scales: {
                         y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: { display: true, text: 'Cost (RM)' }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            grid: { drawOnChartArea: false },
-                            title: { display: true, text: 'Time (Hours)' }
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            }
                         }
+                    },
+                    plugins: {
+                        legend: { display: false }
                     }
                 }
             });
         }
 
-        // 4. Mobile Menu Toggle
-        function initMobileMenu() {
-            const btn = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
-        }
+        // --- Initialization ---
 
+        window.onload = () => {
+            // Initial render in Chinese (default)
+            updateContent('cn');
+            
+            // Set up language toggle listener
+            document.getElementById('lang-toggle-btn').addEventListener('click', toggleLanguage);
+            
+            // Initial rendering of tabs and charts
+            renderDayTabs('cn');
+            renderCharts('cn');
+            renderFoodGrid('all');
+        };
+
+        // Simplified mobile menu toggle (for completeness)
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
     </script>
 </body>
 </html>
