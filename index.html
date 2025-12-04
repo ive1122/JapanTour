@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Honeymoon Itinerary (Updated)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Chart Container Specifics as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .timeline-line {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            bottom: 0;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 font-sans antialiased">
+
+    <!-- Chosen Palette: Rose & Slate (Soft, Romantic, Professional) -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-2xl">🌸</span>
+                    <span class="font-bold text-xl text-slate-800 tracking-tight">Japan<span class="text-rose-500">Honeymoon</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Overview</a>
+                    <a href="#itinerary" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Daily Itinerary</a>
+                    <a href="#food" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Food Map</a>
+                    <a href="#logistics" class="text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Logistics</a>
+                </div>
+                <!-- Mobile menu button placeholder (simplified for this scope) -->
+                <button id="mobile-menu-btn" class="md:hidden text-slate-600 text-xl">☰</button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default, toggled via JS) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#overview" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium">Overview</a>
+                <a href="#itinerary" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium">Itinerary</a>
+                <a href="#food" class="block text-slate-600 hover:text-rose-500 px-3 py-2 rounded-md text-base font-medium">Food</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
+                    <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                        <span class="block xl:inline">7 Days of Zen in</span>
+                        <span class="block text-rose-500 xl:inline">Tokyo, Kyoto & Osaka</span>
+                    </h1>
+                    <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                        A curated honeymoon experience balancing must-see sights with relaxed moments, adjusted for your early Day 7 departure.
+                    </p>
+                    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
+                        <div class="rounded-md shadow">
+                            <a href="#itinerary" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-rose-500 hover:bg-rose-600 md:py-4 md:text-lg transition-all">
+                                Start Journey
+                            </a>
+                        </div>
+                        <div class="mt-3 sm:mt-0 sm:ml-3">
+                            <a href="#checklist" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-rose-700 bg-rose-100 hover:bg-rose-200 md:py-4 md:text-lg transition-all">
+                                Pre-trip Check
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative bg block -->
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-rose-50 flex items-center justify-center">
+            <div class="text-9xl opacity-20 select-none">⛩️</div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section: Trip Overview & Analytics -->
+        <section id="overview" class="py-12 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-base text-rose-600 font-semibold tracking-wide uppercase">Trip Analytics</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                        At a Glance
+                    </p>
+                    <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto">
+                        A breakdown of your estimated budget allocation (RM 8,000 Total) and the balance between adventure and relaxation.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Chart 1: Budget Breakdown -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-lg font-medium text-slate-900 mb-4 text-center">Estimated Budget Allocation (MYR)</h3>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                        <p class="text-xs text-center text-slate-400 mt-2">*Estimates based on current exchange rates.</p>
+                    </div>
+
+                    <!-- Chart 2: Cost vs Time Analysis -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-lg font-medium text-slate-900 mb-4 text-center">Cost vs. Time Spent Analysis</h3>
+                        <div class="chart-container">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                         <p class="text-xs text-center text-slate-400 mt-2">High cost usually means theme parks or luxury dining.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Section: Interactive Itinerary -->
+        <section id="itinerary" class="py-16 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-extrabold text-slate-900">Your Daily Itinerary</h2>
+                    <p class="mt-4 text-lg text-slate-500">
+                        March 28 - April 03 | Tokyo • Kyoto • Osaka
+                    </p>
+                </div>
+
+                <!-- Day Selector Tabs -->
+                <div class="flex overflow-x-auto pb-4 mb-8 gap-2 justify-start md:justify-center no-scrollbar" id="day-tabs">
+                    <!-- JS will populate buttons here -->
+                </div>
+
+                <!-- Dynamic Content Container -->
+                <div id="itinerary-content" class="bg-slate-50 rounded-2xl p-6 md:p-8 shadow-inner min-h-[500px]">
+                    <!-- JS will inject timeline here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Food Map -->
+        <section id="food" class="py-16 bg-rose-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="md:flex md:items-center md:justify-between mb-8">
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl sm:truncate">
+                            Gourmet Map 🍜
+                        </h2>
+                        <p class="mt-1 text-sm text-slate-500">Curated spots for your must-try foods.</p>
+                    </div>
+                    <div class="mt-4 flex md:mt-0 md:ml-4 bg-white p-1 rounded-lg shadow-sm">
+                        <button onclick="filterFood('all')" class="food-filter active px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-colors bg-rose-100 text-rose-700">All</button>
+                        <button onclick="filterFood('main')" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors">Main Meal</button>
+                        <button onclick="filterFood('snack')" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors">Street Food</button>
+                        <button onclick="filterFood('cafe')" class="food-filter px-4 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-rose-100 transition-colors">Cafe</button>
+                    </div>
+                </div>
+
+                <div id="food-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- JS will populate cards here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Logistics & Accommodation -->
+        <section id="logistics" class="py-16 bg-white border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-8 text-center">Accommodation & Transport</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Accommodation -->
+                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:shadow-md transition-shadow">
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <span class="mr-2">🏨</span> Recommended Stays
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <span class="text-xs font-bold text-rose-500 uppercase">Tokyo (3 Nights)</span>
+                                <h4 class="font-semibold text-lg">Hotel Gracery Shinjuku</h4>
+                                <p class="text-sm text-slate-600">Central location, famous for the Godzilla head. Close to transport.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <span class="text-xs font-bold text-rose-500 uppercase">Kyoto (1 Night)</span>
+                                <h4 class="font-semibold text-lg">Cross Hotel Kyoto</h4>
+                                <p class="text-sm text-slate-600">Stylish, modern, and walking distance to Gion/Pontocho.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <span class="text-xs font-bold text-rose-500 uppercase">Osaka (2 Nights)</span>
+                                <h4 class="font-semibold text-lg">The Park Front Hotel</h4>
+                                <p class="text-sm text-slate-600">Directly in front of USJ. Perfect for an early start.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transport -->
+                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:shadow-md transition-shadow">
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <span class="mr-2">🚅</span> Inter-City Travel
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-500">
+                                <h4 class="font-semibold">Tokyo → Kyoto</h4>
+                                <p class="text-sm text-slate-600 mt-1"><strong>Shinkansen Hikari/Nozomi</strong></p>
+                                <p class="text-xs text-slate-500">~2 Hours 15 Mins. Reserve seats on right side (E) for Mt Fuji view.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-500">
+                                <h4 class="font-semibold">Kyoto → Osaka</h4>
+                                <p class="text-sm text-slate-600 mt-1"><strong>JR Special Rapid Service</strong></p>
+                                <p class="text-xs text-slate-500">~30 Mins. Regular commuter train, no reservation needed.</p>
+                            </div>
+                             <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-500">
+                                <h4 class="font-semibold">City Travel: IC Card</h4>
+                                <p class="text-sm text-slate-600 mt-1"><strong>Suica or Pasmo (Apple Pay)</strong></p>
+                                <p class="text-xs text-slate-500">Load ~RM300 equivalent onto your phone for subway/convenience stores.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Pre-Trip Checklist -->
+        <section id="checklist" class="py-12 bg-slate-900 text-white">
+            <div class="max-w-3xl mx-auto px-4 text-center">
+                <h2 class="text-2xl font-bold mb-6">Pre-Flight Checklist ✅</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                    <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
+                        <span>Visit Japan Web (Customs/Immigration)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
+                        <span>USJ Express Pass (Buy 2 months ahead!)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
+                        <span>Shinkansen Tickets (SmartEx App)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-700 transition">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-rose-500 rounded border-slate-500 focus:ring-rose-500">
+                        <span>Travel Insurance</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-400 text-sm">© 2025 Japan Honeymoon Planner. Have a safe trip!</p>
+        </div>
+    </footer>
+    
+    <script>
+        // --- DATA ---
+        
+        const itineraryData = [
+            {
+                day: 1, date: "Mar 28", title: "KUL Departure & Tokyo Arrival (Late)", location: "Tokyo (Shinjuku)",
+                events: [
+                    { time: "TBD", title: "Depart KUL", desc: "Enjoy your flight! Check the train schedules (NEX/Skyliner) for your arrival airport (NRT/HND) based on actual flight time.", icon: "✈️", transport: "Plane", duration: "7h", link: "https://www.narita-airport.jp/en/access/train" },
+                    { time: "20:00-22:50", title: "Arrival & Customs", desc: "Clear customs and immigration. Pick up pre-booked items (e.g., WiFi, etc.).", icon: "🛂", transport: "Customs", duration: "1h", link: "https://www.narita-airport.jp/en/access" },
+                    { time: "22:00-00:30", title: "Train/Taxi to Shinjuku", desc: "Take the fastest available option to Shinjuku. Be aware that most express trains stop running around 11 PM.", icon: "🚅", transport: "Train/Taxi", duration: "1.5h", link: "https://goo.gl/maps/ShinjukuStation" },
+                    { time: "23:30-01:30", title: "Check-in Hotel & Rest", desc: "Settle into Hotel Gracery. Maximize rest after the long journey.", icon: "🏨", transport: "Walk", duration: "1h", link: "https://goo.gl/maps/ShinjukuHotel" }
+                ]
+            },
+            {
+                day: 2, date: "Mar 29", title: "Old & New Tokyo: Culture & Neon", location: "Tokyo (Asakusa/Shinjuku)",
+                events: [
+                    { time: "09:00", title: "Senso-ji Temple", desc: "Start the day with the city's oldest temple. Draw an Omikuji (fortune).", icon: "⛩️", transport: "Subway", duration: "2h", link: "https://goo.gl/maps/Sensoji" },
+                    { time: "11:30", title: "Nakamise Street & Lunch", desc: "Snack on Melon Pan and Agemanju before grabbing a quick, local lunch.", icon: "🍘", transport: "Walk", duration: "1.5h", link: "https://goo.gl/maps/Nakamise" },
+                    { time: "14:30", title: "Meiji Jingu Shrine", desc: "Visit the serene forested shrine dedicated to Emperor Meiji. A peaceful escape.", icon: "🌳", transport: "Subway", duration: "1.5h", link: "https://goo.gl/maps/MeijiJingu" },
+                    { time: "17:30", title: "Omoide Yokocho", desc: "Classic 'Piss Alley' for Yakitori dinner and a classic Tokyo nightlife vibe.", icon: "🍢", transport: "Walk", duration: "2h", link: "https://goo.gl/maps/OmoideYokocho" },
+                    { time: "19:30", title: "Shinjuku Crossing & Kabukicho", desc: "See the 3D Cat billboard and bright neon signs of Shinjuku.", icon: "🌃", transport: "Walk", duration: "1h", link: "https://goo.gl/maps/Kabukicho" }
+                ]
+            },
+            {
+                day: 3, date: "Mar 30", title: "Art, Views & Fuji Day Trip", location: "Tokyo (Odaiba) & Kawaguchiko",
+                events: [
+                    { time: "08:30", title: "TeamLab Planets", desc: "*Must book morning time slot in advance*. Immerse yourselves in the digital art.", icon: "✨", transport: "Train", duration: "2h", link: "https://goo.gl/maps/TeamLabPlanets" },
+                    { time: "11:30", title: "Lunch & Travel Prep", desc: "Quick lunch and prepare for the 2-hour train ride to Kawaguchiko area.", icon: "🍱", transport: "Train", duration: "2.5h", link: "https://goo.gl/maps/ShinjukuStation" },
+                    { time: "14:30", title: "Chureito Pagoda", desc: "The iconic Pagoda and Mt Fuji view. Take the 400 steps for the best photo.", icon: "🗻", transport: "Train/Walk", duration: "2h", link: "https://goo.gl/maps/Chureito" },
+                    { time: "18:00", title: "Return to Tokyo", desc: "Take the Fuji Excursion Limited Express back. Dinner at Shinjuku upon arrival.", icon: "🚅", transport: "Train", duration: "2h", link: "https://goo.gl/maps/Tokyo" }
+                ]
+            },
+            {
+                day: 4, date: "Mar 31", title: "Shinkansen & Kyoto Shrines", location: "Tokyo -> Kyoto",
+                events: [
+                    { time: "09:00", title: "Shinkansen to Kyoto", desc: "Grab an Ekiben (station bento) for breakfast. Aim for a window seat (E) for potential Fuji view.", icon: "🍱", transport: "Shinkansen", duration: "2.5h", link: "https://goo.gl/maps/KyotoStation" },
+                    { time: "13:00", title: "Fushimi Inari Taisha", desc: "Thousands of vermillion Torii gates. Hike halfway up for great photo spots.", icon: "⛩️", transport: "JR Train", duration: "2.5h", link: "https://goo.gl/maps/FushimiInari" },
+                    { time: "16:30", title: "Check-in & Relaxation", desc: "Check into your Kyoto hotel and take a moment to refresh.", icon: "🏨", transport: "Subway", duration: "1h", link: "https://goo.gl/maps/KyotoHotel" },
+                    { time: "19:00", title: "Pontocho Alley Dinner", desc: "Atmospheric narrow alley known for traditional and modern dining options by the Kamo River.", icon: "🏮", transport: "Walk", duration: "2h", link: "https://goo.gl/maps/Pontocho" }
+                ]
+            },
+            {
+                day: 5, date: "Apr 01", title: "Kyoto Serenity, Osaka Castle & Dotonbori", location: "Kyoto -> Osaka",
+                events: [
+                    { time: "07:30", title: "Kiyomizu-dera", desc: "Early start is vital to see the famous wooden stage without crowds.", icon: "🏯", transport: "Bus/Taxi", duration: "2h", link: "https://goo.gl/maps/Kiyomizudera" },
+                    { time: "10:00", title: "Ninenzaka/Sannenzaka Streets", desc: "Walk the beautifully preserved streets leading from the temple. Grab a coffee.", icon: "☕", transport: "Walk", duration: "1.5h", link: "https://goo.gl/maps/Ninenzaka" },
+                    { time: "12:00", title: "Philosopher's Path & Lunch", desc: "A relaxing cherry tree-lined canal walk. Quick lunch near Gion.", icon: "🌸", transport: "Bus", duration: "2h", link: "https://goo.gl/maps/PhilosophersPath" },
+                    { time: "14:30", title: "Train to Osaka", desc: "Travel from Kyoto to Osaka station.", icon: "🚆", transport: "JR Line", duration: "1h", link: "https://goo.gl/maps/OsakaStation" },
+                    { time: "15:30", title: "Osaka Castle (Relocated)", desc: "Quick visit to the castle grounds and exterior for photos.", icon: "🏰", transport: "Subway", duration: "1.5h", link: "https://goo.gl/maps/OsakaCastle" },
+                    { time: "17:00", title: "Check-in USJ Area Hotel", desc: "Travel to the Universal City area and check into The Park Front Hotel.", icon: "🏨", transport: "JR Line", duration: "1.5h", link: "https://goo.gl/maps/USJHotel" },
+                    { time: "19:30", title: "Dotonbori Fun", desc: "Iconic Glico Man sign, street food, and vibrant nightlife.", icon: "🐙", transport: "Subway", duration: "3h", link: "https://goo.gl/maps/Dotonbori" }
+                ]
+            },
+            {
+                day: 6, date: "Apr 02", title: "Universal Studios Japan (USJ)", location: "Osaka (USJ)",
+                events: [
+                    { time: "08:00", title: "USJ Entry", desc: "Arrive early and head straight to Super Nintendo World (Ensure you have an Area Entry Ticket or Express Pass).", icon: "🍄", transport: "Walk", duration: "All Day", link: "https://goo.gl/maps/USJ" },
+                    { time: "12:00", title: "Wizarding World Lunch", desc: "Enjoy lunch and Butterbeer in the Harry Potter themed area.", icon: "🪄", transport: "Walk", duration: "2h", link: "https://goo.gl/maps/USJ" },
+                    { time: "17:00", title: "Themed Rides", desc: "Enjoy the remaining themed rides (Jurassic Park, Spiderman, etc.)", icon: "🎢", transport: "Walk", duration: "3h", link: "https://goo.gl/maps/USJ" },
+                    { time: "20:00", title: "CityWalk Dinner", desc: "Relaxed dinner outside the park gates.", icon: "🍔", transport: "Walk", duration: "1.5h", link: "https://goo.gl/maps/CityWalkOsaka" }
+                ]
+            },
+            {
+                day: 7, date: "Apr 03", title: "Early Departure (10:55 AM Flight)", location: "Osaka -> KUL",
+                events: [
+                    { time: "06:45", title: "Breakfast & Check-out", desc: "Quick breakfast and ensure all luggage is ready for immediate departure.", icon: "☕", transport: "Walk", duration: "30m", link: "" },
+                    { time: "07:15", title: "Train to KIX", desc: "Take the Haruka Express or Nankai Rapid from Tennoji or Namba to Kansai Airport (KIX). Allow 1 hour for travel time.", icon: "🚄", transport: "Train", duration: "1h 15m", link: "https://goo.gl/maps/KIX" },
+                    { time: "08:45", title: "Airport Check-in & Security", desc: "Arrive at KIX. You must be at the airport 2 hours before your 10:55 AM flight.", icon: "🛂", transport: "Check-in", duration: "2h", link: "" },
+                    { time: "10:55", title: "Depart for KUL", desc: "Sayonara Japan! Safe travels home.", icon: "👋", transport: "Plane", duration: "-", link: "" }
+                ]
+            }
+        ];
+
+        const foodData = [
+            { name: "Ichiran Ramen", type: "main", desc: "Famous solo booths. Customize your richness.", cat: "Ramen", loc: "Shinjuku/Osaka", map: "https://goo.gl/maps/Ichiran" },
+            { name: "Kura Sushi", type: "main", desc: "Fun conveyor belt sushi. Cheap and decent quality.", cat: "Sushi", loc: "Everywhere", map: "https://goo.gl/maps/KuraSushi" },
+            { name: "Takoyaki Wanaka", type: "snack", desc: "Crispy octopus balls. Osaka staple.", cat: "Street Food", loc: "Dotonbori", map: "https://goo.gl/maps/Wanaka" },
+            { name: "Matcha House", type: "cafe", desc: "Famous Tiramisu Matcha.", cat: "Dessert", loc: "Kyoto", map: "https://goo.gl/maps/MatchaHouse" },
+            { name: "Kushikatsu Daruma", type: "main", desc: "Deep fried skewers. No double dipping!", cat: "Fried", loc: "Osaka", map: "https://goo.gl/maps/Daruma" },
+            { name: "Melon Pan", type: "snack", desc: "Freshly baked sweet bread.", cat: "Bakery", loc: "Asakusa", map: "https://goo.gl/maps/AsakusaMelon" },
+            { name: "Hoto Fudo", type: "main", desc: "Hearty pumpkin noodles near Fuji.", cat: "Noodle", loc: "Kawaguchiko", map: "https://goo.gl/maps/HotoFudo" },
+            { name: "% Arabica", type: "cafe", desc: "Best coffee with a view.", cat: "Cafe", loc: "Kyoto Arashiyama", map: "https://goo.gl/maps/Arabica" }
+        ];
+
+        // --- APP LOGIC ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDayTabs();
+            renderItinerary(0); // Show Day 1 by default
+            renderFood('all'); // Show all food
+            initCharts();
+            initMobileMenu();
+        });
+
+        // 1. Itinerary Logic
+        function initDayTabs() {
+            const container = document.getElementById('day-tabs');
+            itineraryData.forEach((day, index) => {
+                const btn = document.createElement('button');
+                btn.className = `day-tab flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all border border-slate-200 ${index === 0 ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`;
+                btn.innerText = `Day ${day.day}`;
+                btn.onclick = () => {
+                    // Update active state
+                    document.querySelectorAll('.day-tab').forEach(b => {
+                        b.classList.remove('bg-rose-500', 'text-white', 'shadow-md');
+                        b.classList.add('bg-white', 'text-slate-600');
+                    });
+                    btn.classList.remove('bg-white', 'text-slate-600');
+                    btn.classList.add('bg-rose-500', 'text-white', 'shadow-md');
+                    renderItinerary(index);
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function renderItinerary(index) {
+            const day = itineraryData[index];
+            const content = document.getElementById('itinerary-content');
+            
+            let eventsHtml = day.events.map((evt, i) => `
+                <div class="relative pl-8 sm:pl-12 py-4 group hover:bg-white hover:rounded-lg hover:shadow-sm transition-all p-2">
+                    <!-- Timeline Line & Dot -->
+                    <div class="absolute left-[9px] top-6 w-3 h-3 bg-rose-400 rounded-full border-2 border-white ring-2 ring-rose-100"></div>
+                    <div class="absolute left-[15px] top-0 bottom-0 w-[2px] bg-slate-200 ${i === day.events.length - 1 ? 'h-1/2' : ''} ${i === 0 ? 'top-1/2' : ''}"></div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                        <div class="flex-1">
+                            <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-200 text-slate-600 mb-1">${evt.time}</span>
+                            <h4 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <span>${evt.icon}</span> ${evt.title}
+                            </h4>
+                            <p class="text-slate-600 text-sm mt-1">${evt.desc}</p>
+                            
+                            <div class="flex items-center gap-4 mt-2 text-xs text-slate-500">
+                                <span class="flex items-center gap-1">🚌 ${evt.transport}</span>
+                                <span class="flex items-center gap-1">⏱️ ${evt.duration}</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 sm:mt-0">
+                             ${evt.link ? `<a href="${evt.link}" target="_blank" class="inline-flex items-center gap-1 text-xs font-medium text-rose-500 hover:text-rose-700 border border-rose-200 px-3 py-1 rounded-full hover:bg-rose-50 transition">📍 Map</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            content.innerHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex items-end justify-between border-b border-slate-200 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">${day.title}</h3>
+                            <p class="text-rose-500 font-medium">📍 ${day.location} &nbsp;|&nbsp; 📅 ${day.date}</p>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        ${eventsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 2. Food Logic
+        function filterFood(type) {
+            // Update buttons
+            document.querySelectorAll('.food-filter').forEach(btn => {
+                btn.classList.remove('bg-rose-100', 'text-rose-700');
+                if(event.target === btn) {
+                    btn.classList.add('bg-rose-100', 'text-rose-700');
+                }
+            });
+
+            renderFood(type);
+        }
+
+        function renderFood(type) {
+            const grid = document.getElementById('food-grid');
+            const filtered = type === 'all' ? foodData : foodData.filter(f => f.type === type);
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-5 border border-slate-100">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-rose-50 text-rose-600 mb-2">${item.cat}</span>
+                            <h4 class="font-bold text-slate-800 text-lg">${item.name}</h4>
+                            <p class="text-xs text-slate-500 mb-2">📍 ${item.loc}</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4 line-clamp-2">${item.desc}</p>
+                    <a href="${item.map}" target="_blank" class="block w-full text-center py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">Open in Maps</a>
+                </div>
+            `).join('');
+        }
+
+        // 3. Charts Logic
+        function initCharts() {
+            // Budget Chart (Doughnut)
+            const ctxBudget = document.getElementById('budgetChart').getContext('2d');
+            new Chart(ctxBudget, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Flights', 'Accommodation', 'Transport', 'Food/Dining', 'Activities'],
+                    datasets: [{
+                        data: [2500, 2800, 1000, 1200, 500], // Estimated based on RM8k
+                        backgroundColor: ['#e2e8f0', '#f43f5e', '#6366f1', '#fbbf24', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` RM ${context.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Cost vs Time (Bar)
+            const ctxComp = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(ctxComp, {
+                type: 'bar',
+                data: {
+                    labels: ['Senso-ji', 'TeamLab', 'Mt Fuji Trip', 'USJ', 'Kyoto Temples', 'Food/Relax'],
+                    datasets: [{
+                        label: 'Estimated Cost (MYR)',
+                        data: [0, 120, 300, 350, 50, 200], // Approx ticket/food costs
+                        backgroundColor: '#f43f5e',
+                        yAxisID: 'y',
+                    }, {
+                        label: 'Time Spent (Hours)',
+                        data: [2, 3, 8, 10, 4, 3],
+                        backgroundColor: '#cbd5e1',
+                        yAxisID: 'y1',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Cost (RM)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Time (Hours)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. Mobile Menu Toggle
+        function initMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+
+    </script>
+</body>
+</html>
