@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="doc-title">日本蜜月之旅</title>
+    <title id="doc-title">日本蜜月之旅 - RM 10,740 预算</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -81,7 +81,7 @@
                         <span class="block text-rose-500 xl:inline" data-i18n="hero_main_2">Tokyo, Kyoto & Osaka</span>
                     </h1>
                     <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" data-i18n="hero_subtitle">
-                        为您精心策划的蜜月体验，已根据您第7天提早的航班时间调整。
+                        为您精心策划的蜜月体验。已将预算提升至更舒适、更现实的 **RM 10,740**。
                     </p>
                     <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
                         <div class="rounded-md shadow">
@@ -114,9 +114,12 @@
                         一览无余
                     </p>
                     <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto" data-i18n="section_analytics_subtitle">
-                        您预估的预算分配 (总计 RM 8,000) 以及冒险与休闲的平衡。
+                        您的新预算分配 (总计 RM 10,740) 以及冒险与休闲的平衡。
                     </p>
                 </div>
+                
+                <!-- Diagram Trigger -->
+                
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <!-- Chart 1: Budget Breakdown -->
@@ -125,7 +128,7 @@
                         <div class="chart-container">
                             <canvas id="budgetChart"></canvas>
                         </div>
-                        <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_1">*基于当前汇率的估算。</p>
+                        <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_1">*基于您 RM 10,740 的总预算，已包含机票费用。</p>
                     </div>
 
                     <!-- Chart 2: Cost vs Time Analysis -->
@@ -135,6 +138,17 @@
                             <canvas id="comparisonChart"></canvas>
                         </div>
                          <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_2">高成本通常指主题乐园或豪华餐饮。</p>
+                    </div>
+                </div>
+                
+                <!-- Detailed Budget Breakdown Section -->
+                <div class="mt-12 bg-white rounded-xl shadow-lg overflow-hidden">
+                    <button id="toggle-budget-btn" class="w-full text-left p-6 flex justify-between items-center text-xl font-bold text-slate-900 bg-rose-100 hover:bg-rose-200 transition-colors" onclick="toggleBudgetDetails()">
+                        <span data-i18n="section_detailed_breakdown">详细预算分解 (RM 10,740 总计)</span>
+                        <span id="toggle-icon">▼</span>
+                    </button>
+                    <div id="budget-details-content" class="p-6 hidden">
+                        <!-- Budget table inserted here by JS -->
                     </div>
                 </div>
             </div>
@@ -200,20 +214,21 @@
                         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center" data-i18n="logistics_stays">
                             <span class="mr-2">🏨</span> 推荐住宿
                         </h3>
+                        <p class="text-sm text-slate-600 mb-4" data-i18n="logistics_stays_note">预算已调整至平均 RM 350/晚，能住到更舒适的酒店。</p>
                         <div class="space-y-4">
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <span class="text-xs font-bold text-rose-500 uppercase" data-i18n="logistics_tokyo">东京 (3晚)</span>
-                                <h4 class="font-semibold text-lg">Hotel Gracery Shinjuku</h4>
+                                <h4 class="font-semibold text-lg">Hotel Gracery Shinjuku 或同级</h4>
                                 <p class="text-sm text-slate-600" data-i18n="logistics_tokyo_desc">位置中心，以哥斯拉头闻名。靠近交通枢纽。</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <span class="text-xs font-bold text-rose-500 uppercase" data-i18n="logistics_kyoto">京都 (1晚)</span>
-                                <h4 class="font-semibold text-lg">Cross Hotel Kyoto</h4>
+                                <h4 class="font-semibold text-lg">Cross Hotel Kyoto 或同级</h4>
                                 <p class="text-sm text-slate-600" data-i18n="logistics_kyoto_desc">时尚、现代，步行可至祗园/先斗町。</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm">
                                 <span class="text-xs font-bold text-rose-500 uppercase" data-i18n="logistics_osaka">大阪 (2晚)</span>
-                                <h4 class="font-semibold text-lg">The Park Front Hotel</h4>
+                                <h4 class="font-semibold text-lg">The Park Front Hotel 或同级</h4>
                                 <p class="text-sm text-slate-600" data-i18n="logistics_osaka_desc">正对USJ。非常适合早起游玩。</p>
                             </div>
                         </div>
@@ -224,21 +239,22 @@
                         <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center" data-i18n="logistics_transport">
                             <span class="mr-2">🚅</span> 城际交通
                         </h3>
+                         <p class="text-sm text-slate-600 mb-4" data-i18n="logistics_transport_note">RM 1,400 的预算确保了两人份新干线和所有本地交通绰绰有余。</p>
                         <div class="space-y-4">
                             <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-500">
-                                <h4 class="font-semibold" data-i18n="logistics_shinkansen_to_kyoto">东京 → 京都</h4>
+                                <h4 class="font-semibold" data-i18n="logistics_shinkansen_to_kyoto">东京 → 京都 (2人)</h4>
                                 <p class="text-sm text-slate-600 mt-1"><strong>新干线 光号/希望号</strong></p>
                                 <p class="text-xs text-slate-500" data-i18n="logistics_shinkansen_to_kyoto_desc">约 2 小时 15 分钟。预订右侧（E座）座位可欣赏富士山景观。</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-500">
-                                <h4 class="font-semibold" data-i18n="logistics_kyoto_to_osaka">京都 → 大阪</h4>
+                                <h4 class="font-semibold" data-i18n="logistics_kyoto_to_osaka">京都 → 大阪 (2人)</h4>
                                 <p class="text-sm text-slate-600 mt-1"><strong>JR新快速列车</strong></p>
                                 <p class="text-xs text-slate-500" data-i18n="logistics_kyoto_to_osaka_desc">约 30 分钟。普通通勤列车，无需预订。</p>
                             </div>
                              <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-500">
-                                <h4 class="font-semibold" data-i18n="logistics_ic_card">城市交通：IC卡</h4>
+                                <h4 class="font-semibold" data-i18n="logistics_ic_card">城市交通：IC卡 (2人)</h4>
                                 <p class="text-sm text-slate-600 mt-1"><strong>Suica 或 Pasmo (Apple Pay)</strong></p>
-                                <p class="text-xs text-slate-500" data-i18n="logistics_ic_detail">向手机充值约 RM300 等值金额，用于地铁/便利店。</p>
+                                <p class="text-xs text-slate-500" data-i18n="logistics_ic_detail">向手机充值约 RM500 等值金额，用于地铁/便利店。</p>
                             </div>
                         </div>
                     </div>
@@ -298,16 +314,17 @@
             nav_logistics: { cn: "后勤信息", en: "Logistics" },
             hero_main_1: { cn: "七日禅意之旅：", en: "7 Days of Zen in" },
             hero_main_2: { cn: "东京、京都与大阪", en: "Tokyo, Kyoto & Osaka" },
-            hero_subtitle: { cn: "为您精心策划的蜜月体验，已根据您第7天提早的航班时间调整。", en: "Your curated honeymoon experience, adjusted for your Day 7 early flight." },
+            hero_subtitle: { cn: "为您精心策划的蜜月体验。已将预算提升至更舒适、更现实的 **RM 10,740**。", en: "Your curated honeymoon experience. Budget increased to a more comfortable and realistic **RM 10,740**." },
             btn_start: { cn: "开启旅程", en: "Start the Journey" },
             btn_check: { cn: "行前清单", en: "Pre-Trip Checklist" },
             section_analytics: { cn: "行程分析", en: "TRIP ANALYTICS" },
             section_glance: { cn: "一览无余", en: "At a Glance" },
-            section_analytics_subtitle: { cn: "您预估的预算分配 (总计 RM 8,000) 以及冒险与休闲的平衡。", en: "Estimated budget distribution (Total RM 8,000) and balance of adventure vs. relaxation." },
+            section_analytics_subtitle: { cn: "您的新预算分配 (总计 RM 10,740) 以及冒险与休闲的平衡。", en: "Your new budget distribution (Total RM 10,740) and balance of adventure vs. relaxation." },
             section_budget: { cn: "预估预算分配 (MYR)", en: "Estimated Budget Breakdown (MYR)" },
-            chart_note_1: { cn: "*基于当前汇率的估算。", en: "*Estimates based on current exchange rates." },
+            chart_note_1: { cn: "*基于您 RM 10,740 的总预算，已包含机票费用。", en: "*Based on your total budget of RM 10,740, including flight costs." },
             section_cost_time: { cn: "成本与时间分析", en: "Cost vs. Time Analysis" },
             chart_note_2: { cn: "高成本通常指主题乐园或豪华餐饮。", en: "High cost usually refers to theme parks or luxury dining." },
+            section_detailed_breakdown: { cn: "详细预算分解 (RM 10,740 总计)", en: "Detailed Budget Breakdown (RM 10,740 Total)" },
             section_daily_itinerary: { cn: "您的每日行程安排", en: "Your Daily Itinerary" },
             food_map_title: { cn: "美食地图 🍜", en: "Food Map 🍜" },
             food_map_subtitle: { cn: "为您精选的必尝美食地点。", en: "Curated must-try dining locations." },
@@ -317,6 +334,7 @@
             food_filter_cafe: { cn: "咖啡/甜点", en: "Cafe/Dessert" },
             logistics_title: { cn: "住宿与交通", en: "Accommodation & Transport" },
             logistics_stays: { cn: "推荐住宿", en: "Recommended Stays" },
+            logistics_stays_note: { cn: "预算已调整至平均 RM 350/晚，能住到更舒适的酒店。", en: "Budget adjusted to average RM 350/night for more comfortable hotel options." },
             logistics_tokyo: { cn: "东京 (3晚)", en: "TOKYO (3 Nights)" },
             logistics_tokyo_desc: { cn: "位置中心，以哥斯拉头闻名。靠近交通枢纽。", en: "Central location, famous for the Godzilla head. Close to major transport hubs." },
             logistics_kyoto: { cn: "京都 (1晚)", en: "KYOTO (1 Night)" },
@@ -324,16 +342,17 @@
             logistics_osaka: { cn: "大阪 (2晚)", en: "OSAKA (2 Nights)" },
             logistics_osaka_desc: { cn: "正对USJ。非常适合早起游玩。", en: "Directly opposite USJ. Great for early starts." },
             logistics_transport: { cn: "城际交通", en: "Inter-City Transport" },
-            logistics_shinkansen_to_kyoto: { cn: "东京 → 京都", en: "Tokyo → Kyoto" },
+            logistics_transport_note: { cn: "RM 1,400 的预算确保了两人份新干线和所有本地交通绰绰有余。", en: "The RM 1,400 budget ensures Shinkansen for two and all local transport is covered comfortably." },
+            logistics_shinkansen_to_kyoto: { cn: "东京 → 京都 (2人)", en: "Tokyo → Kyoto (2 pax)" },
             logistics_shinkansen_to_kyoto_desc: { cn: "约 2 小时 15 分钟。预订右侧（E座）座位可欣赏富士山景观。", en: "Approx. 2 hrs 15 mins. Book a right-side (E seat) for potential Fuji view." },
-            logistics_kyoto_to_osaka: { cn: "京都 → 大阪", en: "Kyoto → Osaka" },
+            logistics_kyoto_to_osaka: { cn: "京都 → 大阪 (2人)", en: "Kyoto → Osaka (2 pax)" },
             logistics_kyoto_to_osaka_desc: { cn: "约 30 分钟。普通通勤列车，无需预订。", en: "Approx. 30 mins. Regular commuter train, no reservation needed." },
-            logistics_ic_card: { cn: "城市交通：IC卡", en: "City Transport: IC Card" },
-            logistics_ic_detail: { cn: "向手机充值约 RM300 等值金额，用于地铁/便利店。", en: "Load ~RM300 equivalent onto phone for subway/convenience stores." },
+            logistics_ic_card: { cn: "城市交通：IC卡 (2人)", en: "City Transport: IC Card (2 pax)" },
+            logistics_ic_detail: { cn: "向手机充值约 RM500 等值金额，用于地铁/便利店。", en: "Load ~RM500 equivalent onto phone for subway/convenience stores." },
             checklist_title: { cn: "行前清单 ✅", en: "Pre-Trip Checklist ✅" },
             checklist_vjw: { cn: "Visit Japan Web (海关/入境)", en: "Visit Japan Web (Customs/Immigration)" },
             checklist_usj: { cn: "USJ 快速通行证 (提前2个月购买!)", en: "USJ Express Pass (Book 2 months ahead!)" },
-            checklist_shinkansen: { cn: "新干线车票 (SmartEx App)在", en: "Shinkansen Tickets (SmartEx App)" },
+            checklist_shinkansen: { cn: "新干线车票 (SmartEx App)", en: "Shinkansen Tickets (SmartEx App)" },
             checklist_insurance: { cn: "旅行保险", en: "Travel Insurance" },
             footer: { cn: "© 2025 日本蜜月旅行计划。祝您旅途愉快！", en: "© 2025 Japan Honeymoon Planner. Have a wonderful trip!" },
         };
@@ -494,8 +513,58 @@
             { name: "Kushikatsu (Fried Skewers)", city: "Osaka", category: "main", desc: "Skewered and deep-fried meat and vegetables with sweet sauce.", icon: "🍤" }
         ];
 
-        const chartLabelsCN = ["交通", "住宿", "餐饮", "娱乐/门票", "购物"];
-        const chartLabelsEN = ["Transport", "Accommodation", "Food", "Entertainment/Tickets", "Shopping"];
+        // --- UPDATED REALISTIC BUDGET DATA for 2 pax (Total RM 10,740) ---
+        // New Allocation: Flights(3500), Accom(2100), Transport(1400), Food(1540), Entertainment(1500), Buffer(700) = 10740
+        const budgetData = [3500, 2100, 1400, 1540, 1500, 700]; 
+        
+        const chartLabelsCN = ["机票", "住宿", "本地交通/新干线", "餐饮", "娱乐/门票", "购物/缓冲"];
+        const chartLabelsEN = ["Flights", "Accommodation", "Local Transport/Shinkansen", "Food & Drinks", "Entertainment/Tickets", "Shopping/Buffer"];
+
+        const detailedBreakdown = [
+            {
+                category_cn: "机票 (KUL-JPN 往返, 2人)", 
+                category_en: "Flights (KUL-JPN R/T, 2 pax)", 
+                cost: 3500, 
+                details_cn: "2张廉价航空往返机票 @ RM 1,750/张。", 
+                details_en: "2x budget R/T Tickets @ RM 1,750/ticket." 
+            },
+            {
+                category_cn: "住宿 (6晚)", 
+                category_en: "Accommodation (6 Nights)", 
+                cost: 2100, 
+                details_cn: "6晚酒店住宿 (平均 RM 350/晚)。能提供舒适、位置良好的 3-4 星级酒店。", 
+                details_en: "6 nights hotel stay (Avg. RM 350/night). Allows for comfortable, well-located 3-4 star hotels." 
+            },
+            {
+                category_cn: "本地交通与城际交通 (2人)", 
+                category_en: "Local & Inter-City Transport (2 pax)", 
+                cost: 1400, 
+                details_cn: "新干线东京-京都 2人 (约 RM 900)，本地地铁/巴士卡 2人 (约 RM 500)。", 
+                details_en: "Shinkansen Tokyo-Kyoto for 2 pax (Approx. RM 900), Local Subway/IC Card for 2 pax (Approx. RM 500)." 
+            },
+            {
+                category_cn: "餐饮 (7天)", 
+                category_en: "Food & Drinks (7 Days)", 
+                cost: 1540, 
+                details_cn: "平均每日 RM 220 (2人)，可享受中档餐厅和街头美食。", 
+                details_en: "Avg. RM 220 per day (2 pax), allowing for mid-range restaurants and street food indulgences." 
+            },
+            {
+                category_cn: "娱乐/门票 (2人)", 
+                category_en: "Entertainment/Tickets (2 pax)", 
+                cost: 1500, 
+                details_cn: "USJ 门票 + 快速通行证 2人 (约 RM 1350)，TeamLab Planets 2人 (约 RM 150)。", 
+                details_en: "USJ Ticket + Express Pass for 2 pax (Approx. RM 1350), TeamLab Planets for 2 pax (Approx. RM 150)." 
+            },
+            {
+                category_cn: "购物与缓冲", 
+                category_en: "Shopping & Buffer", 
+                cost: 700, 
+                details_cn: "更充裕的金额用于纪念品和应对意外支出。", 
+                details_en: "A more generous amount for souvenirs and unforeseen expenses." 
+            }
+        ];
+
 
         // --- Core Functions ---
 
@@ -506,9 +575,15 @@
                     element.textContent = translationMap[key][lang];
                 }
             });
+            
+            // Check and update the specific chart note element
+            const chartNote1Element = document.querySelector('#overview p[data-i18n="chart_note_1"]');
+            if (chartNote1Element) {
+                chartNote1Element.textContent = translationMap.chart_note_1[lang];
+            }
 
             // Update title
-            document.getElementById('doc-title').textContent = translationMap.nav_title[lang];
+            document.getElementById('doc-title').textContent = (lang === 'cn' ? '日本蜜月之旅 - RM 10,740 预算' : 'Japan Honeymoon Itinerary - RM 10,740 Budget');
 
             // Update Food Filters (since text is dynamically set)
             document.querySelectorAll('.food-filter').forEach(btn => {
@@ -518,10 +593,11 @@
                 }
             });
             
-            // Re-render itinerary and charts
+            // Re-render itinerary, charts, and budget details
             renderDayTabs(lang);
             renderCharts(lang);
             renderFoodGrid('all'); // Re-render food grid with current filter
+            renderBudgetDetails(lang); // New: Render budget details table
         }
 
         function toggleLanguage() {
@@ -678,8 +754,8 @@
         
         function renderCharts(lang) {
             const labels = lang === 'cn' ? chartLabelsCN : chartLabelsEN;
-            const budgetData = [1000, 2000, 1500, 3000, 500]; // Total RM 8000
-            const comparisonData = [3, 2, 4, 5, 1]; // Arbitrary rating 1-5 for Cost/Time Balance
+            // Budget data: [Flights, Accommodation, Local Transport/Shinkansen, Food & Drinks, Entertainment/Tickets, Shopping/Buffer]
+            const data = budgetData; 
 
             // Budget Chart (Doughnut)
             const budgetCtx = document.getElementById('budgetChart');
@@ -691,8 +767,9 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        data: budgetData,
-                        backgroundColor: ['#f43f5e', '#6366f1', '#10b981', '#f59e0b', '#06b6d4'],
+                        data: data,
+                        // Custom colors optimized for new distribution
+                        backgroundColor: ['#1d4ed8', '#059669', '#f97316', '#ef4444', '#8b5cf6', '#a1a1aa'],
                         hoverOffset: 16,
                         borderWidth: 0
                     }]
@@ -714,10 +791,14 @@
                 }
             });
 
-            // Comparison Chart (Bar)
+            // Comparison Chart (Bar) - Using the same labels but arbitrary data for time/cost balance
             const comparisonCtx = document.getElementById('comparisonChart');
             if (!comparisonCtx) return; // Guard clause if canvas is not found
             if (comparisonChartInstance) { comparisonChartInstance.destroy(); }
+            
+            // Generate comparison data based on the new number of labels (6)
+            // Flights(5), Accomm(3), Transport(4), Food(4), Entertainment(5), Shopping(2)
+            const comparisonData = [5, 3, 4, 4, 5, 2]; 
             
             comparisonChartInstance = new Chart(comparisonCtx.getContext('2d'), {
                 type: 'bar',
@@ -740,6 +821,15 @@
                             ticks: {
                                 stepSize: 1
                             }
+                        },
+                        x: {
+                            // Ensure the x-axis labels are readable
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    size: 10
+                                }
+                            }
                         }
                     },
                     plugins: {
@@ -747,6 +837,63 @@
                     }
                 }
             });
+        }
+
+        // --- Budget Detail Functions ---
+
+        function renderBudgetDetails(lang) {
+            const container = document.getElementById('budget-details-content');
+            let tableHtml = `
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">${lang === 'cn' ? '类别' : 'Category'}</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">${lang === 'cn' ? '金额 (RM)' : 'Cost (RM)'}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">${lang === 'cn' ? '详情/备注' : 'Details/Notes'}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-slate-200">
+            `;
+            let totalCost = 0;
+
+            detailedBreakdown.forEach(item => {
+                totalCost += item.cost;
+                tableHtml += `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">${lang === 'cn' ? item.category_cn : item.category_en}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-rose-600">RM ${item.cost.toLocaleString('en-US')}</td>
+                        <td class="px-6 py-4 text-sm text-slate-500">${lang === 'cn' ? item.details_cn : item.details_en}</td>
+                    </tr>
+                `;
+            });
+
+            // Total Row
+            tableHtml += `
+                        <tr class="bg-slate-100 font-extrabold">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">${lang === 'cn' ? '总计' : 'TOTAL ESTIMATE'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-indigo-600">RM ${totalCost.toLocaleString('en-US')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            container.innerHTML = tableHtml;
+        }
+
+        function toggleBudgetDetails() {
+            const content = document.getElementById('budget-details-content');
+            const icon = document.getElementById('toggle-icon');
+            const isHidden = content.classList.contains('hidden');
+
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.textContent = '▲';
+            } else {
+                content.classList.add('hidden');
+                icon.textContent = '▼';
+            }
         }
 
         // --- Initialization ---
