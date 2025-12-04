@@ -78,7 +78,7 @@
                 <span class="block xl:inline" data-i18n="hero_main_1">7 Days of Zen in</span>
                 <span class="block text-rose-500 xl:inline" data-i18n="hero_main_2">Tokyo, Kyoto & Osaka</span>
             </h1>
-            <p class="mt-3 text-base justify-center text-slate-500 sm:mt-5 sm:text-lg sm:mx-auto md:mt-5 md:text-xl lg:mx-0" data-i18n="hero_subtitle">
+            <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" data-i18n="hero_subtitle">
                 为您精心策划的蜜月体验。
             </p>
             <div class="mt-5 sm:mt-8 flex justify-center gap-4">
@@ -107,7 +107,7 @@
                         一览无余
                     </p>
                     <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto" data-i18n="section_analytics_subtitle">
-                        您的新预算分配 (总计 RM 10,740) 以及冒险与休闲的平衡。
+                        您的新预算分配 (总计 RM 12,040) 以及冒险与休闲的平衡。
                     </p>
                 </div>
                 
@@ -120,7 +120,7 @@
                         <div class="chart-container">
                             <canvas id="budgetChart"></canvas>
                         </div>
-                        <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_1">*基于您 RM 10,740 的总预算，已包含机票费用。</p>
+                        <p class="text-xs text-center text-slate-400 mt-2" data-i18n="chart_note_1">*基于您 RM 12,040 的总预算，已包含机票费用。</p>
                     </div>
 
                     <!-- Chart 2: Cost vs Time Analysis -->
@@ -136,7 +136,7 @@
                 <!-- Detailed Budget Breakdown Section -->
                 <div class="mt-12 bg-white rounded-xl shadow-lg overflow-hidden">
                     <button id="toggle-budget-btn" class="w-full text-left p-6 flex justify-between items-center text-xl font-bold text-slate-900 bg-rose-100 hover:bg-rose-200 transition-colors" onclick="toggleBudgetDetails()">
-                        <span data-i18n="section_detailed_breakdown">详细预算分解 (RM 10,740 总计)</span>
+                        <span data-i18n="section_detailed_breakdown">详细预算分解 (RM 12,040 总计)</span>
                         <span id="toggle-icon">▼</span>
                     </button>
                     <div id="budget-details-content" class="p-6 hidden">
@@ -304,19 +304,19 @@
             nav_itinerary: { cn: "每日行程", en: "Daily Itinerary" },
             nav_food: { cn: "美食地图", en: "Food Map" },
             nav_logistics: { cn: "后勤信息", en: "Logistics" },
-            hero_main_1: { cn: "七日禅意之旅：", en: "7 Days of Zen in" },
+            hero_main_1: { cn: "7 Days of Zen in", en: "7 Days of Zen in" },
             hero_main_2: { cn: "东京、京都与大阪", en: "Tokyo, Kyoto & Osaka" },
             hero_subtitle: { cn: "为您精心策划的蜜月体验。", en: "Your curated honeymoon experience." },
             btn_start: { cn: "开启旅程", en: "Start the Journey" },
             btn_check: { cn: "行前清单", en: "Pre-Trip Checklist" },
             section_analytics: { cn: "行程分析", en: "TRIP ANALYTICS" },
             section_glance: { cn: "一览无余", en: "At a Glance" },
-            section_analytics_subtitle: { cn: "您的新预算分配 (总计 RM 10,740) 以及冒险与休闲的平衡。", en: "Your new budget distribution (Total RM 10,740) and balance of adventure vs. relaxation." },
+            section_analytics_subtitle: { cn: "您的新预算分配 (总计 RM 12,040) 以及冒险与休闲的平衡。", en: "Your new budget distribution (Total RM 12,040) and balance of adventure vs. relaxation." },
             section_budget: { cn: "预估预算分配 (MYR)", en: "Estimated Budget Breakdown (MYR)" },
-            chart_note_1: { cn: "*基于您 RM 10,740 的总预算，已包含机票费用。", en: "*Based on your total budget of RM 10,740, including flight costs." },
+            chart_note_1: { cn: "*基于您 RM 12,040 的总预算，已包含机票费用。", en: "*Based on your total budget of RM 12,040, including flight costs." },
             section_cost_time: { cn: "成本与时间分析", en: "Cost vs. Time Analysis" },
             chart_note_2: { cn: "高成本通常指主题乐园或豪华餐饮。", en: "High cost usually refers to theme parks or luxury dining." },
-            section_detailed_breakdown: { cn: "详细预算分解 (RM 10,740 总计)", en: "Detailed Budget Breakdown (RM 10,740 Total)" },
+            section_detailed_breakdown: { cn: "详细预算分解 (RM 12,040 总计)", en: "Detailed Budget Breakdown (RM 12,040 Total)" },
             section_daily_itinerary: { cn: "您的每日行程安排", en: "Your Daily Itinerary" },
             food_map_title: { cn: "美食地图 🍜", en: "Food Map 🍜" },
             food_map_subtitle: { cn: "为您精选的必尝美食地点。", en: "Curated must-try dining locations." },
@@ -505,9 +505,9 @@
             { name: "Kushikatsu (Fried Skewers)", city: "Osaka", category: "main", desc: "Skewered and deep-fried meat and vegetables with sweet sauce.", icon: "🍤" }
         ];
 
-        // --- UPDATED REALISTIC BUDGET DATA for 2 pax (Total RM 10,740) ---
-        // New Allocation: Flights(3500), Accom(2100), Transport(1400), Food(1540), Entertainment(1500), Buffer(700) = 10740
-        const budgetData = [3500, 2100, 1400, 1540, 1500, 700]; 
+        // --- UPDATED REALISTIC BUDGET DATA for 2 pax (Total RM 12,040) ---
+        // New Allocation: Flights(4800), Accom(2100), Transport(1400), Food(1540), Entertainment(1500), Buffer(700) = 12040
+        const budgetData = [4800, 2100, 1400, 1540, 1500, 700]; 
         
         const chartLabelsCN = ["机票", "住宿", "本地交通/新干线", "餐饮", "娱乐/门票", "购物/缓冲"];
         const chartLabelsEN = ["Flights", "Accommodation", "Local Transport/Shinkansen", "Food & Drinks", "Entertainment/Tickets", "Shopping/Buffer"];
@@ -516,9 +516,9 @@
             {
                 category_cn: "机票 (KUL-JPN 往返, 2人)", 
                 category_en: "Flights (KUL-JPN R/T, 2 pax)", 
-                cost: 3500, 
-                details_cn: "2张廉价航空往返机票 @ RM 1,750/张。", 
-                details_en: "2x budget R/T Tickets @ RM 1,750/ticket." 
+                cost: 4800, 
+                details_cn: "2张往返机票 @ RM 2,400/张。新的总金额。", 
+                details_en: "2x R/T Tickets @ RM 2,400/ticket. Reflects the new, higher total cost." 
             },
             {
                 category_cn: "住宿 (6晚)", 
@@ -575,7 +575,7 @@
             }
 
             // Update title
-            document.getElementById('doc-title').textContent = (lang === 'cn' ? '日本蜜月之旅 - RM 10,740 预算' : 'Japan Honeymoon Itinerary - RM 10,740 Budget');
+            document.getElementById('doc-title').textContent = (lang === 'cn' ? translationMap.nav_title.cn + ' - RM 12,040 预算' : translationMap.nav_title.en + ' - RM 12,040 Budget');
 
             // Update Food Filters (since text is dynamically set)
             document.querySelectorAll('.food-filter').forEach(btn => {
