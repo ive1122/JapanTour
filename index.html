@@ -628,7 +628,7 @@
                 button.className = `${baseClasses} ${
                     isActive ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
                 }`;
-                button.textContent = `${data[index].day === 7 ? data[index].date : (lang === 'cn' ? '第' + dayData.day + '天' : 'Day ' + dayData.day)} (${dayData.location.split(' ').pop().replace(')', '')})`;
+                button.textContent = `${data[index].day === 7 ? data[index].date : (lang === 'cn' ? '第' + dayData.day + '天' : 'Day ' + dayData.day)} (${dayData.location.split(' ').pop().replace('(', '').replace(')', '')})`;
                 button.setAttribute('data-day-index', index);
                 
                 button.onclick = (e) => {
@@ -909,3 +909,4 @@
     </script>
 </body>
 </html>
+
