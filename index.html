@@ -33,22 +33,6 @@
         /* No scrollbar for the day tabs */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Timeline Placeholder Block (Replacing Image) */
-        .timeline-placeholder {
-            width: 100%;
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #e2e8f0; /* slate-200 */
-            color: #475569; /* slate-600 */
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-align: center;
-            border: 1px dashed #94a3b8;
-        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-700 font-sans antialiased">
@@ -159,21 +143,23 @@
 
         <!-- Section: Interactive Itinerary -->
         <section id="itinerary" class="py-16 bg-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
+            <!-- Widen the main container for the tabs -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center mb-12 max-w-4xl mx-auto">
                     <h2 class="text-3xl font-extrabold text-slate-900" data-i18n="section_daily_itinerary">您的每日行程安排</h2>
                     <p class="mt-4 text-lg text-slate-500">
                         3月28日 - 4月03日 | 东京 • 京都 • 大阪
                     </p>
                 </div>
 
-                <!-- Day Selector Tabs -->
-                <div class="flex overflow-x-auto pb-4 mb-8 gap-2 justify-start md:justify-center no-scrollbar" id="day-tabs">
+                <!-- Day Selector Tabs - Now wider (up to 7xl) -->
+                <div class="flex overflow-x-auto pb-4 mb-8 gap-2 justify-start md:justify-around no-scrollbar" id="day-tabs">
                     <!-- JS will populate buttons here -->
                 </div>
 
-                <!-- Dynamic Content Container -->
-                <div id="itinerary-content" class="bg-slate-50 rounded-2xl p-6 md:p-8 shadow-inner min-h-[500px]">
+                <!-- Dynamic Content Container - Constrained for readability -->
+                <div id="itinerary-content" class="max-w-4xl mx-auto bg-slate-50 rounded-2xl p-6 md:p-8 shadow-inner min-h-[500px]">
                     <!-- JS will inject timeline here -->
                 </div>
             </div>
@@ -439,7 +425,7 @@
             {
                 day: 3, date: "Mar 30", title: "Art, Views & Fuji Day Trip", location: "Tokyo (Odaiba) & Kawaguchiko",
                 events: [
-                    { time: "08:30", title: "TeamLab Planets", desc: "*Must book morning time slot in advance*. Immerse yourselves in the digital art.", icon: "✨", transport: "Train", duration: "2h", link: "https://goo.gl/maps/TeamLabPlanets" },
+                    { time: "08:30", title: "TeamLab Planets", desc: "*Must book morning time slot in advance*. Immerse yourselves in the digital art.", icon: "✨", transport: "火车", duration: "2h", link: "https://goo.gl/maps/TeamLabPlanets" },
                     { time: "11:30", title: "Lunch & Travel Prep", desc: "Quick lunch and prepare for the 2-hour train ride to Kawaguchiko area.", icon: "🍱", transport: "Train", duration: "2.5h", link: "https://goo.gl/maps/ShinjukuStation" },
                     { time: "14:30", title: "Chureito Pagoda", desc: "The iconic Pagoda and Mt Fuji view. Take the 400 steps for the best photo.", icon: "🗻", transport: "Train/Walk", duration: "2h", link: "https://goo.gl/maps/Chureito" },
                     { time: "18:00", title: "Return to Tokyo", desc: "Take the Fuji Excursion Limited Express back. Dinner at Shinjuku upon arrival.", icon: "🚅", transport: "Train", duration: "2h", link: "https://goo.gl/maps/Tokyo" }
@@ -554,34 +540,54 @@
             const container = document.getElementById('day-tabs');
             container.innerHTML = '';
             
+            // Initial render state check
+            const initialDayIndex = 0;
+            let currentActiveIndex = initialDayIndex;
+            // Check if a day has been previously activated in this session
+            const activeBtn = container.querySelector('.bg-rose-500');
+            if (activeBtn) {
+                 currentActiveIndex = parseInt(activeBtn.getAttribute('data-day-index'));
+            }
+
+            // Base classes for the button (w-full on md is crucial for grid layout)
+            const baseClasses = 'flex-shrink-0 px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap md:w-full';
+
             data.forEach((dayData, index) => {
-                const isActive = index === 0; // Default to Day 1 active
+                const isActive = index === currentActiveIndex; 
                 const button = document.createElement('button');
-                button.className = `px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap ${
+                
+                button.className = `${baseClasses} ${
                     isActive ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
                 }`;
-                button.textContent = `${data[index].day === 7 ? data[index].date : '第' + dayData.day + '天'} (${dayData.location.split(' ').pop().replace(')', '')})`;
+                button.textContent = `${data[index].day === 7 ? data[index].date : (lang === 'cn' ? '第' + dayData.day + '天' : 'Day ' + dayData.day)} (${dayData.location.split(' ').pop().replace(')', '')})`;
                 button.setAttribute('data-day-index', index);
-                button.onclick = () => {
+                
+                button.onclick = (e) => {
+                    // Deactivate all
                     document.querySelectorAll('#day-tabs button').forEach(btn => {
-                        btn.className = 'px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap bg-white text-slate-700 hover:bg-slate-100';
+                        // Apply the full set of base/inactive classes
+                        btn.className = `${baseClasses} bg-white text-slate-700 hover:bg-slate-100`;
                     });
-                    button.className = 'px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap bg-rose-500 text-white shadow-md';
+                    // Activate current
+                    e.currentTarget.className = `${baseClasses} bg-rose-500 text-white shadow-md`;
                     renderItineraryTimeline(index);
                 };
                 container.appendChild(button);
-
-                if (isActive) {
-                    renderItineraryTimeline(index);
-                }
             });
+
+            // Apply grid class for desktop layout and re-render initial content
+            container.classList.add('md:grid', 'md:grid-cols-7', 'md:gap-4');
+            renderItineraryTimeline(currentActiveIndex);
         }
+
 
         function renderItineraryTimeline(dayIndex) {
             const data = currentLang === 'cn' ? itineraryDataCN : itineraryDataEN;
             const dayData = data[dayIndex];
             const container = document.getElementById('itinerary-content');
             
+            const linkText = currentLang === 'cn' ? '地图/链接' : 'Map/Link';
+
             let timelineHtml = `
                 <div class="mb-6 border-b pb-4">
                     <h3 class="text-2xl font-bold text-slate-900">${dayData.title}</h3>
@@ -591,37 +597,30 @@
 
             timelineHtml += `
                 <div class="space-y-8 relative">
-                    <!-- Vertical Line -->
-                    <div class="absolute w-0.5 bg-rose-200 left-3 top-0 bottom-0 md:left-1/2 md:transform md:-translate-x-1/2"></div>
+                    <!-- Vertical Line (Aligned to the left) -->
+                    <div class="absolute w-0.5 bg-rose-200 left-4 top-0 bottom-0"></div>
             `;
 
-            dayData.events.forEach((event, index) => {
-                // Determine if event is left or right in desktop view
-                const isLeft = index % 2 === 0;
+            dayData.events.forEach((event) => {
                 
                 timelineHtml += `
-                    <div class="relative flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-start w-full">
+                    <div class="relative flex items-start w-full">
                         
-                        <!-- Icon Circle -->
-                        <div class="absolute top-0 left-0 md:left-1/2 md:transform md:-translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full bg-rose-500 text-white z-10 shadow-lg ring-4 ring-slate-50">
+                        <!-- Icon Circle (Centered on the Vertical Line at left-4) -->
+                        <div class="absolute top-0 left-4 flex items-center justify-center w-8 h-8 rounded-full bg-rose-500 text-white z-10 shadow-lg ring-4 ring-slate-50 transform -translate-x-1/2">
                             ${event.icon}
                         </div>
                         
-                        <!-- Content Panel (Left/Right positioning) -->
-                        <div class="flex-1 ${isLeft ? 'pr-8 md:text-right md:pr-12' : 'pl-8 md:text-left md:pl-12'}">
-                            <div class="${isLeft ? 'ml-6 md:ml-0' : 'mr-6 md:mr-0'} bg-white p-4 rounded-xl shadow-md border border-slate-100 transition-all hover:shadow-lg">
+                        <!-- Content Panel (Starts after the icon/line, using pl-12) -->
+                        <div class="flex-1 pl-12">
+                            <div class="bg-white p-4 rounded-xl shadow-md border border-slate-100 transition-all hover:shadow-lg">
                                 <p class="text-xs font-semibold uppercase text-rose-500">${event.time} (${event.duration})</p>
                                 <h4 class="mt-1 text-lg font-bold text-slate-900">${event.title}</h4>
                                 <p class="mt-2 text-sm text-slate-600">${event.desc}</p>
                                 
-                                <div class="mt-4">
-                                    <div class="timeline-placeholder">
-                                        Location Visual: ${event.title}
-                                    </div>
-                                    ${event.link ? `<a href="${event.link}" target="_blank" class="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
-                                        ${event.transport} &rarr; 地图/链接
-                                    </a>` : ''}
-                                </div>
+                                ${event.link ? `<a href="${event.link}" target="_blank" class="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+                                    ${event.transport} &rarr; ${linkText}
+                                </a>` : ''}
                             </div>
                         </div>
                     </div>
@@ -682,9 +681,11 @@
             const comparisonData = [3, 2, 4, 5, 1]; // Arbitrary rating 1-5 for Cost/Time Balance
 
             // Budget Chart (Doughnut)
-            const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+            const budgetCtx = document.getElementById('budgetChart');
+            if (!budgetCtx) return; // Guard clause if canvas is not found
             if (budgetChartInstance) { budgetChartInstance.destroy(); }
-            budgetChartInstance = new Chart(budgetCtx, {
+            
+            budgetChartInstance = new Chart(budgetCtx.getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: labels,
@@ -713,9 +714,11 @@
             });
 
             // Comparison Chart (Bar)
-            const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+            const comparisonCtx = document.getElementById('comparisonChart');
+            if (!comparisonCtx) return; // Guard clause if canvas is not found
             if (comparisonChartInstance) { comparisonChartInstance.destroy(); }
-            comparisonChartInstance = new Chart(comparisonCtx, {
+            
+            comparisonChartInstance = new Chart(comparisonCtx.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -754,10 +757,7 @@
             // Set up language toggle listener
             document.getElementById('lang-toggle-btn').addEventListener('click', toggleLanguage);
             
-            // Initial rendering of tabs and charts
-            renderDayTabs('cn');
-            renderCharts('cn');
-            renderFoodGrid('all');
+            // The initial render is handled by updateContent('cn');
         };
 
         // Simplified mobile menu toggle (for completeness)
