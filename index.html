@@ -283,6 +283,11 @@
         let budgetChartInstance = null;
         let comparisonChartInstance = null;
 
+        // Helper function to generate a robust Google Maps search link
+        const generateMapsLink = (query) => {
+            return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+        };
+
         // --- Data Definitions (Chinese and English) ---
         
         const translationMap = {
@@ -328,7 +333,7 @@
             checklist_title: { cn: "行前清单 ✅", en: "Pre-Trip Checklist ✅" },
             checklist_vjw: { cn: "Visit Japan Web (海关/入境)", en: "Visit Japan Web (Customs/Immigration)" },
             checklist_usj: { cn: "USJ 快速通行证 (提前2个月购买!)", en: "USJ Express Pass (Book 2 months ahead!)" },
-            checklist_shinkansen: { cn: "新干线车票 (SmartEx App)", en: "Shinkansen Tickets (SmartEx App)" },
+            checklist_shinkansen: { cn: "新干线车票 (SmartEx App)在", en: "Shinkansen Tickets (SmartEx App)" },
             checklist_insurance: { cn: "旅行保险", en: "Travel Insurance" },
             footer: { cn: "© 2025 日本蜜月旅行计划。祝您旅途愉快！", en: "© 2025 Japan Honeymoon Planner. Have a wonderful trip!" },
         };
@@ -339,63 +344,63 @@
                 events: [
                     { time: "待定", title: "从吉隆坡出发", desc: "享受您的航班！根据实际航班时间，查询抵达机场 (NRT/HND) 的火车时刻表 (NEX/Skyliner)。", icon: "✈️", transport: "飞机", duration: "7小时", link: "https://www.narita-airport.jp/ch/access/train" },
                     { time: "20:00-22:50", title: "抵达与清关", desc: "办理海关和入境手续。领取预订物品（如 WiFi 等）。", icon: "🛂", transport: "海关", duration: "1小时", link: "https://www.narita-airport.jp/ch/access" },
-                    { time: "22:00-00:30", title: "乘火车/出租车前往新宿", desc: "搭乘最快的交通工具前往新宿。请注意，大多数特快列车在晚上 11 点左右停运。", icon: "🚅", transport: "火车/出租车", duration: "1.5小时", link: "https://goo.gl/maps/ShinjukuStation" },
-                    { time: "23:30-01:30", title: "入住酒店与休息", desc: "入住 Hotel Gracery。长途旅行后尽量休息。", icon: "🏨", transport: "步行", duration: "1小时", link: "https://goo.gl/maps/ShinjukuHotel" }
+                    { time: "22:00-00:30", title: "乘火车/出租车前往新宿", desc: "搭乘最快的交通工具前往新宿。请注意，大多数特快列车在晚上 11 点左右停运。", icon: "🚅", transport: "火车/出租车", duration: "1.5小时", link: generateMapsLink("Shinjuku Station") },
+                    { time: "23:30-01:30", title: "入住酒店与休息", desc: "入住 Hotel Gracery。长途旅行后尽量休息。", icon: "🏨", transport: "步行", duration: "1小时", link: generateMapsLink("Hotel Gracery Shinjuku") }
                 ]
             },
             {
                 day: 2, date: "3月29日", title: "古老与现代的东京：文化与霓虹", location: "东京 (浅草/新宿)",
                 events: [
-                    { time: "09:00", title: "浅草寺", desc: "从东京最古老的寺庙开始新的一天。抽一支御神签（求签）。", icon: "⛩️", transport: "地铁", duration: "2小时", link: "https://goo.gl/maps/Sensoji" },
-                    { time: "11:30", title: "仲见世商店街与午餐", desc: "在当地餐馆吃午餐前，品尝波罗面包和炸馒头。", icon: "🍘", transport: "步行", duration: "1.5小时", link: "https://goo.gl/maps/Nakamise" },
-                    { time: "14:30", title: "明治神宫", desc: "参观供奉明治天皇的宁静森林神社。一片宁静的净土。", icon: "🌳", transport: "地铁", duration: "1.5小时", link: "https://goo.gl/maps/MeijiJingu" },
-                    { time: "17:30", title: "回忆横丁 (Omoide Yokocho)", desc: "经典‘小便横丁’，享用日式烤串晚餐，感受经典的东京夜生活氛围。", icon: "🍢", transport: "步行", duration: "2小时", link: "https://goo.gl/maps/OmoideYokocho" },
-                    { time: "19:30", title: "新宿十字路口与歌舞伎町", desc: "观看 3D 猫咪广告牌和新宿璀璨的霓虹灯。", icon: "🌃", transport: "步行", duration: "1小时", link: "https://goo.gl/maps/Kabukicho" }
+                    { time: "09:00", title: "浅草寺", desc: "从东京最古老的寺庙开始新的一天。抽一支御神签（求签）。", icon: "⛩️", transport: "地铁", duration: "2小时", link: generateMapsLink("Senso-ji Temple") },
+                    { time: "11:30", title: "仲见世商店街与午餐", desc: "在当地餐馆吃午餐前，品尝波罗面包和炸馒头。", icon: "🍘", transport: "步行", duration: "1.5小时", link: generateMapsLink("Nakamise Street") },
+                    { time: "14:30", title: "明治神宫", desc: "参观供奉明治天皇的宁静森林神社。一片宁静的净土。", icon: "🌳", transport: "地铁", duration: "1.5小时", link: generateMapsLink("Meiji Jingu Shrine") },
+                    { time: "17:30", title: "回忆横丁 (Omoide Yokocho)", desc: "经典‘小便横丁’，享用日式烤串晚餐，感受经典的东京夜生活氛围。", icon: "🍢", transport: "步行", duration: "2小时", link: generateMapsLink("Omoide Yokocho") },
+                    { time: "19:30", title: "新宿十字路口与歌舞伎町", desc: "观看 3D 猫咪广告牌和新宿璀璨的霓虹灯。", icon: "🌃", transport: "步行", duration: "1小时", link: generateMapsLink("Kabukicho Shinjuku") }
                 ]
             },
             {
                 day: 3, date: "3月30日", title: "艺术、美景与富士山一日游", location: "东京 (台场) 与河口湖",
                 events: [
-                    { time: "08:30", title: "TeamLab Planets", desc: "*务必提前预订上午时段*。沉浸在数字艺术之中。", icon: "✨", transport: "火车", duration: "2小时", link: "https://goo.gl/maps/TeamLabPlanets" },
-                    { time: "11:30", title: "午餐与准备", desc: "快速午餐并准备搭乘 2 小时的火车前往河口湖地区。", icon: "🍱", transport: "火车", duration: "2.5小时", link: "https://goo.gl/maps/ShinjukuStation" },
-                    { time: "14:30", title: "忠灵塔 (Chureito Pagoda)", desc: "标志性的宝塔和富士山美景。爬上 400 级台阶可拍到最佳照片。", icon: "🗻", transport: "火车/步行", duration: "2小时", link: "https://goo.gl/maps/Chureito" },
-                    { time: "18:00", title: "返回东京", desc: "搭乘富士特快列车返回。抵达新宿后享用晚餐。", icon: "🚅", transport: "火车", duration: "2小时", link: "https://goo.gl/maps/Tokyo" }
+                    { time: "08:30", title: "TeamLab Planets", desc: "*务必提前预订上午时段*。沉浸在数字艺术之中。", icon: "✨", transport: "火车", duration: "2小时", link: generateMapsLink("TeamLab Planets Tokyo") },
+                    { time: "11:30", title: "午餐与准备", desc: "快速午餐并准备搭乘 2 小时的火车前往河口湖地区。", icon: "🍱", transport: "火车", duration: "2.5小时", link: generateMapsLink("Shinjuku Station") },
+                    { time: "14:30", title: "忠灵塔 (Chureito Pagoda)", desc: "标志性的宝塔和富士山美景。爬上 400 级台阶可拍到最佳照片。", icon: "🗻", transport: "火车/步行", duration: "2小时", link: generateMapsLink("Chureito Pagoda") },
+                    { time: "18:00", title: "返回东京", desc: "搭乘富士特快列车返回。抵达新宿后享用晚餐。", icon: "🚅", transport: "火车", duration: "2小时", link: generateMapsLink("Shinjuku Station") }
                 ]
             },
             {
                 day: 4, date: "3月31日", title: "新干线与京都神社", location: "东京 -> 京都",
                 events: [
-                    { time: "09:00", title: "新干线前往京都", desc: "买一份车站便当 (Ekiben) 作为早餐。尽量选择靠窗座位 (E) 以欣赏富士山景色。", icon: "🍱", transport: "新干线", duration: "2.5小时", link: "https://goo.gl/maps/KyotoStation" },
-                    { time: "13:00", title: "伏见稻荷大社", desc: "数千座朱红色鸟居。爬到半山腰可获得绝佳的拍照地点。", icon: "⛩️", transport: "JR列车", duration: "2.5小时", link: "https://goo.gl/maps/FushimiInari" },
-                    { time: "16:30", title: "入住与放松", desc: "入住您的京都酒店，休息片刻。", icon: "🏨", transport: "地铁", duration: "1小时", link: "https://goo.gl/maps/KyotoHotel" },
-                    { time: "19:00", title: "先斗町晚餐", desc: "在鸭川旁的狭窄小巷，以传统和现代餐饮选择而闻名，氛围十足。", icon: "🏮", transport: "步行", duration: "2小时", link: "https://goo.gl/maps/Pontocho" }
+                    { time: "09:00", title: "新干线前往京都", desc: "买一份车站便当 (Ekiben) 作为早餐。尽量选择靠窗座位 (E) 以欣赏富士山景色。", icon: "🍱", transport: "新干线", duration: "2.5小时", link: generateMapsLink("Kyoto Station") },
+                    { time: "13:00", title: "伏见稻荷大社", desc: "数千座朱红色鸟居。爬到半山腰可获得绝佳的拍照地点。", icon: "⛩️", transport: "JR列车", duration: "2.5小时", link: generateMapsLink("Fushimi Inari Taisha") },
+                    { time: "16:30", title: "入住与放松", desc: "入住您的京都酒店，休息片刻。", icon: "🏨", transport: "地铁", duration: "1小时", link: generateMapsLink("Cross Hotel Kyoto") },
+                    { time: "19:00", title: "先斗町晚餐", desc: "在鸭川旁的狭窄小巷，以传统和现代餐饮选择而闻名，氛围十足。", icon: "🏮", transport: "步行", duration: "2小时", link: generateMapsLink("Pontocho Alley") }
                 ]
             },
             {
                 day: 5, date: "4月01日", title: "京都宁静、大阪城与道顿堀", location: "京都 -> 大阪",
                 events: [
-                    { time: "07:30", title: "清水寺", desc: "提早出发至关重要，以便在没有人群的情况下看到著名的木制舞台。", icon: "🏯", transport: "巴士/出租车", duration: "2小时", link: "https://goo.gl/maps/Kiyomizudera" },
-                    { time: "10:00", title: "二年坂/三年坂", desc: "沿着保存完好的街道从寺庙步行。找一家咖啡馆休息。", icon: "☕", transport: "步行", duration: "1.5小时", link: "https://goo.gl/maps/Ninenzaka" },
-                    { time: "12:00", title: "哲学之道与午餐", desc: "沿着樱花树成荫的运河散步。在祇园附近快速午餐。", icon: "🌸", transport: "巴士", duration: "2小时", link: "https://goo.gl/maps/PhilosophersPath" },
-                    { time: "14:30", title: "前往大阪", desc: "从京都站前往大阪站。", icon: "🚆", transport: "JR线", duration: "1小时", link: "https://goo.gl/maps/OsakaStation" },
-                    { time: "15:30", title: "大阪城 (搬迁)", desc: "快速参观城堡庭院和外观拍照。", icon: "🏰", transport: "地铁", duration: "1.5小时", link: "https://goo.gl/maps/OsakaCastle" },
-                    { time: "17:00", title: "入住 USJ 地区酒店", desc: "前往环球影城 (Universal City) 地区并入住 The Park Front Hotel。", icon: "🏨", transport: "JR线", duration: "1.5小时", link: "https://goo.gl/maps/USJHotel" },
-                    { time: "19:30", title: "道顿堀之乐", desc: "标志性的格力高人广告牌、街头美食和充满活力的夜生活。", icon: "🐙", transport: "地铁", duration: "3小时", link: "https://goo.gl/maps/Dotonbori" }
+                    { time: "07:30", title: "清水寺", desc: "提早出发至关重要，以便在没有人群的情况下看到著名的木制舞台。", icon: "🏯", transport: "巴士/出租车", duration: "2小时", link: generateMapsLink("Kiyomizu-dera Temple") },
+                    { time: "10:00", title: "二年坂/三年坂", desc: "沿着保存完好的街道从寺庙步行。找一家咖啡馆休息。", icon: "☕", transport: "步行", duration: "1.5小时", link: generateMapsLink("Ninenzaka and Sannenzaka Kyoto") },
+                    { time: "12:00", title: "哲学之道与午餐", desc: "沿着樱花树成荫的运河散步。在祇园附近快速午餐。", icon: "🌸", transport: "巴士", duration: "2小时", link: generateMapsLink("Philosopher's Path Kyoto") },
+                    { time: "14:30", title: "前往大阪", desc: "从京都站前往大阪站。", icon: "🚆", transport: "JR线", duration: "1小时", link: generateMapsLink("Osaka Station") },
+                    { time: "15:30", title: "大阪城 (搬迁)", desc: "快速参观城堡庭院和外观拍照。", icon: "🏰", transport: "地铁", duration: "1.5小时", link: generateMapsLink("Osaka Castle") },
+                    { time: "17:00", title: "入住 USJ 地区酒店", desc: "前往环球影城 (Universal City) 地区并入住 The Park Front Hotel。", icon: "🏨", transport: "JR线", duration: "1.5小时", link: generateMapsLink("The Park Front Hotel at Universal Studios Japan") },
+                    { time: "19:30", title: "道顿堀之乐", desc: "标志性的格力高人广告牌、街头美食和充满活力的夜生活。", icon: "🐙", transport: "地铁", duration: "3小时", link: generateMapsLink("Dotonbori Osaka") }
                 ]
             },
             {
                 day: 6, date: "4月02日", title: "日本环球影城 (USJ)", location: "大阪 (USJ)",
                 events: [
-                    { time: "08:00", title: "USJ 入园", desc: "提早抵达，直奔超级任天堂世界 (Super Nintendo World)（确保您有区域入场券或快速通行证）。", icon: "🍄", transport: "步行", duration: "全天", link: "https://goo.gl/maps/USJ" },
-                    { time: "12:00", title: "魔法世界午餐", desc: "在哈利波特主题区享用午餐和黄油啤酒。", icon: "🪄", transport: "步行", duration: "2小时", link: "https://goo.gl/maps/USJ" },
-                    { time: "17:00", title: "主题游乐设施", desc: "享受剩余的主题游乐设施（侏罗纪公园、蜘蛛侠等）。", icon: "🎢", transport: "步行", duration: "3小时", link: "https://goo.gl/maps/USJ" },
-                    { time: "20:00", title: "CityWalk 晚餐", desc: "在公园大门外的 CityWalk 享受轻松的晚餐。", icon: "🍔", transport: "步行", duration: "1.5小时", link: "https://goo.gl/maps/CityWalkOsaka" }
+                    { time: "08:00", title: "USJ 入园", desc: "提早抵达，直奔超级任天堂世界 (Super Nintendo World)（确保您有区域入场券或快速通行证）。", icon: "🍄", transport: "步行", duration: "全天", link: generateMapsLink("Universal Studios Japan") },
+                    { time: "12:00", title: "魔法世界午餐", desc: "在哈利波特主题区享用午餐和黄油啤酒。", icon: "🪄", transport: "步行", duration: "2小时", link: generateMapsLink("Universal Studios Japan") },
+                    { time: "17:00", title: "主题游乐设施", desc: "享受剩余的主题游乐设施（侏罗纪公园、蜘蛛侠等）。", icon: "🎢", transport: "步行", duration: "3小时", link: generateMapsLink("Universal Studios Japan") },
+                    { time: "20:00", title: "CityWalk 晚餐", desc: "在公园大门外的 CityWalk 享受轻松的晚餐。", icon: "🍔", transport: "步行", duration: "1.5小时", link: generateMapsLink("Universal CityWalk Osaka") }
                 ]
             },
             {
                 day: 7, date: "4月03日", title: "大阪出发 → 吉隆坡 (早班机)", location: "大阪 (KIX) → 吉隆坡",
                 events: [
-                    { time: "06:00", title: "退房与前往机场", desc: "从 USJ 地区搭乘 JR 快速线前往关西国际机场 (KIX)。提早前往以避免拥堵。", icon: "🚖", transport: "JR线", duration: "1.5小时", link: "https://goo.gl/maps/KIX" },
+                    { time: "06:00", title: "退房与前往机场", desc: "从 USJ 地区搭乘 JR 快速线前往关西国际机场 (KIX)。提早前往以避免拥堵。", icon: "🚖", transport: "JR线", duration: "1.5小时", link: generateMapsLink("Kansai International Airport KIX") },
                     { time: "08:00", title: "办理登机手续与离境", desc: "办理登机手续，通过安检，并享受最后一刻的购物。", icon: "🛍️", transport: "值机", duration: "2小时", link: "https://www.kansai-airport.or.jp/cn/" },
                     { time: "10:30", title: "返回吉隆坡", desc: "希望您带着美好的回忆和照片满载而归！", icon: "👋", transport: "飞机", duration: "6.5小时", link: "" }
                 ]
@@ -408,63 +413,63 @@
                 events: [
                     { time: "TBD", title: "Depart KUL", desc: "Enjoy your flight! Check the train schedules (NEX/Skyliner) for your arrival airport (NRT/HND) based on actual flight time.", icon: "✈️", transport: "Plane", duration: "7h", link: "https://www.narita-airport.jp/en/access/train" },
                     { time: "20:00-22:50", title: "Arrival & Customs", desc: "Clear customs and immigration. Pick up pre-booked items (e.g., WiFi, etc.).", icon: "🛂", transport: "Customs", duration: "1h", link: "https://www.narita-airport.jp/en/access" },
-                    { time: "22:00-00:30", title: "Train/Taxi to Shinjuku", desc: "Take the fastest available option to Shinjuku. Be aware that most express trains stop running around 11 PM.", icon: "🚅", transport: "Train/Taxi", duration: "1.5h", link: "https://goo.gl/maps/ShinjukuStation" },
-                    { time: "23:30-01:30", title: "Check-in Hotel & Rest", desc: "Settle into Hotel Gracery. Maximize rest after the long journey.", icon: "🏨", transport: "Walk", duration: "1h", link: "https://goo.gl/maps/ShinjukuHotel" }
+                    { time: "22:00-00:30", title: "Train/Taxi to Shinjuku", desc: "Take the fastest available option to Shinjuku. Be aware that most express trains stop running around 11 PM.", icon: "🚅", transport: "Train/Taxi", duration: "1.5h", link: generateMapsLink("Shinjuku Station") },
+                    { time: "23:30-01:30", title: "Check-in Hotel & Rest", desc: "Settle into Hotel Gracery. Maximize rest after the long journey.", icon: "🏨", transport: "Walk", duration: "1h", link: generateMapsLink("Hotel Gracery Shinjuku") }
                 ]
             },
             {
                 day: 2, date: "Mar 29", title: "Old & New Tokyo: Culture & Neon", location: "Tokyo (Asakusa/Shinjuku)",
                 events: [
-                    { time: "09:00", title: "Senso-ji Temple", desc: "Start the day with the city's oldest temple. Draw an Omikuji (fortune).", icon: "⛩️", transport: "Subway", duration: "2h", link: "https://goo.gl/maps/Sensoji" },
-                    { time: "11:30", title: "Nakamise Street & Lunch", desc: "Snack on Melon Pan and Agemanju before grabbing a quick, local lunch.", icon: "🍘", transport: "Walk", duration: "1.5h", link: "https://goo.gl/maps/Nakamise" },
-                    { time: "14:30", title: "Meiji Jingu Shrine", desc: "Visit the serene forested shrine dedicated to Emperor Meiji. A peaceful escape.", icon: "🌳", transport: "Subway", duration: "1.5h", link: "https://goo.gl/maps/MeijiJingu" },
-                    { time: "17:30", title: "Omoide Yokocho", desc: "Classic 'Piss Alley' for Yakitori dinner and a classic Tokyo nightlife vibe.", icon: "🍢", transport: "Walk", duration: "2h", link: "https://goo.gl/maps/OmoideYokocho" },
-                    { time: "19:30", title: "Shinjuku Crossing & Kabukicho", desc: "See the 3D Cat billboard and bright neon signs of Shinjuku.", icon: "🌃", transport: "Walk", duration: "1h", link: "https://goo.gl/maps/Kabukicho" }
+                    { time: "09:00", title: "Senso-ji Temple", desc: "Start the day with the city's oldest temple. Draw an Omikuji (fortune).", icon: "⛩️", transport: "Subway", duration: "2h", link: generateMapsLink("Senso-ji Temple") },
+                    { time: "11:30", title: "Nakamise Street & Lunch", desc: "Snack on Melon Pan and Agemanju before grabbing a quick, local lunch.", icon: "🍘", transport: "Walk", duration: "1.5h", link: generateMapsLink("Nakamise Street") },
+                    { time: "14:30", title: "Meiji Jingu Shrine", desc: "Visit the serene forested shrine dedicated to Emperor Meiji. A peaceful escape.", icon: "🌳", transport: "Subway", duration: "1.5h", link: generateMapsLink("Meiji Jingu Shrine") },
+                    { time: "17:30", title: "Omoide Yokocho", desc: "Classic 'Piss Alley' for Yakitori dinner and a classic Tokyo nightlife vibe.", icon: "🍢", transport: "Walk", duration: "2h", link: generateMapsLink("Omoide Yokocho") },
+                    { time: "19:30", title: "Shinjuku Crossing & Kabukicho", desc: "See the 3D Cat billboard and bright neon signs of Shinjuku.", icon: "🌃", transport: "Walk", duration: "1h", link: generateMapsLink("Kabukicho Shinjuku") }
                 ]
             },
             {
                 day: 3, date: "Mar 30", title: "Art, Views & Fuji Day Trip", location: "Tokyo (Odaiba) & Kawaguchiko",
                 events: [
-                    { time: "08:30", title: "TeamLab Planets", desc: "*Must book morning time slot in advance*. Immerse yourselves in the digital art.", icon: "✨", transport: "火车", duration: "2h", link: "https://goo.gl/maps/TeamLabPlanets" },
-                    { time: "11:30", title: "Lunch & Travel Prep", desc: "Quick lunch and prepare for the 2-hour train ride to Kawaguchiko area.", icon: "🍱", transport: "Train", duration: "2.5h", link: "https://goo.gl/maps/ShinjukuStation" },
-                    { time: "14:30", title: "Chureito Pagoda", desc: "The iconic Pagoda and Mt Fuji view. Take the 400 steps for the best photo.", icon: "🗻", transport: "Train/Walk", duration: "2h", link: "https://goo.gl/maps/Chureito" },
-                    { time: "18:00", title: "Return to Tokyo", desc: "Take the Fuji Excursion Limited Express back. Dinner at Shinjuku upon arrival.", icon: "🚅", transport: "Train", duration: "2h", link: "https://goo.gl/maps/Tokyo" }
+                    { time: "08:30", title: "TeamLab Planets", desc: "*Must book morning time slot in advance*. Immerse yourselves in the digital art.", icon: "✨", transport: "火车", duration: "2h", link: generateMapsLink("TeamLab Planets Tokyo") },
+                    { time: "11:30", title: "Lunch & Travel Prep", desc: "Quick lunch and prepare for the 2-hour train ride to Kawaguchiko area.", icon: "🍱", transport: "Train", duration: "2.5h", link: generateMapsLink("Shinjuku Station") },
+                    { time: "14:30", title: "Chureito Pagoda", desc: "The iconic Pagoda and Mt Fuji view. Take the 400 steps for the best photo.", icon: "🗻", transport: "Train/Walk", duration: "2h", link: generateMapsLink("Chureito Pagoda") },
+                    { time: "18:00", title: "Return to Tokyo", desc: "Take the Fuji Excursion Limited Express back. Dinner at Shinjuku upon arrival.", icon: "🚅", transport: "Train", duration: "2h", link: generateMapsLink("Shinjuku Station") }
                 ]
             },
             {
                 day: 4, date: "Mar 31", title: "Shinkansen & Kyoto Shrines", location: "Tokyo -> Kyoto",
                 events: [
-                    { time: "09:00", title: "Shinkansen to Kyoto", desc: "Grab an Ekiben (station bento) for breakfast. Aim for a window seat (E) for potential Fuji view.", icon: "🍱", transport: "Shinkansen", duration: "2.5h", link: "https://goo.gl/maps/KyotoStation" },
-                    { time: "13:00", title: "Fushimi Inari Taisha", desc: "Thousands of vermillion Torii gates. Hike halfway up for great photo spots.", icon: "⛩️", transport: "JR Train", duration: "2.5h", link: "https://goo.gl/maps/FushimiInari" },
-                    { time: "16:30", title: "Check-in & Relaxation", desc: "Check into your Kyoto hotel and take a moment to refresh.", icon: "🏨", transport: "Subway", duration: "1h", link: "https://goo.gl/maps/KyotoHotel" },
-                    { time: "19:00", title: "Pontocho Alley Dinner", desc: "Atmospheric narrow alley known for traditional and modern dining options by the Kamo River.", icon: "🏮", transport: "Walk", duration: "2h", link: "https://goo.gl/maps/Pontocho" }
+                    { time: "09:00", title: "Shinkansen to Kyoto", desc: "Grab an Ekiben (station bento) for breakfast. Aim for a window seat (E) for potential Fuji view.", icon: "🍱", transport: "Shinkansen", duration: "2.5h", link: generateMapsLink("Kyoto Station") },
+                    { time: "13:00", title: "Fushimi Inari Taisha", desc: "Thousands of vermillion Torii gates. Hike halfway up for great photo spots.", icon: "⛩️", transport: "JR Train", duration: "2.5h", link: generateMapsLink("Fushimi Inari Taisha") },
+                    { time: "16:30", title: "Check-in & Relaxation", desc: "Check into your Kyoto hotel and take a moment to refresh.", icon: "🏨", transport: "Subway", duration: "1h", link: generateMapsLink("Cross Hotel Kyoto") },
+                    { time: "19:00", title: "Pontocho Alley Dinner", desc: "Atmospheric narrow alley known for traditional and modern dining options by the Kamo River.", icon: "🏮", transport: "Walk", duration: "2h", link: generateMapsLink("Pontocho Alley") }
                 ]
             },
             {
                 day: 5, date: "Apr 01", title: "Kyoto Serenity, Osaka Castle & Dotonbori", location: "Kyoto -> Osaka",
                 events: [
-                    { time: "07:30", title: "Kiyomizu-dera", desc: "Early start is vital to see the famous wooden stage without crowds.", icon: "🏯", transport: "Bus/Taxi", duration: "2h", link: "https://goo.gl/maps/Kiyomizudera" },
-                    { time: "10:00", title: "Ninenzaka/Sannenzaka Streets", desc: "Walk the beautifully preserved streets leading from the temple. Grab a coffee.", icon: "☕", transport: "Walk", duration: "1.5h", link: "https://goo.gl/maps/Ninenzaka" },
-                    { time: "12:00", title: "Philosopher's Path & Lunch", desc: "A relaxing cherry tree-lined canal walk. Quick lunch near Gion.", icon: "🌸", transport: "Bus", duration: "2h", link: "https://goo.gl/maps/PhilosophersPath" },
-                    { time: "14:30", title: "Train to Osaka", desc: "Travel from Kyoto to Osaka station.", icon: "🚆", transport: "JR Line", duration: "1h", link: "https://goo.gl/maps/OsakaStation" },
-                    { time: "15:30", title: "Osaka Castle (Relocated)", desc: "Quick visit to the castle grounds and exterior for photos.", icon: "🏰", transport: "Subway", duration: "1.5h", link: "https://goo.gl/maps/OsakaCastle" },
-                    { time: "17:00", title: "Check-in USJ Area Hotel", desc: "Travel to the Universal City area and check into The Park Front Hotel.", icon: "🏨", transport: "JR Line", duration: "1.5h", link: "https://goo.gl/maps/USJHotel" },
-                    { time: "19:30", title: "Dotonbori Fun", desc: "Iconic Glico Man sign, street food, and vibrant nightlife.", icon: "🐙", transport: "Subway", duration: "3h", link: "https://goo.gl/maps/Dotonbori" }
+                    { time: "07:30", title: "Kiyomizu-dera", desc: "Early start is vital to see the famous wooden stage without crowds.", icon: "🏯", transport: "Bus/Taxi", duration: "2h", link: generateMapsLink("Kiyomizu-dera Temple") },
+                    { time: "10:00", title: "Ninenzaka/Sannenzaka Streets", desc: "Walk the beautifully preserved streets leading from the temple. Grab a coffee.", icon: "☕", transport: "Walk", duration: "1.5h", link: generateMapsLink("Ninenzaka and Sannenzaka Kyoto") },
+                    { time: "12:00", title: "Philosopher's Path & Lunch", desc: "A relaxing cherry tree-lined canal walk. Quick lunch near Gion.", icon: "🌸", transport: "Bus", duration: "2h", link: generateMapsLink("Philosopher's Path Kyoto") },
+                    { time: "14:30", title: "Train to Osaka", desc: "Travel from Kyoto to Osaka station.", icon: "🚆", transport: "JR Line", duration: "1h", link: generateMapsLink("Osaka Station") },
+                    { time: "15:30", title: "Osaka Castle (Relocated)", desc: "Quick visit to the castle grounds and exterior for photos.", icon: "🏰", transport: "Subway", duration: "1.5h", link: generateMapsLink("Osaka Castle") },
+                    { time: "17:00", title: "Check-in USJ Area Hotel", desc: "Travel to the Universal City area and check into The Park Front Hotel.", icon: "🏨", transport: "JR Line", duration: "1.5h", link: generateMapsLink("The Park Front Hotel at Universal Studios Japan") },
+                    { time: "19:30", title: "Dotonbori Fun", desc: "Iconic Glico Man sign, street food, and vibrant nightlife.", icon: "🐙", transport: "Subway", duration: "3h", link: generateMapsLink("Dotonbori Osaka") }
                 ]
             },
             {
                 day: 6, date: "Apr 02", title: "Universal Studios Japan (USJ)", location: "Osaka (USJ)",
                 events: [
-                    { time: "08:00", title: "USJ Entry", desc: "Arrive early and head straight to Super Nintendo World (Ensure you have an Area Entry Ticket or Express Pass).", icon: "🍄", transport: "Walk", duration: "All Day", link: "https://goo.gl/maps/USJ" },
-                    { time: "12:00", title: "Wizarding World Lunch", desc: "Enjoy lunch and Butterbeer in the Harry Potter themed area.", icon: "🪄", transport: "Walk", duration: "2h", link: "https://goo.gl/maps/USJ" },
-                    { time: "17:00", title: "Themed Rides", desc: "Enjoy the remaining themed rides (Jurassic Park, Spiderman, etc.)", icon: "🎢", transport: "Walk", duration: "3h", link: "https://goo.gl/maps/USJ" },
-                    { time: "20:00", title: "CityWalk Dinner", desc: "Relaxed dinner outside the park gates.", icon: "🍔", transport: "Walk", duration: "1.5h", link: "https://goo.gl/maps/CityWalkOsaka" }
+                    { time: "08:00", title: "USJ Entry", desc: "Arrive early and head straight to Super Nintendo World (Ensure you have an Area Entry Ticket or Express Pass).", icon: "🍄", transport: "步行", duration: "All Day", link: generateMapsLink("Universal Studios Japan") },
+                    { time: "12:00", title: "Wizarding World Lunch", desc: "Enjoy lunch and Butterbeer in the Harry Potter themed area.", icon: "🪄", transport: "Walk", duration: "2h", link: generateMapsLink("Universal Studios Japan") },
+                    { time: "17:00", title: "Themed Rides", desc: "Enjoy the remaining themed rides (Jurassic Park, Spiderman, etc.)", icon: "🎢", transport: "Walk", duration: "3h", link: generateMapsLink("Universal Studios Japan") },
+                    { time: "20:00", title: "CityWalk Dinner", desc: "Relaxed dinner outside the park gates.", icon: "🍔", transport: "Walk", duration: "1.5h", link: generateMapsLink("Universal CityWalk Osaka") }
                 ]
             },
             {
                 day: 7, date: "Apr 03", title: "Osaka Departure → KUL (Early Flight)", location: "Osaka (KIX) → KUL",
                 events: [
-                    { time: "06:00", title: "Check-out & Travel to KIX", desc: "Take the JR Rapid Line from USJ area to Kansai International Airport (KIX). Leave early to avoid delays.", icon: "🚖", transport: "JR Line", duration: "1.5h", link: "https://goo.gl/maps/KIX" },
+                    { time: "06:00", title: "Check-out & Travel to KIX", desc: "Take the JR Rapid Line from USJ area to Kansai International Airport (KIX). Leave early to avoid delays.", icon: "🚖", transport: "JR Line", duration: "1.5h", link: generateMapsLink("Kansai International Airport KIX") },
                     { time: "08:00", title: "Check-in & Departure", desc: "Check in, clear security, and enjoy some last-minute duty-free shopping.", icon: "🛍️", transport: "Check-in", duration: "2h", link: "https://www.kansai-airport.or.jp/en/" },
                     { time: "10:30", title: "Return to KUL", desc: "Hope you enjoyed the trip and return home with wonderful memories and photos!", icon: "👋", transport: "Plane", duration: "6.5h", link: "" }
                 ]
@@ -540,16 +545,12 @@
             const container = document.getElementById('day-tabs');
             container.innerHTML = '';
             
-            // Initial render state check
-            const initialDayIndex = 0;
+            // Determine the currently active day index or default to 0
+            const activeBtn = document.querySelector('#day-tabs button.bg-rose-500');
+            const initialDayIndex = activeBtn ? parseInt(activeBtn.getAttribute('data-day-index')) : 0;
             let currentActiveIndex = initialDayIndex;
-            // Check if a day has been previously activated in this session
-            const activeBtn = container.querySelector('.bg-rose-500');
-            if (activeBtn) {
-                 currentActiveIndex = parseInt(activeBtn.getAttribute('data-day-index'));
-            }
 
-            // Base classes for the button (w-full on md is crucial for grid layout)
+            // Base classes for the button
             const baseClasses = 'flex-shrink-0 px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap md:w-full';
 
             data.forEach((dayData, index) => {
