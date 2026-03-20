@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Osaka-Kyoto Sakura 2026 | Full Experience Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
@@ -20,6 +21,10 @@
         .hidden-tab { display: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .7rem; border-radius:9999px; font-size:.72rem; font-weight:700; }
+		.reminder-card { background: #fff7ed; border: 1px solid #fdba74; }
+		.info-card { background: #f8fafc; border: 1px solid #e2e8f0; }
+		.map-container { position: relative; width: 100%; padding-bottom: 58%; height: 0; overflow: hidden; border-radius: 1rem; border: 1px solid #e2e8f0; background: #fff; }
+		.map-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
     </style>
 </head>
 <body class="text-slate-900">
@@ -40,913 +45,1772 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-4 py-6">
-        <nav class="flex gap-8 mb-8 border-b overflow-x-auto no-scrollbar whitespace-nowrap">
-            <button onclick="switchTab('itinerary')" class="tab-btn pb-4 tab-active" id="btn-itinerary">Itinerary</button>
-            <button onclick="switchTab('food')" class="tab-btn pb-4 text-slate-400" id="btn-food">Food Guide</button>
-            <button onclick="switchTab('checklist')" class="tab-btn pb-4 text-slate-400" id="btn-checklist">Checklist</button>
-            <button onclick="switchTab('analysis')" class="tab-btn pb-4 text-slate-400" id="btn-analysis">Analytics</button>
-        </nav>
 
-        <section id="tab-itinerary" class="tab-content">
-            <div class="flex gap-2 mb-6 overflow-x-auto no-scrollbar pb-2" id="day-tabs"></div>
+		<!-- Tabs -->
+		<nav class="flex gap-8 mb-8 border-b overflow-x-auto no-scrollbar whitespace-nowrap">
+			<button onclick="switchTab('itinerary')" class="tab-btn pb-4 tab-active" id="btn-itinerary">Itinerary</button>
+			<button onclick="switchTab('checklist')" class="tab-btn pb-4 text-slate-400" id="btn-checklist">Checklist</button>
+			<button onclick="switchTab('cost')" class="tab-btn pb-4 text-slate-400" id="btn-cost">Cost</button>
+			<button onclick="switchTab('analysis')" class="tab-btn pb-4 text-slate-400" id="btn-analysis">Analytics</button>
+		</nav>
 
-            <div class="grid lg:grid-cols-2 gap-8">
-                <div class="space-y-3" id="timeline-list"></div>
+		<!-- ================= ITINERARY ================= -->
+		<section id="tab-itinerary" class="tab-content">
 
-                <div id="detail-card" class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sticky top-32 h-fit min-h-[540px]">
-                    <div class="flex flex-col items-center justify-center h-64 text-slate-300">
-                        <p class="text-4xl mb-4">📍</p>
-                        <p class="text-sm font-medium">Click an activity to see live map preview & food ideas</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+			<!-- Day Selector -->
+			<div class="flex gap-2 mb-6 overflow-x-auto no-scrollbar pb-2" id="day-tabs"></div>
 
-        <section id="tab-food" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
-            <h2 class="text-2xl font-bold mb-2 text-orange-600">🍱 Regional Food Specials</h2>
-            <p class="text-sm text-slate-500 mb-6">
-                Must-try dishes organized by the exact areas on this itinerary.
-            </p>
-            <div class="grid md:grid-cols-2 gap-6" id="food-grid"></div>
-        </section>
+			<!-- Layout -->
+			<div class="grid lg:grid-cols-2 gap-8">
 
-        <section id="tab-checklist" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
-            <h2 class="text-2xl font-bold mb-6 text-blue-600">🎒 Essential Checklist</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="font-bold mb-4">Documents & Digital</h3>
-                    <ul class="space-y-2 text-slate-600">
-                        <li>✅ Passport + arrival departure details</li>
-                        <li>✅ Visit Japan Web QR code screenshot</li>
-                        <li>✅ IC card / Suica / Pasmo ready on phone</li>
-                        <li>✅ Portable WiFi or eSIM activated</li>
-                        <li>✅ Hotel address saved offline</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-bold mb-4">Sakura Trip Items</h3>
-                    <ul class="space-y-2 text-slate-600">
-                        <li>🌸 Power bank for all-day Maps use</li>
-                        <li>🌸 Comfortable walking shoes</li>
-                        <li>🌸 Light jacket for cool evenings</li>
-                        <li>🌸 Compact umbrella</li>
-                        <li>🌸 Small tote for market / snack stops</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+				<!-- LEFT COLUMN -->
+				<div>
 
-        <section id="tab-analysis" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
-            <h2 class="text-2xl font-bold mb-4 text-purple-600">📊 Trip Statistics</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <p class="text-xs text-slate-500 uppercase">Total Days</p>
-                    <p class="text-2xl font-bold">8 Days</p>
-                </div>
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <p class="text-xs text-slate-500 uppercase">Estimated Steps</p>
-                    <p class="text-2xl font-bold">120,000+</p>
-                </div>
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <p class="text-xs text-slate-500 uppercase">Regions</p>
-                    <p class="text-2xl font-bold">Osaka / Kyoto / Nara / Kobe</p>
-                </div>
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <p class="text-xs text-slate-500 uppercase">Signature Eats</p>
-                    <p class="text-2xl font-bold">20+</p>
-                </div>
-            </div>
-        </section>
-    </main>
+					<!-- Daily Reminders -->
+					<div id="daily-reminders" class="mb-4"></div>
+
+					<!-- Timeline -->
+					<div class="space-y-3" id="timeline-list"></div>
+
+				</div>
+
+				<!-- RIGHT COLUMN -->
+				<div id="detail-card"
+					 class="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sticky top-32 h-fit min-h-[540px]">
+
+					<div class="flex flex-col items-center justify-center h-64 text-slate-300 text-center">
+						<p class="text-4xl mb-4">📍</p>
+						<p class="text-sm font-medium">
+							Click an activity to see route, transport details & nearby food
+						</p>
+					</div>
+
+				</div>
+
+			</div>
+		</section>
+
+		<!-- ================= FOOD ================= -->
+		<section id="tab-food" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
+
+			<h2 class="text-2xl font-bold mb-2 text-orange-600">🍱 Regional Food Specials</h2>
+			<p class="text-sm text-slate-500 mb-6">
+				Must-try food near each attraction (walking distance).
+			</p>
+
+			<div id="food-grid" class="grid md:grid-cols-2 gap-6"></div>
+
+		</section>
+
+		<!-- ================= CHECKLIST ================= -->
+		<section id="tab-checklist" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
+
+			<h2 class="text-2xl font-bold mb-6 text-blue-600">🎒 Essential Checklist</h2>
+
+			<!-- IMPORTANT: JS depends on this ID -->
+			<div id="checklist-grid" class="grid md:grid-cols-2 gap-8"></div>
+
+		</section>
+
+		<!-- ================= COST ================= -->
+		<section id="tab-cost" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
+
+			<h2 class="text-2xl font-bold mb-6 text-emerald-600">💴 Trip Cost (2 Pax)</h2>
+
+			<!-- SUMMARY -->
+			<div class="grid md:grid-cols-4 gap-4 mb-8">
+
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Transport</p>
+					<p class="text-2xl font-bold">¥42,000 – ¥44,000</p>
+				</div>
+
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Meals</p>
+					<p class="text-2xl font-bold">¥41,000 – ¥72,000</p>
+				</div>
+
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Tickets</p>
+					<p class="text-2xl font-bold">¥24,000 – ¥27,000</p>
+				</div>
+
+				<div class="p-5 bg-emerald-500 text-white rounded-2xl shadow-lg">
+					<p class="text-xs uppercase opacity-80">Grand Total</p>
+					<p class="text-3xl font-bold mt-1">¥107,000 – ¥143,000</p>
+				</div>
+
+			</div>
+
+			<!-- QUICK NOTE -->
+			<div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-sm text-amber-800">
+				⚠️ Sagano Romantic Train and Hozugawa River Boat Ride are already booked and are included in the ticket total below.
+			</div>
+
+			<!-- TRANSPORT BREAKDOWN -->
+			<div class="mb-10">
+				<h3 class="font-bold text-lg mb-4 text-slate-700">🚆 Transport Breakdown (2 Pax)</h3>
+
+				<div class="grid md:grid-cols-2 gap-4">
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Mar 30 · KIX → Namba</p>
+								<p class="text-sm text-slate-500 mt-1">
+									Nankai Rapi:t airport transfer for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									Includes airport to city transfer only; evening in Minami is mostly walking.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">¥2,700</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Mar 31 · Osaka city transport</p>
+								<p class="text-sm text-slate-500 mt-1">
+									ICOCA / Metro rides only for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									No Amazing Pass recommended because Umeda Sky Building is after 3 PM and needs separate tickets.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">~¥2,000</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Apr 1 · Osaka ↔ Kyoto</p>
+								<p class="text-sm text-slate-500 mt-1">
+									Keihan / local transit estimate for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									Covers Kyoto day movement such as Fushimi Inari, Kiyomizu area, and return to Osaka.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">¥2,600 – ¥3,300</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Apr 2 · Osaka ↔ Arashiyama local rail</p>
+								<p class="text-sm text-slate-500 mt-1">
+									JR + local movement only
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									This transport estimate excludes the Sagano train and Hozugawa boat because those are counted in tickets.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">~¥3,800 – ¥4,500</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Apr 3 · Osaka ↔ Nara</p>
+								<p class="text-sm text-slate-500 mt-1">
+									Kintetsu round-trip for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									Best-value simple day trip transport.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">~¥2,700</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Apr 4 · Osaka ↔ Kobe</p>
+								<p class="text-sm text-slate-500 mt-1">
+									JR round-trip for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									Ropeway is not included here; ropeway is counted in tickets below.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">~¥1,700 – ¥2,000</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Apr 5 · Osaka local transport</p>
+								<p class="text-sm text-slate-500 mt-1">
+									Metro + walking day for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									Light transport day around Nakazakicho, Umeda, Shinsaibashi, Kuromon, and Dotonbori.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">¥800 – ¥1,400</p>
+						</div>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<div class="flex justify-between items-start gap-4">
+							<div>
+								<p class="font-semibold">Apr 6 · Namba → Rinku → KIX</p>
+								<p class="text-sm text-slate-500 mt-1">
+									Airport transfer day for 2 people
+								</p>
+								<p class="text-xs text-slate-400 mt-2">
+									Range depends on whether you buy the Rinku outlet rail bundle or just pay standard fares.
+								</p>
+							</div>
+							<p class="font-bold text-pink-600 whitespace-nowrap">¥2,000 – ¥3,500</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- MEAL BREAKDOWN -->
+			<div class="mb-10">
+				<h3 class="font-bold text-lg mb-4 text-slate-700">🍜 Meal Estimate (2 Pax)</h3>
+
+				<div class="grid md:grid-cols-2 gap-4">
+
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Mar 30 · Arrival dinner</p><p class="text-orange-600 font-bold">¥3,000 – ¥5,000</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Mar 31 · Osaka day meals</p><p class="text-orange-600 font-bold">¥5,000 – ¥8,000</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 1 · Kyoto day meals</p><p class="text-orange-600 font-bold">¥6,000 – ¥9,600</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 2 · Arashiyama day meals</p><p class="text-orange-600 font-bold">¥6,000 – ¥10,000</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 3 · Nara day meals</p><p class="text-orange-600 font-bold">¥5,000 – ¥8,000</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 4 · Kobe day meals</p><p class="text-orange-600 font-bold">¥7,000 – ¥16,000</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 5 · Osaka food day</p><p class="text-orange-600 font-bold">¥7,000 – ¥12,000</p></div>
+					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 6 · Final lunch</p><p class="text-orange-600 font-bold">¥2,000 – ¥3,600</p></div>
+
+				</div>
+			</div>
+
+			<!-- TICKET BREAKDOWN -->
+			<div class="mb-10">
+				<h3 class="font-bold text-lg mb-4 text-slate-700">🎟️ Ticket Breakdown (2 Pax)</h3>
+
+				<div class="grid md:grid-cols-2 gap-4">
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Umeda Sky Building</p>
+						<p class="text-sm text-slate-500">After 3 PM, separate ticket needed</p>
+						<p class="text-pink-600 font-bold">¥4,000</p>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Kiyomizu-dera</p>
+						<p class="text-pink-600 font-bold">¥800</p>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Todai-ji</p>
+						<p class="text-pink-600 font-bold">¥1,200</p>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Kobe Ropeway</p>
+						<p class="text-pink-600 font-bold">¥4,000</p>
+					</div>
+
+					<div class="p-4 bg-green-50 border border-green-200 rounded-xl">
+						<p class="font-semibold">Sagano Romantic Train</p>
+						<p class="text-sm text-green-600">✔ Already Booked</p>
+						<p class="font-bold">¥1,760</p>
+					</div>
+
+					<div class="p-4 bg-green-50 border border-green-200 rounded-xl">
+						<p class="font-semibold">Hozugawa River Boat Ride</p>
+						<p class="text-sm text-green-600">✔ Already Booked</p>
+						<p class="font-bold">¥12,000</p>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- OPTIONAL TICKETS -->
+			<div>
+				<h3 class="font-bold text-lg mb-4 text-slate-700">🟡 Optional Tickets</h3>
+
+				<div class="grid md:grid-cols-2 gap-4">
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Osaka Castle Interior</p>
+						<p class="text-pink-600 font-bold">¥1,200</p>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Nishinomaru Garden</p>
+						<p class="text-pink-600 font-bold">¥400 – ¥700</p>
+					</div>
+
+					<div class="p-4 bg-slate-50 rounded-xl">
+						<p class="font-semibold">Tenryu-ji</p>
+						<p class="text-pink-600 font-bold">¥1,000 – ¥1,600</p>
+					</div>
+
+				</div>
+			</div>
+
+		</section>
+		
+		<!-- ================= ANALYTICS ================= -->
+		<section id="tab-analysis" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
+			<h2 class="text-2xl font-bold mb-4 text-purple-600">📊 Trip Statistics</h2>
+
+			<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Total Days</p>
+					<p class="text-2xl font-bold">8 Days</p>
+				</div>
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Estimated Steps</p>
+					<p class="text-2xl font-bold">120,000+</p>
+				</div>
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Regions</p>
+					<p class="text-2xl font-bold">Osaka / Kyoto / Nara / Kobe</p>
+				</div>
+				<div class="p-4 bg-slate-50 rounded-2xl">
+					<p class="text-xs text-slate-500 uppercase">Signature Eats</p>
+					<p class="text-2xl font-bold">20+</p>
+				</div>
+			</div>
+
+			<div class="h-[320px]">
+				<canvas id="activityChart"></canvas>
+			</div>
+		</section>
+
+	</main>
 
     <script>
-        let currentLang = 'en';
-        let currentDayIdx = 0;
+		let currentLang = 'en';
+		let currentDayIdx = 0;
 
-        const uiText = {
-            en: {
-                itinerary: "Itinerary",
-                food: "Food Guide",
-                checklist: "Checklist",
-                analysis: "Analytics",
-                activityRoute: "Activity / Route",
-                expertTip: "Expert Tip",
-                nearbyFood: "Nearby Must-Try",
-                regionGuide: "Regional Guide",
-                liveMap: "Live Map Preview",
-                openMaps: "Open in Google Maps",
-                selectPrompt: "Click an activity to see live map preview & food ideas",
-                noSpecificFood: "Good area for local specialties and snack stops.",
-                enjoy: "Enjoy the scenery!"
-            },
-            zh: {
-                itinerary: "行程",
-                food: "美食指南",
-                checklist: "清单",
-                analysis: "统计",
-                activityRoute: "活动 / 路线",
-                expertTip: "贴士建议",
-                nearbyFood: "附近必吃",
-                regionGuide: "区域美食",
-                liveMap: "地图预览",
-                openMaps: "在谷歌地图中打开",
-                selectPrompt: "点击活动即可查看实时地图预览与美食建议",
-                noSpecificFood: "这一区也很适合安排当地特色小吃。",
-                enjoy: "好好享受风景！"
-            }
-        };
+		const ui = {
+			en: {
+				selectPrompt: "Select an item to see the route, transport, reminders, and tips",
+				requiredTicket: "Required Ticket",
+				activityCount: "Activity Count",
+				dayReminders: "Daily Checklist / Reminders",
+				routePlan: "Route Plan",
+				pointToPoint: "Point-to-Point",
+				transportInfo: "Transport Info",
+				nearbyFood: "Nearby Food",
+				expertTips: "Tips / Notes",
+				bestTime: "Best Timing",
+				sakuraAdvice: "Sakura Advice",
+				extraNotes: "Extra Details",
+				openMaps: "Open Google Maps",
+				noMap: "No map link for this item"
+			},
+			zh: {
+				selectPrompt: "点击左侧项目查看详细路线、交通、提醒与贴士",
+				requiredTicket: "今日票券",
+				activityCount: "活动数量",
+				dayReminders: "每日清单 / 提醒",
+				routePlan: "路线规划",
+				pointToPoint: "点对点路线",
+				transportInfo: "交通信息",
+				nearbyFood: "附近美食",
+				expertTips: "贴士 / 注意事项",
+				bestTime: "最佳时段",
+				sakuraAdvice: "赏樱建议",
+				extraNotes: "补充说明",
+				openMaps: "打开 Google 地图",
+				noMap: "此项目没有地图链接"
+			}
+		};
 
-        const foodGuide = {
-            "Osaka - Dotonbori & Namba": [
-                { name: "Takoyaki", desc: "Classic Osaka octopus balls." },
-                { name: "Okonomiyaki", desc: "Savory griddled pancake loaded with toppings." },
-                { name: "Kushikatsu", desc: "Deep-fried skewers with a crisp coating." },
-                { name: "551 Horai Butaman", desc: "Famous Kansai pork buns for a quick snack." }
-            ],
-            "Osaka - Shinsaibashi / Umeda / Kuromon": [
-                { name: "Tonkotsu Ramen", desc: "Great late-night comfort meal." },
-                { name: "Katsu / Tonkatsu", desc: "Breaded pork cutlet lunch classic." },
-                { name: "Fresh Seafood", desc: "Scallops, sashimi, and grilled bites at Kuromon." },
-                { name: "Mixed Snack Hall Plates", desc: "Easy casual tasting in Umeda food halls." }
-            ],
-            "Kyoto - Fushimi Inari / Higashiyama": [
-                { name: "Inari Sushi", desc: "Rice in sweet tofu pockets, fitting for Fushimi Inari." },
-                { name: "Handmade Udon", desc: "Popular around temple areas for a simple lunch." },
-                { name: "Yudofu", desc: "Kyoto-style tofu dish with delicate flavor." },
-                { name: "Matcha Sweets", desc: "Parfaits, soft serve, and wagashi with Kyoto tea." }
-            ],
-            "Kyoto - Arashiyama": [
-                { name: "Yudofu Set", desc: "One of Arashiyama’s signature gentle meals." },
-                { name: "Yuba", desc: "Tofu skin, served fresh or layered in set meals." },
-                { name: "Matcha Desserts", desc: "Tea sweets pair perfectly with a scenic break." },
-                { name: "Kyo-Kaiseki", desc: "Seasonal Kyoto tasting menu for a splurge." }
-            ],
-            "Nara": [
-                { name: "Kakinoha-zushi", desc: "Pressed sushi wrapped in persimmon leaf." },
-                { name: "Miwa Somen", desc: "Historic thin noodles from Nara." },
-                { name: "Yomogi Mochi", desc: "Mugwort mochi with sweet red bean filling." },
-                { name: "Yamato Tea", desc: "Tea-growing tradition tied to the region." }
-            ],
-            "Kobe": [
-                { name: "Kobe Beef", desc: "The city’s marquee specialty, often as steak." },
-                { name: "Butaman", desc: "Juicy steamed meat buns, great in Chinatown." },
-                { name: "Gyoza / Dumplings", desc: "Popular snack stop in Nankinmachi." },
-                { name: "Western-style Cafe Sweets", desc: "Kobe’s port-city café culture shows here." }
-            ],
-            "Rinku / KIX Departure Area": [
-                { name: "Final Kansai Curry Rice", desc: "Easy, filling pre-flight meal." },
-                { name: "Bento / Ekiben", desc: "Convenient grab-and-go train or airport meal." },
-                { name: "551 Horai Takeaway", desc: "Popular last-minute Kansai souvenir snack." },
-                { name: "Matcha or Japanese Sweets", desc: "Simple dessert before departure." }
-            ]
-        };
+		const data = {
+			days: [
+				{
+					date: "Mar 30",
+					weekday: { en: "Mon", zh: "周一" },
+					ticket: { en: "ICOCA / Nankai Rapi:t", zh: "ICOCA卡 / 南海电铁 Rapi:t" },
+					reminders: [
+						{
+							en: "Before landing: keep your Visit Japan Web QR ready and screenshot hotel name/address.",
+							zh: "抵达前：准备好 Visit Japan Web 二维码，并截图酒店名称与地址。"
+						},
+						{
+							en: "Rapi:t is the fastest airport option here; exchange or activate before entering the Nankai gate.",
+							zh: "Rapi:t 是这里最快的机场线；进南海电铁闸口前先兑换或启用车票。"
+						},
+						{
+							en: "Tonight is a light walk night — do not overpack the evening if immigration takes longer.",
+							zh: "今晚以轻松散步为主；若入境耗时较长，不要把晚上排太满。"
+						}
+					],
+					events: [
+						{
+							time: "15:00",
+							title: { en: "Landing at KIX", zh: "抵达关西机场" },
+							type: "transport",
+							duration: "90m",
+							route: { en: "KIX immigration → baggage claim → WiFi/SIM pickup → rail station", zh: "KIX入境 → 行李提取 → WiFi/SIM领取 → 前往铁路站" },
+							p2p: { en: "Terminal 1 arrivals → railway access level → Kansai-Airport Station", zh: "T1到达层 → 前往铁路层 → 关西机场站" },
+							transport: { en: "Walk inside airport terminals", zh: "机场内步行" },
+							transportDetail: {
+								en: "Allow buffer for immigration, baggage, and mobile data pickup before the train.",
+								zh: "预留入境、提取行李和领取网络设备的缓冲时间，再去搭车。"
+							},
+							estTime: { en: "60–90 min total depending on queue", zh: "约 60–90 分钟，视排队情况而定" },
+							tips: {
+								en: "Complete arrival formalities before buying snacks or transit passes.",
+								zh: "先完成入境流程，再安排买吃的或交通票。"
+							},
+							bestTime: { en: "Earlier exit from customs = more relaxed first evening.", zh: "越早完成入境，第一晚越从容。" },
+							sakura: { en: "No sakura stop today; save energy for tomorrow.", zh: "今天不安排赏樱，留体力给明天。" },
+							notes: {
+								en: "Keep one small bag ready with passport, QR code, and hotel details for smoother processing.",
+								zh: "准备一个随手小包放护照、二维码和酒店资料，会更顺。"
+							},
+							maps: "Kansai+International+Airport",
+							food: "N/A"
+						},
+						{
+							time: "16:30",
+							title: { en: "Airport Express / Rapi:t", zh: "机场特急 / Rapi:t" },
+							type: "transport",
+							duration: "40m",
+							route: { en: "Kansai-Airport Station → Nankai Namba Station", zh: "关西机场站 → 南海难波站" },
+							p2p: { en: "KIX rail gate → Nankai platform → Nankai Namba", zh: "机场铁路闸口 → 南海站台 → 南海难波" },
+							transport: { en: "Nankai Limited Express Rapi:t (reserved)", zh: "南海特急 Rapi:t（对号座）" },
+							transportDetail: {
+								en: "Official minimum runtime is 34 minutes between Kansai-Airport and Nankai Namba.",
+								zh: "官方最短车程为关西机场到南海难波约 34 分钟。"
+							},
+							estTime: { en: "34–40 min", zh: "约 34–40 分钟" },
+							tips: {
+								en: "Sit near luggage space if carrying larger suitcases.",
+								zh: "如果带大行李，尽量坐靠近行李区的位置。"
+							},
+							bestTime: { en: "Use the first convenient departure after clearing the airport.", zh: "出关后搭乘最顺手的一班即可。" },
+							sakura: { en: "Not a sakura segment.", zh: "这一段不是赏樱路段。" },
+							notes: {
+								en: "Rapi:t uses Nankai Namba, which is slightly different from JR/Metro station zones in Namba.",
+								zh: "Rapi:t 到的是南海难波站，和 JR/地铁的难波区域略有差别。"
+							},
+							maps: "Nankai+Namba+Station",
+							food: "N/A"
+						},
+						{
+							time: "17:45",
+							title: { en: "Hotel Check-in", zh: "办理酒店入住" },
+							type: "hotel",
+							duration: "30m",
+							route: { en: "Nankai Namba → Smile Hotel Premium Osaka Shinsaibashi", zh: "南海难波 → Smile Hotel Premium 大阪心斋桥" },
+							p2p: { en: "Namba station area → hotel by walk or short taxi", zh: "难波站区域 → 步行或短程出租车到酒店" },
+							transport: { en: "Walk or taxi", zh: "步行或出租车" },
+							transportDetail: {
+								en: "Walking is possible, but a short taxi is easier if carrying luggage after the flight.",
+								zh: "可以步行，但若刚下飞机且有行李，短程打车会更轻松。"
+							},
+							estTime: { en: "12–20 min", zh: "约 12–20 分钟" },
+							tips: {
+								en: "Drop bags, refill water, and only bring what you need for the evening.",
+								zh: "先放行李、补水，晚上只带必要物品出门。"
+							},
+							bestTime: { en: "Keep hotel stop efficient so you still have Dotonbori daylight/blue hour.", zh: "酒店这段尽量效率一点，这样还能赶上道顿堀傍晚或蓝调时段。" },
+							sakura: { en: "No sakura focus here.", zh: "这里不是赏樱重点。" },
+							notes: {
+								en: "Save the hotel pin in Google Maps before going back out.",
+								zh: "出门前先把酒店定位存进 Google Maps。"
+							},
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						},
+						{
+							time: "19:15",
+							title: { en: "Dinner near Namba", zh: "难波晚餐" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Hotel → Dotonbori dinner zone", zh: "酒店 → 道顿堀晚餐区" },
+							p2p: { en: "Shinsaibashi base → Dotonbori canal area", zh: "心斋桥住宿区 → 道顿堀运河一带" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: {
+								en: "Everything tonight is easiest on foot once you reach the Minami core.",
+								zh: "到了大阪南区核心后，今晚基本都以步行为主。"
+							},
+							estTime: { en: "10–15 min walk", zh: "步行约 10–15 分钟" },
+							tips: {
+								en: "Aim for one main dinner plus one snack, not a full food crawl on arrival day.",
+								zh: "第一晚建议一顿正餐加一个小吃，不要一上来就暴走式吃遍。"
+							},
+							bestTime: { en: "Best around dusk into early evening.", zh: "傍晚到晚上初段最舒服。" },
+							sakura: { en: "No sakura stop; tonight is city-light Osaka.", zh: "今晚不是赏樱，而是大阪夜景氛围。" },
+							notes: {
+								en: "551 Horai is easy and local; save longer queues for later in the trip.",
+								zh: "551 Horai 方便又地道；排很长的名店可以留到后面几天。"
+							},
+							maps: "Dotonbori+Glico+Sign",
+							food: "551 Horai / Dotonbori snacks"
+						},
+						{
+							time: "20:20",
+							title: { en: "Dotonbori Neon Walk", zh: "道顿堀漫步" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Glico Sign → Ebisu Bridge → canal walk → Hozenji Yokocho", zh: "固力果招牌 → 戎桥 → 运河散步 → 法善寺横丁" },
+							p2p: { en: "Main canal strip → quieter Hozenji lane", zh: "主运河区 → 较安静的法善寺横丁" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: {
+								en: "This entire sightseeing stretch is best done on foot.",
+								zh: "这一段观光最适合全程步行。"
+							},
+							estTime: { en: "60–120 min flexible", zh: "弹性约 60–120 分钟" },
+							tips: {
+								en: "Take your bright-sign photos first, then move into Hozenji for a quieter contrast.",
+								zh: "先拍霓虹招牌，再走去法善寺感受安静反差。"
+							},
+							bestTime: { en: "Blue hour and just after dark.", zh: "日落后蓝调时段到刚入夜最美。" },
+							sakura: { en: "No sakura here, but this is your Osaka night-atmosphere slot.", zh: "这里不是赏樱点，但非常适合感受大阪夜晚氛围。" },
+							notes: {
+								en: "Keep one offline map ready because the Minami side streets can feel repetitive late at night.",
+								zh: "建议准备离线地图，夜里在南区小巷容易走混。"
+							},
+							maps: "Hozenji+Yokocho",
+							food: "Late snack optional"
+						},
+						{
+							time: "22:15",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Dotonbori / Hozenji → hotel", zh: "道顿堀 / 法善寺 → 酒店" },
+							p2p: { en: "Minami core → hotel", zh: "大阪南区核心 → 酒店" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Easy short walk back if staying around Shinsaibashi.", zh: "如果住在心斋桥附近，走回去很方便。" },
+							estTime: { en: "10–15 min", zh: "约 10–15 分钟" },
+							tips: { en: "Sleep early; tomorrow is your first real sakura day.", zh: "早点休息，明天才是第一天正式赏樱日。" },
+							bestTime: { en: "Return before you are too tired to prep for the morning.", zh: "别拖太晚，留体力整理明天。" },
+							sakura: { en: "Tomorrow starts the blossom-focused schedule.", zh: "明天开始进入赏樱重点行程。" },
+							notes: { en: "Top up phone and power bank tonight.", zh: "今晚记得给手机和行动电源充电。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        const tripData = [
-            {
-                date: "Mar 30",
-                weekday: { en: "Mon", zh: "周一" },
-                events: [
-                    {
-                        time: "15:00",
-                        type: "transport",
-                        title: { en: "Arrive KIX", zh: "抵达关西机场" },
-                        route: "Immigration & WiFi Pickup",
-                        tips: "3:00 PM arrival. Head to Level 1 for WiFi and rail access.",
-                        maps: "Kansai+International+Airport",
-                        region: "Rinku / KIX Departure Area",
-                        mustTry: [
-                            { name: "551 Horai takeaway", spot: "Airport / station kiosks", desc: "Classic Kansai snack if you want a quick first bite." },
-                            { name: "Bento", spot: "Airport food hall", desc: "Good backup if you want something fast before the train." }
-                        ]
-                    },
-                    {
-                        time: "16:30",
-                        type: "transport",
-                        title: { en: "Nankai Rapi:t to Namba", zh: "南海电铁前往难波" },
-                        route: "KIX Station to Namba",
-                        tips: "Reserved seat recommended.",
-                        maps: "Nankai+Namba+Station",
-                        region: "Osaka - Dotonbori & Namba"
-                    },
-                    {
-                        time: "17:45",
-                        type: "hotel",
-                        title: { en: "Check-in Hotel", zh: "办理酒店入住" },
-                        route: "To Smile Hotel Premium",
-                        tips: "15 min walk or quick taxi.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "19:15",
-                        type: "meal",
-                        title: { en: "Dinner: Dotonbori", zh: "晚餐：道顿堀" },
-                        route: "Walk to Food Street",
-                        tips: "A perfect first-night Osaka food crawl.",
-                        maps: "Dotonbori+Glico+Sign",
-                        region: "Osaka - Dotonbori & Namba",
-                        mustTry: [
-                            { name: "Takoyaki", spot: "Dotonbori stalls", desc: "The must-eat Osaka street snack." },
-                            { name: "Okonomiyaki", spot: "Dotonbori grills", desc: "Savory pancake and Osaka comfort food." },
-                            { name: "551 Horai Butaman", spot: "Namba area", desc: "Great handheld snack while exploring." }
-                        ]
-                    },
-                    {
-                        time: "20:30",
-                        type: "sight",
-                        title: { en: "Dotonbori Neon Walk", zh: "道顿堀霓虹漫步" },
-                        route: "Neon signs & riverside",
-                        tips: "Best photos at Glico Bridge.",
-                        maps: "Hozenji+Yokocho",
-                        region: "Osaka - Dotonbori & Namba"
-                    },
-                    {
-                        time: "22:00",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Rest",
-                        tips: "Early start tomorrow.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Mar 31",
-                weekday: { en: "Tue", zh: "周二" },
-                events: [
-                    {
-                        time: "08:30",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "酒店出发" },
-                        route: "To Osaka Castle",
-                        tips: "Use Midosuji / Chuo Line.",
-                        maps: "Osaka+Castle+Park",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "09:15",
-                        type: "sight",
-                        title: { en: "Osaka Castle Park", zh: "大阪城公园" },
-                        route: "Sakura Viewing",
-                        tips: "Best sakura spot: Nishinomaru Garden.",
-                        maps: "Osaka+Castle+Park",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "12:00",
-                        type: "meal",
-                        title: { en: "Lunch: Tanimachi Area", zh: "午餐：谷町附近" },
-                        route: "Walking distance",
-                        tips: "A hearty lunch is ideal before more park walking.",
-                        maps: "Tonkatsu+Daiki+Osaka",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon",
-                        mustTry: [
-                            { name: "Tonkatsu", spot: "Tanimachi area", desc: "Classic breaded pork cutlet lunch." },
-                            { name: "Set meal", spot: "Local lunch shops", desc: "Easy, filling option for sightseeing days." }
-                        ]
-                    },
-                    {
-                        time: "13:30",
-                        type: "sight",
-                        title: { en: "Sakuranomiya Park", zh: "樱之宫公园" },
-                        route: "Riverside Walk",
-                        tips: "Over 4,000 sakura trees.",
-                        maps: "Kema+Sakuranomiya+Park",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "16:30",
-                        type: "sight",
-                        title: { en: "Umeda Sky Building", zh: "梅田蓝天大厦" },
-                        route: "Sunset views",
-                        tips: "Go to the rooftop deck.",
-                        maps: "Umeda+Sky+Building",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "19:00",
-                        type: "meal",
-                        title: { en: "Dinner: Shinsaibashi", zh: "晚餐：心斋桥" },
-                        route: "Back to base",
-                        tips: "Ramen or kushikatsu both work well tonight.",
-                        maps: "Ramen+Zundoya+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon",
-                        mustTry: [
-                            { name: "Tonkotsu Ramen", spot: "Shinsaibashi ramen row", desc: "Ideal for a quick dinner." },
-                            { name: "Kushikatsu", spot: "Casual izakaya", desc: "Another Osaka classic if you want variety." }
-                        ]
-                    },
-                    {
-                        time: "21:00",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Sleep",
-                        tips: "Tomorrow is Kyoto day.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Apr 01",
-                weekday: { en: "Wed", zh: "周三" },
-                events: [
-                    {
-                        time: "07:30",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "酒店出发" },
-                        route: "To Fushimi Inari",
-                        tips: "Take the Keihan Line.",
-                        maps: "Fushimi+Inari+Taisha",
-                        region: "Kyoto - Fushimi Inari / Higashiyama"
-                    },
-                    {
-                        time: "08:45",
-                        type: "sight",
-                        title: { en: "Fushimi Inari", zh: "伏见稻荷大社" },
-                        route: "Torii Gates",
-                        tips: "Early arrival beats crowds.",
-                        maps: "Fushimi+Inari+Taisha",
-                        region: "Kyoto - Fushimi Inari / Higashiyama"
-                    },
-                    {
-                        time: "12:00",
-                        type: "meal",
-                        title: { en: "Lunch: Inari Area", zh: "午餐：稻荷区" },
-                        route: "Street Food / Udon",
-                        tips: "Perfect place for a Kyoto-style light lunch.",
-                        maps: "Kendonya+Handmade+Udon",
-                        region: "Kyoto - Fushimi Inari / Higashiyama",
-                        mustTry: [
-                            { name: "Inari Sushi", spot: "Fushimi Inari area", desc: "Tofu-pocket sushi linked to the shrine area." },
-                            { name: "Handmade Udon", spot: "Station approach", desc: "Comforting and easy between temple stops." }
-                        ]
-                    },
-                    {
-                        time: "13:30",
-                        type: "sight",
-                        title: { en: "Kiyomizu-dera", zh: "清水寺" },
-                        route: "Uphill walk",
-                        tips: "Stunning sakura from the famous stage.",
-                        maps: "Kiyomizu-dera",
-                        region: "Kyoto - Fushimi Inari / Higashiyama"
-                    },
-                    {
-                        time: "15:30",
-                        type: "sight",
-                        title: { en: "Philosopher's Path", zh: "哲学之道" },
-                        route: "Canal Walk",
-                        tips: "One of Kyoto’s most iconic cherry blossom walks.",
-                        maps: "Philosopher's+Path+Kyoto",
-                        region: "Kyoto - Fushimi Inari / Higashiyama"
-                    },
-                    {
-                        time: "19:30",
-                        type: "meal",
-                        title: { en: "Dinner: Namba", zh: "晚餐：难波" },
-                        route: "Back to Osaka",
-                        tips: "Keep it easy after a long Kyoto day.",
-                        maps: "Gyoza+no+Ohsho+Namba",
-                        region: "Osaka - Dotonbori & Namba",
-                        mustTry: [
-                            { name: "Gyoza", spot: "Namba casual diners", desc: "Fast, satisfying dinner option." },
-                            { name: "Takoyaki", spot: "Night stalls", desc: "Good for a late snack on the way back." }
-                        ]
-                    },
-                    {
-                        time: "21:00",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Rest",
-                        tips: "Arashiyama early tomorrow.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Apr 02",
-                weekday: { en: "Thu", zh: "周四" },
-                events: [
-                    {
-                        time: "07:00",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "酒店出发" },
-                        route: "To Arashiyama",
-                        tips: "JR Osaka to Saga-Arashiyama.",
-                        maps: "Saga-Arashiyama+Station",
-                        region: "Kyoto - Arashiyama"
-                    },
-                    {
-                        time: "08:15",
-                        type: "sight",
-                        title: { en: "Bamboo Grove", zh: "岚山竹林" },
-                        route: "Morning walk",
-                        tips: "Best for emptier photos before 8:30 AM.",
-                        maps: "Arashiyama+Bamboo+Forest",
-                        region: "Kyoto - Arashiyama"
-                    },
-                    {
-                        time: "11:00",
-                        type: "transport",
-                        title: { en: "Romantic Train", zh: "嵯峨野小火车" },
-                        route: "Torokko Saga Station",
-                        tips: "11 AM departure. Be on time!",
-                        maps: "Saga+Torokko+Station",
-                        region: "Kyoto - Arashiyama"
-                    },
-                    {
-                        time: "12:00",
-                        type: "meal",
-                        title: { en: "Lunch: Arashiyama", zh: "午餐：岚山" },
-                        route: "Near River",
-                        tips: "This is the best day to try Kyoto tofu specialties.",
-                        maps: "Arashiyama+Park",
-                        region: "Kyoto - Arashiyama",
-                        mustTry: [
-                            { name: "Yudofu", spot: "Arashiyama tofu restaurants", desc: "A signature Kyoto tofu dish." },
-                            { name: "Yuba", spot: "Temple-town eateries", desc: "Delicate tofu skin, very Kyoto." },
-                            { name: "Matcha dessert", spot: "Cafe stop", desc: "Great afternoon sweet with tea." }
-                        ]
-                    },
-                    {
-                        time: "13:00",
-                        type: "sight",
-                        title: { en: "Hozugawa Boat", zh: "保津川漂流" },
-                        route: "River journey",
-                        tips: "Check in 15 minutes early.",
-                        maps: "Hozugawa+River+Boat+Dock",
-                        region: "Kyoto - Arashiyama"
-                    },
-                    {
-                        time: "19:00",
-                        type: "meal",
-                        title: { en: "Dinner: Shinsaibashi", zh: "晚餐：心斋桥" },
-                        route: "Osaka Area",
-                        tips: "A quick, easy dinner after a full day out.",
-                        maps: "CoCo+Ichibanya+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon",
-                        mustTry: [
-                            { name: "Japanese Curry Rice", spot: "Shinsaibashi", desc: "Fast and reliable recovery meal." },
-                            { name: "Ramen", spot: "Nearby noodle shops", desc: "Great if you want something hotter and richer." }
-                        ]
-                    },
-                    {
-                        time: "20:30",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Rest",
-                        tips: "Leg recovery night.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Apr 03",
-                weekday: { en: "Fri", zh: "周五" },
-                events: [
-                    {
-                        time: "08:30",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "酒店出发" },
-                        route: "To Nara",
-                        tips: "Kintetsu Line from Namba.",
-                        maps: "Kintetsu-Nara+Station",
-                        region: "Nara"
-                    },
-                    {
-                        time: "09:30",
-                        type: "sight",
-                        title: { en: "Todai-ji & Nara Park", zh: "东大寺与奈良公园" },
-                        route: "Deer & Buddha",
-                        tips: "The Great Buddha Hall is a must.",
-                        maps: "Todai-ji",
-                        region: "Nara"
-                    },
-                    {
-                        time: "12:30",
-                        type: "meal",
-                        title: { en: "Lunch: Mizuya Chaya", zh: "午餐：水谷茶屋" },
-                        route: "Inside the park",
-                        tips: "Best day to try classic Nara specialties.",
-                        maps: "Mizuya+Chaya",
-                        region: "Nara",
-                        mustTry: [
-                            { name: "Kakinoha-zushi", spot: "Nara specialty shops", desc: "Pressed sushi wrapped in persimmon leaf." },
-                            { name: "Miwa Somen", spot: "Traditional eateries", desc: "Thin noodles tied to Nara food culture." },
-                            { name: "Yomogi Mochi", spot: "Sanjo Dori sweet shops", desc: "Ideal dessert snack after temple visits." }
-                        ]
-                    },
-                    {
-                        time: "14:00",
-                        type: "sight",
-                        title: { en: "Kasuga Taisha", zh: "春日大社" },
-                        route: "Lantern Shrine",
-                        tips: "Walk through the forest path.",
-                        maps: "Kasuga+Taisha",
-                        region: "Nara"
-                    },
-                    {
-                        time: "19:00",
-                        type: "meal",
-                        title: { en: "Dinner: Namba", zh: "晚餐：难波" },
-                        route: "Back to Osaka",
-                        tips: "A grilled dinner works well tonight.",
-                        maps: "Yakiniku+M+Dotonbori",
-                        region: "Osaka - Dotonbori & Namba",
-                        mustTry: [
-                            { name: "Yakiniku", spot: "Namba grill spots", desc: "Good change of pace after daytime regional dishes." },
-                            { name: "Takoyaki", spot: "Street stall dessert snack", desc: "Easy extra bite if you still have room." }
-                        ]
-                    },
-                    {
-                        time: "21:00",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Rest",
-                        tips: "Kobe day tomorrow.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Apr 04",
-                weekday: { en: "Sat", zh: "周六" },
-                events: [
-                    {
-                        time: "08:45",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "酒店出发" },
-                        route: "To Kobe",
-                        tips: "JR Special Rapid Service.",
-                        maps: "Sannomiya+Station",
-                        region: "Kobe"
-                    },
-                    {
-                        time: "10:00",
-                        type: "sight",
-                        title: { en: "Kobe Ropeway", zh: "神户缆车" },
-                        route: "To Herb Garden",
-                        tips: "Amazing bay view.",
-                        maps: "Shin-Kobe+Ropeway",
-                        region: "Kobe"
-                    },
-                    {
-                        time: "12:30",
-                        type: "meal",
-                        title: { en: "Lunch: Chinatown", zh: "午餐：南京町" },
-                        route: "Motomachi",
-                        tips: "This is your best snack-grazing lunch day.",
-                        maps: "Kobe+Chinatown+Nankinmachi",
-                        region: "Kobe",
-                        mustTry: [
-                            { name: "Butaman", spot: "Nankinmachi stalls", desc: "Steamed pork bun and Kobe Chinatown favorite." },
-                            { name: "Gyoza / Dumplings", spot: "Nankinmachi", desc: "Easy street-food style lunch bite." },
-                            { name: "Sesame sweets", spot: "Chinese confection stalls", desc: "Nice dessert while walking." }
-                        ]
-                    },
-                    {
-                        time: "17:30",
-                        type: "sight",
-                        title: { en: "Kobe Harborland", zh: "神户港乐园" },
-                        route: "Waterfront",
-                        tips: "Beautiful night lights.",
-                        maps: "Kobe+Harborland",
-                        region: "Kobe"
-                    },
-                    {
-                        time: "19:30",
-                        type: "meal",
-                        title: { en: "Dinner: Mosaic", zh: "晚餐：Mosaic" },
-                        route: "By the water",
-                        tips: "Best night to splurge on Kobe beef if desired.",
-                        maps: "Kobe+Harborland+umie",
-                        region: "Kobe",
-                        mustTry: [
-                            { name: "Kobe Beef", spot: "Harborland / Sannomiya steakhouse", desc: "The signature Kobe experience." },
-                            { name: "Western-style dessert", spot: "Waterfront cafe", desc: "Kobe’s port-city cafe culture shows up here." }
-                        ]
-                    },
-                    {
-                        time: "21:30",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Back to Osaka",
-                        tips: "Relax on the train ride.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Apr 05",
-                weekday: { en: "Sun", zh: "周日" },
-                events: [
-                    {
-                        time: "10:00",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "酒店出发" },
-                        route: "Late morning",
-                        tips: "Rest up for final shopping.",
-                        maps: "Nakazakicho+Station",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "10:30",
-                        type: "sight",
-                        title: { en: "Nakazakicho", zh: "中崎町" },
-                        route: "Vintage vibe",
-                        tips: "Quiet indie cafes and slower pace.",
-                        maps: "Nakazakicho",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "12:30",
-                        type: "meal",
-                        title: { en: "Lunch: Umeda", zh: "午餐：梅田" },
-                        route: "Station area",
-                        tips: "Snack hall style lunch gives you variety.",
-                        maps: "Hanshin+Department+Store",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon",
-                        mustTry: [
-                            { name: "Snack hall tasting", spot: "Hanshin Snack Park", desc: "Easy way to sample multiple Osaka comfort foods." },
-                            { name: "Mini okonomiyaki / yakisoba", spot: "Department food hall", desc: "Good casual Kansai lunch picks." }
-                        ]
-                    },
-                    {
-                        time: "14:00",
-                        type: "sight",
-                        title: { en: "Shinsaibashi Shopping", zh: "心斋桥购物" },
-                        route: "Main artery",
-                        tips: "Drugstores and fashion browsing.",
-                        maps: "Shinsaibashi-suji+Shopping+Street",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    },
-                    {
-                        time: "16:15",
-                        type: "sight",
-                        title: { en: "Kuromon Market", zh: "黑门市场" },
-                        route: "Seafood Market",
-                        tips: "Best for fresh seafood grazing.",
-                        maps: "Kuromon+Ichiba+Market",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon",
-                        mustTry: [
-                            { name: "Scallops", spot: "Market seafood stalls", desc: "Popular grilled market bite." },
-                            { name: "Sashimi", spot: "Seafood counters", desc: "Fresh and easy to sample in small portions." },
-                            { name: "Sea urchin or crab bites", spot: "Premium stalls", desc: "Good splurge snack if available." }
-                        ]
-                    },
-                    {
-                        time: "19:00",
-                        type: "meal",
-                        title: { en: "Dinner: Okonomiyaki", zh: "晚餐：大阪烧" },
-                        route: "Dotonbori",
-                        tips: "A fitting final signature Osaka dinner.",
-                        maps: "Mizuno+Okonomiyaki",
-                        region: "Osaka - Dotonbori & Namba",
-                        mustTry: [
-                            { name: "Okonomiyaki", spot: "Dotonbori", desc: "Essential final-night Osaka dish." },
-                            { name: "Takoyaki", spot: "Nearby stalls", desc: "Easy add-on for a true Osaka finish." }
-                        ]
-                    },
-                    {
-                        time: "21:00",
-                        type: "hotel",
-                        title: { en: "Back to Hotel", zh: "返回酒店" },
-                        route: "Packing",
-                        tips: "Check luggage weight tonight.",
-                        maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-                        region: "Osaka - Shinsaibashi / Umeda / Kuromon"
-                    }
-                ]
-            },
-            {
-                date: "Apr 06",
-                weekday: { en: "Mon", zh: "周一" },
-                events: [
-                    {
-                        time: "10:00",
-                        type: "hotel",
-                        title: { en: "Depart Hotel", zh: "退房出发" },
-                        route: "Namba Station",
-                        tips: "Store bags at Rinku lockers if needed.",
-                        maps: "Nankai+Namba+Station",
-                        region: "Rinku / KIX Departure Area"
-                    },
-                    {
-                        time: "11:15",
-                        type: "sight",
-                        title: { en: "Rinku Outlets", zh: "临空城奥特莱斯" },
-                        route: "Final Shopping",
-                        tips: "One stop before the airport.",
-                        maps: "Rinku+Premium+Outlets",
-                        region: "Rinku / KIX Departure Area"
-                    },
-                    {
-                        time: "12:30",
-                        type: "meal",
-                        title: { en: "Final Lunch", zh: "最后午餐" },
-                        route: "Outlet Food Court",
-                        tips: "Keep it convenient and airport-friendly.",
-                        maps: "Rinku+Premium+Outlets+Food+Court",
-                        region: "Rinku / KIX Departure Area",
-                        mustTry: [
-                            { name: "Curry rice", spot: "Food court", desc: "Quick and filling pre-flight choice." },
-                            { name: "Bento / takeaway", spot: "Station / outlet food area", desc: "Great if you want a flexible departure meal." },
-                            { name: "551 Horai", spot: "Kansai takeaway counters", desc: "Popular last Kansai bite or souvenir snack." }
-                        ]
-                    },
-                    {
-                        time: "14:15",
-                        type: "transport",
-                        title: { en: "Arrive KIX", zh: "抵达机场" },
-                        route: "Check-in",
-                        tips: "Flight departs at 16:15.",
-                        maps: "Kansai+International+Airport",
-                        region: "Rinku / KIX Departure Area"
-                    }
-                ]
-            }
-        ];
+				{
+					date: "Mar 31",
+					weekday: { en: "Tue", zh: "周二" },
+					ticket: { en: "Osaka Amazing Pass (1D)", zh: "大阪周游卡（1日券）" },
+					reminders: [
+						{
+							en: "Use the Osaka Amazing Pass on your phone; the official guide says you scan/show the live QR and should not rely on a screenshot.",
+							zh: "大阪周游卡请直接用手机显示官方二维码；官方说明是不应依赖截图使用。"
+						},
+						{
+							en: "This is your best value pass day because you are stacking metro rides plus major Osaka sights.",
+							zh: "今天是最适合用周游卡的一天，因为会叠加地铁和大阪主要景点。"
+						},
+						{
+							en: "Do Osaka Castle earlier, then Sakuranomiya, then Umeda; keep Umeda before evening if you want to stay flexible with pass benefits.",
+							zh: "建议先大阪城、再樱之宫、最后梅田；若要保留票券弹性，梅田尽量放在傍晚前。"
+						}
+					],
+					events: [
+						{
+							time: "08:15",
+							title: { en: "Depart Hotel", zh: "出发" },
+							type: "hotel",
+							duration: "30m",
+							route: { en: "Hotel → Tanimachi 4-chome", zh: "酒店 → 谷町四丁目" },
+							p2p: { en: "Shinsaibashi / Namba side → Osaka Metro → Tanimachi 4-chome", zh: "心斋桥 / 难波区域 → 大阪地铁 → 谷町四丁目" },
+							transport: { en: "Osaka Metro", zh: "大阪地铁" },
+							transportDetail: {
+								en: "Tanimachi 4-chome is one of the recommended subway approaches for Osaka Castle.",
+								zh: "谷町四丁目是前往大阪城常用且推荐的地铁进场点之一。"
+							},
+							estTime: { en: "20–30 min depending on hotel start point", zh: "视酒店出发点约 20–30 分钟" },
+							tips: { en: "Charge your pass and phone before leaving.", zh: "出门前把票券和手机都准备好。" },
+							bestTime: { en: "Early departure helps you get castle photos before crowds build.", zh: "早点出发能在游客变多前拍到更好的大阪城。" },
+							sakura: { en: "The castle moat area is one of Osaka’s headline blossom zones.", zh: "大阪城护城河一带是大阪最代表性的赏樱区域之一。" },
+							notes: { en: "Use Otemon Gate approach if you want a classic castle arrival feeling.", zh: "若想走经典进场路线，可从大手门方向进入。" },
+							maps: "Tanimachi+4-chome+Station",
+							food: "N/A"
+						},
+						{
+							time: "09:00",
+							title: { en: "Osaka Castle Park", zh: "大阪城公园" },
+							type: "sight",
+							duration: "180m",
+							route: { en: "Tanimachi 4-chome → Otemon area → castle grounds → Nishinomaru", zh: "谷町四丁目 → 大手门区域 → 城内 → 西之丸庭园" },
+							p2p: { en: "Tanimachi 4-chome / Osakajokoen / Morinomiya are all workable access points", zh: "谷町四丁目 / 大阪城公园 / 森之宫都可作为进出点" },
+							transport: { en: "Walk from station", zh: "从车站步行" },
+							transportDetail: {
+								en: "Official Osaka tourism guidance notes Tanimachi 4-chome, JR Osakajokoen, and Morinomiya as practical access points, with the keep roughly 20 minutes on foot from JR Osakajokoen or Morinomiya.",
+								zh: "官方大阪观光资料提到谷町四丁目、JR大阪城公园站与森之宫都是实用进出口；从 JR 大阪城公园或森之宫走到天守阁约 20 分钟。"
+							},
+							estTime: { en: "2.5–3 hr including photo stops", zh: "含拍照约 2.5–3 小时" },
+							tips: { en: "Go to Nishinomaru for the most postcard-style castle-and-blossom framing.", zh: "若想拍最经典的大阪城配樱花构图，优先去西之丸。" },
+							bestTime: { en: "Morning light is cleaner and crowds are easier.", zh: "上午光线更干净，人潮也更好控制。" },
+							sakura: { en: "Official Osaka tourism pages highlight the moat perimeter and Nishinomaru Garden as standout cherry blossom viewpoints.", zh: "大阪官方观光资料特别强调护城河周边与西之丸庭园是代表性赏樱点。" },
+							notes: { en: "This is a large park — do not underestimate intra-park walking time.", zh: "大阪城公园范围很大，不要低估园内步行时间。" },
+							maps: "Osaka+Castle+Park",
+							food: "N/A"
+						},
+						{
+							time: "12:00",
+							title: { en: "Lunch: Tonkatsu Daiki", zh: "午餐：大木炸猪排" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Castle area → nearby lunch stop", zh: "大阪城区域 → 午餐点" },
+							p2p: { en: "Walk out from castle side to lunch area", zh: "从大阪城步行到午餐点" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Keep lunch near your current area to avoid breaking the day’s rhythm.", zh: "午餐尽量吃在当前区域附近，避免打断行程节奏。" },
+							estTime: { en: "10–20 min access plus meal", zh: "步行约 10–20 分钟，加用餐时间" },
+							tips: { en: "Go a little early if possible; lunchtime queues can build fast.", zh: "能提早一点就提早，午餐排队很容易变长。" },
+							bestTime: { en: "Right after the castle while you are already nearby.", zh: "大阪城结束后直接吃最顺。" },
+							sakura: { en: "Lunch break between your two best Osaka blossom walks.", zh: "这是两段大阪赏樱行程之间的休息点。" },
+							notes: { en: "Hydrate here before heading to the riverside walk.", zh: "这里顺便补水，准备下午河岸散步。" },
+							maps: "Tonkatsu+Daiki+Osaka",
+							food: "Tonkatsu Daiki"
+						},
+						{
+							time: "13:30",
+							title: { en: "Kema Sakuranomiya", zh: "毛马樱之宫公园" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Castle area → JR Loop Line → Sakuranomiya riverside walk", zh: "大阪城区域 → JR环状线 → 樱之宫河岸散步" },
+							p2p: { en: "JR station area → river path", zh: "JR站区 → 河岸步道" },
+							transport: { en: "JR + walk", zh: "JR + 步行" },
+							transportDetail: {
+								en: "This stop works well as a linear riverside stroll rather than a single fixed attraction.",
+								zh: "这里更适合当作线性河岸散步，而不是单点景点。"
+							},
+							estTime: { en: "20–30 min transit + 60–120 min walk", zh: "交通约 20–30 分钟，散步约 60–120 分钟" },
+							tips: { en: "Keep this scenic, not rushed — the river walk is the point.", zh: "这一段不要赶，重点就是沿河慢慢走。" },
+							bestTime: { en: "Mid-afternoon works well when the riverside is bright but softer than noon.", zh: "下午中段光线不错，也比正午舒服。" },
+							sakura: { en: "This is one of Osaka’s classic cherry-blossom river walks.", zh: "这里是大阪非常经典的河岸赏樱路线。" },
+							notes: { en: "If you are tired, shorten the walk rather than sacrificing Umeda timing later.", zh: "若累了，缩短河岸步行即可，不要牺牲后面梅田的时间。" },
+							maps: "Kema+Sakuranomiya+Park",
+							food: "Mint Museum area / coffee break"
+						},
+						{
+							time: "16:30",
+							title: { en: "Umeda Sky Building", zh: "梅田蓝天大厦" },
+							type: "sight",
+							duration: "90m",
+							route: { en: "Sakuranomiya → Umeda / Osaka station area → Umeda Sky Building", zh: "樱之宫 → 梅田 / 大阪站区域 → 梅田蓝天大厦" },
+							p2p: { en: "JR / Metro to Umeda side → walk to observatory entrance", zh: "JR / 地铁到梅田侧 → 步行到观景台入口" },
+							transport: { en: "Train + walk", zh: "电车 + 步行" },
+							transportDetail: {
+								en: "The observatory sits on the 39th, 40th and rooftop levels; official building hours are 9:30–22:30 with last admission at 22:00.",
+								zh: "官方资料显示观景设施位于 39 楼、40 楼与屋顶层，营业时间 9:30–22:30，最晚入场 22:00。"
+							},
+							estTime: { en: "20–30 min access + 60–90 min visit", zh: "交通约 20–30 分钟，参观约 60–90 分钟" },
+							tips: { en: "If you are using sightseeing-pass benefits, go earlier rather than later and check same-day pass rules before entry.", zh: "若要使用观光票券优惠，建议早点到，并在入场前确认当天票券规则。" },
+							bestTime: { en: "Late afternoon into sunset.", zh: "下午后段到日落时最好。" },
+							sakura: { en: "This is skyline viewing, not a blossom stop.", zh: "这里是城市天际线景点，不是赏樱点。" },
+							notes: { en: "You can pivot dinner plans easily from Umeda back to Shinsaibashi afterward.", zh: "从这里回心斋桥晚餐很顺，后续弹性高。" },
+							maps: "Umeda+Sky+Building",
+							food: "N/A"
+						},
+						{
+							time: "19:00",
+							title: { en: "Dinner: Shinsaibashi", zh: "晚餐：心斋桥" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Umeda → Shinsaibashi dinner area", zh: "梅田 → 心斋桥晚餐区" },
+							p2p: { en: "Midosuji corridor southbound to Shinsaibashi", zh: "沿御堂筋线往南到心斋桥" },
+							transport: { en: "Osaka Metro Midosuji Line", zh: "大阪地铁御堂筋线" },
+							transportDetail: { en: "This is one of the simplest north-south moves in central Osaka.", zh: "这是大阪市中心最简单的南北移动之一。" },
+							estTime: { en: "15–20 min", zh: "约 15–20 分钟" },
+							tips: { en: "A ramen dinner is easier than a long queue meal after a full walking day.", zh: "走了一整天后，拉面这种快节奏晚餐会更轻松。" },
+							bestTime: { en: "After sunset, once you are done with Umeda views.", zh: "看完梅田景色后再回来吃晚餐最合理。" },
+							sakura: { en: "No sakura emphasis tonight.", zh: "今晚不再以赏樱为主。" },
+							notes: { en: "Prep Kyoto day items before sleeping: pass, umbrella, camera battery.", zh: "睡前先整理明天京都需要的票券、雨具和相机电量。" },
+							maps: "Ramen+Zundoya+Shinsaibashi",
+							food: "Ramen Zundoya"
+						},
+						{
+							time: "20:15",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Dinner area → hotel", zh: "晚餐区 → 酒店" },
+							p2p: { en: "Shinsaibashi → hotel", zh: "心斋桥 → 酒店" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Very short urban walk.", zh: "市区短距离步行。" },
+							estTime: { en: "5–10 min", zh: "约 5–10 分钟" },
+							tips: { en: "Pack lighter for Kyoto; tomorrow has more transfers and hills.", zh: "明天京都移动更多、坡也更多，尽量轻装。" },
+							bestTime: { en: "Return early enough to recharge and reorganize.", zh: "尽量早点回去整理与充电。" },
+							sakura: { en: "Tomorrow is Kyoto’s iconic blossom day.", zh: "明天进入京都经典赏樱日。" },
+							notes: { en: "Sleep earlier than night one if possible.", zh: "最好比第一晚更早休息。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden-tab'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active', 'text-slate-900'));
-            document.getElementById('tab-' + tabId).classList.remove('hidden-tab');
-            document.getElementById('btn-' + tabId).classList.add('tab-active');
-        }
+				{
+					date: "Apr 01",
+					weekday: { en: "Wed", zh: "周三" },
+					ticket: { en: "ICOCA / Keihan Pass", zh: "ICOCA / 京阪观光券" },
+					reminders: [
+						{
+							en: "Keihan is useful today, but note that limited express trains do not stop at Fushimi-inari Station.",
+							zh: "今天京阪很好用，但请注意特急列车不停 Fushimi-inari 站。"
+						},
+						{
+							en: "Fushimi Inari is easiest early; Kiyomizu and Philosopher’s Path get busier later.",
+							zh: "伏见稻荷越早越好；清水寺和哲学之道会在后段越来越多人。"
+						},
+						{
+							en: "Wear shoes with grip today — you have station walks, slopes, and temple streets.",
+							zh: "今天请穿抓地力好的鞋，会有车站步行、坡道和寺院街道。"
+						}
+					],
+					events: [
+						{
+							time: "07:30",
+							title: { en: "Depart Hotel", zh: "出发前往京都" },
+							type: "hotel",
+							duration: "75m",
+							route: { en: "Osaka base → Yodoyabashi / Keihan → Fushimi-inari area", zh: "大阪住宿区 → 淀屋桥 / 京阪 → 伏见稻荷区域" },
+							p2p: { en: "Hotel → Keihan Main Line → Fushimi-inari Station", zh: "酒店 → 京阪本线 → 伏见稻荷站" },
+							transport: { en: "Keihan Main Line", zh: "京阪本线" },
+							transportDetail: {
+								en: "Keihan’s travel info shows Fushimi-inari as one of the major stops from Yodoyabashi, but Kyoto tourism notes limited express services do not stop there.",
+								zh: "京阪旅游资料把伏见稻荷列为淀屋桥方向的重要站点之一，但京都观光资料提醒特急列车并不停该站。"
+							},
+							estTime: { en: "About 60–75 min from Osaka base depending on connection", zh: "视转乘情况约 60–75 分钟" },
+							tips: { en: "Take a service that actually stops at Fushimi-inari; do not board purely by speed label.", zh: "请搭会停伏见稻荷的班次，不要只看“特急”字样。" },
+							bestTime: { en: "Earlier is dramatically better for Fushimi Inari.", zh: "越早到，对伏见稻荷体验越有帮助。" },
+							sakura: { en: "Today mixes shrine gates and blossom walks rather than one huge park.", zh: "今天是神社与樱花步道混合型行程，不是单一大型公园。" },
+							notes: { en: "Bring water before temple-area climbs.", zh: "寺院区域上坡多，先带好水。" },
+							maps: "Yodoyabashi+Station",
+							food: "N/A"
+						},
+						{
+							time: "08:45",
+							title: { en: "Fushimi Inari Taisha", zh: "伏见稻荷大社" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Fushimi-inari Station / JR Inari → shrine entrance → lower torii paths", zh: "伏见稻荷站 / JR 稻荷站 → 神社入口 → 下段千本鸟居步道" },
+							p2p: { en: "Keihan Fushimi-inari Station is about 5 min east of the shrine; JR Inari Station sits right next to it", zh: "京阪伏见稻荷站步行约 5 分钟可达；JR 稻荷站几乎就在神社旁" },
+							transport: { en: "Train + walk", zh: "电车 + 步行" },
+							transportDetail: {
+								en: "Official shrine access says JR Inari Station is right next to the shrine, while Keihan Fushimi-inari Station is about a 5-minute walk east.",
+								zh: "神社官方交通写明：JR 稻荷站紧邻神社，京阪伏见稻荷站步行约 5 分钟。"
+							},
+							estTime: { en: "90–120 min for lower and mid slopes", zh: "下段与中段约 90–120 分钟" },
+							tips: { en: "You do not need to summit the mountain to get the classic experience; going beyond the first main crowd zone is enough.", zh: "不一定要登顶；只要走过第一波人潮区，体验就已经很完整。" },
+							bestTime: { en: "Early morning before tour buses pile in.", zh: "早上、旅行团到之前最理想。" },
+							sakura: { en: "This stop is more torii-and-shrine atmosphere than peak blossom density.", zh: "这里更偏重鸟居与神社氛围，不是樱花最密集的一站。" },
+							notes: { en: "If energy is limited, shorten the upper climb and protect time for Kiyomizu / Philosopher’s Path.", zh: "若体力有限，可缩短上山段，把时间留给清水寺和哲学之道。" },
+							maps: "Fushimi+Inari+Taisha",
+							food: "Inari sushi / shrine approach snacks"
+						},
+						{
+							time: "11:15",
+							title: { en: "Lunch: Kendonya", zh: "午餐：Kendonya" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Shrine area → nearby lunch", zh: "神社区域 → 附近午餐点" },
+							p2p: { en: "Fushimi Inari approach → Kendonya", zh: "伏见稻荷参道 → Kendonya" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Keep lunch close; this preserves more time for eastern Kyoto later.", zh: "午餐吃近一点，才能把时间留给下午东山区域。" },
+							estTime: { en: "Very short walk", zh: "很短的步行距离" },
+							tips: { en: "A warm noodle lunch works better than a heavy meal before temple slopes.", zh: "在下午坡道行程前，热面类会比太重的餐更舒服。" },
+							bestTime: { en: "Immediately after Fushimi Inari.", zh: "伏见稻荷结束后立刻吃最顺。" },
+							sakura: { en: "Lunch buffer before your more blossom-focused Kyoto afternoon.", zh: "这是进入下午京都赏樱重点前的缓冲。" },
+							notes: { en: "Refill water here.", zh: "这里记得补水。" },
+							maps: "Kendonya+Handmade+Udon",
+							food: "Kendonya Udon"
+						},
+						{
+							time: "13:00",
+							title: { en: "Kiyomizu-dera", zh: "清水寺" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Fushimi area → Keihan / local transit → Kiyomizu-Gojo side → uphill walk to temple", zh: "伏见区域 → 京阪 / 市内交通 → 清水五条侧 → 上坡步行到清水寺" },
+							p2p: { en: "Station area → slope streets → temple precinct", zh: "车站区域 → 坡道街区 → 寺院区域" },
+							transport: { en: "Train + uphill walk", zh: "电车 + 上坡步行" },
+							transportDetail: { en: "The last segment is the harder part; budget time for the climb, not just the train.", zh: "最后一段上坡才是耗时重点，别只算车程。" },
+							estTime: { en: "30–45 min transit/access + temple time", zh: "交通与步行约 30–45 分钟，加寺院参观时间" },
+							tips: { en: "Expect crowding; move steadily and save shopping for after the main viewpoint if needed.", zh: "这里人多很正常，先把主景点看完，再考虑逛店。" },
+							bestTime: { en: "Early afternoon is workable, but not crowd-light.", zh: "下午前段还可以，但不会清静。" },
+							sakura: { en: "Temple terraces and surrounding slopes are especially photogenic in blossom season.", zh: "樱花季时寺院舞台与周边坡道非常上镜。" },
+							notes: { en: "This is a good place for your classic Kyoto postcard shots.", zh: "这里适合拍经典京都明信片式照片。" },
+							maps: "Kiyomizu-dera",
+							food: "Kyoto sweets / yatsuhashi"
+						},
+						{
+							time: "16:15",
+							title: { en: "Philosopher's Path", zh: "哲学之道" },
+							type: "sight",
+							duration: "90m",
+							route: { en: "Higashiyama side → local bus / transfer → canal-side walking path", zh: "东山区域 → 公车 / 转乘 → 沿运河步道" },
+							p2p: { en: "Approach by bus/taxi as needed → walk the canal section", zh: "依状况搭公车 / 出租车接近 → 沿运河步行" },
+							transport: { en: "Bus + walk", zh: "巴士 + 步行" },
+							transportDetail: { en: "Kyoto buses can be slow; leave margin and be willing to taxi if you are behind schedule.", zh: "京都公车常会塞，务必预留缓冲；若严重落后可改搭出租车。" },
+							estTime: { en: "20–35 min transfer + 60–90 min walk", zh: "转移约 20–35 分钟，步行约 60–90 分钟" },
+							tips: { en: "This is for strolling, not speed-running — slow down here.", zh: "这里的重点是慢慢走，不是赶行程。" },
+							bestTime: { en: "Late afternoon is beautiful if light remains.", zh: "若还有光线，傍晚前后很美。" },
+							sakura: { en: "Kyoto’s official tourism guide describes the walk as renowned for cherry blossoms overhanging the path like a canopy.",
+									   zh: "京都官方观光资料形容这里春天樱花会像拱顶般覆盖步道，是非常著名的赏樱地。" },
+							notes: { en: "If you are tired, do a shorter best section instead of forcing the full walk.", zh: "累的话就走最精华的一小段，不必强求全程。" },
+							maps: "Philosopher's+Path+Kyoto",
+							food: "Matcha tea / sweets nearby"
+						},
+						{
+							time: "19:45",
+							title: { en: "Dinner: Gyoza Ohsho", zh: "晚餐：王将饺子" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Kyoto → Osaka base → quick dinner near Namba", zh: "京都 → 返回大阪住宿区 → 难波附近快晚餐" },
+							p2p: { en: "Keihan back toward Osaka → local transfer → dinner", zh: "京阪回大阪 → 市区转乘 → 晚餐" },
+							transport: { en: "Keihan / Metro", zh: "京阪 / 地铁" },
+							transportDetail: { en: "After a long Kyoto day, simplify the return and do not add extra shopping detours.", zh: "京都一整天之后，回程尽量简单，不要再加购物绕路。" },
+							estTime: { en: "60–75 min return depending on transfer", zh: "视转乘约 60–75 分钟" },
+							tips: { en: "Fast, salty, comforting dinner is a good call tonight.", zh: "今晚吃快速、咸香、舒服的晚餐最合理。" },
+							bestTime: { en: "As soon as you get back to Osaka.", zh: "回到大阪后尽快吃。" },
+							sakura: { en: "Sakura day is over; protect tomorrow’s energy.", zh: "今天赏樱段已结束，把体力留给明天。" },
+							notes: { en: "Charge cameras tonight for Arashiyama.", zh: "今晚记得给相机和手机充足电，明天去岚山。" },
+							maps: "Gyoza+no+Ohsho+Namba",
+							food: "Gyoza no Ohsho"
+						},
+						{
+							time: "21:00",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Dinner → hotel", zh: "晚餐 → 酒店" },
+							p2p: { en: "Namba area → hotel", zh: "难波区域 → 酒店" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Short return on foot.", zh: "短距离步行返回。" },
+							estTime: { en: "5–15 min", zh: "约 5–15 分钟" },
+							tips: { en: "Sleep early; Arashiyama rewards early starts more than almost anywhere else.", zh: "早点睡；岚山比多数地方更值得早出发。" },
+							bestTime: { en: "Do not let this become a late night.", zh: "这晚尽量不要拖太晚。" },
+							sakura: { en: "Tomorrow’s scenic train and river route can be spectacular in blossom season.", zh: "明天的岚山观光列车和河道段在樱花季会非常精彩。" },
+							notes: { en: "Prepare vouchers tonight.", zh: "今晚把预订凭证先整理好。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        function toggleLang() {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
-            document.getElementById('langBtn').innerText = currentLang === 'en' ? '中文 (简体)' : 'English';
-            updateStaticLabels();
-            updateUI();
-        }
+				{
+					date: "Apr 02",
+					weekday: { en: "Thu", zh: "周四" },
+					ticket: { en: "Reserved Train / Boat Tickets", zh: "预订车票 / 船票" },
+					reminders: [
+						{
+							en: "Keep both the Sagano train voucher and Hozugawa boat booking easy to reach before leaving Osaka.",
+							zh: "出发前先把嵯峨野小火车与保津川船票凭证放在最容易拿到的位置。"
+						},
+						{
+							en: "This is your earliest start; pack light but bring a layer because the river can feel cooler.",
+							zh: "今天是最早出发的一天；轻装但请带一层外套，河上会更凉。"
+						},
+						{
+							en: "From Torokko Kameoka, the official boat access includes a bus option to the Hozugawa-kudari boarding site.",
+							zh: "官方资料显示，从 Torokko Kameoka 到保津川下り乘船点可搭接驳巴士。"
+						}
+					],
+					events: [
+						{
+							time: "06:45",
+							title: { en: "Depart Hotel", zh: "出发前往岚山" },
+							type: "hotel",
+							duration: "80m",
+							route: { en: "Osaka → JR → Saga-Arashiyama", zh: "大阪 → JR → 嵯峨岚山" },
+							p2p: { en: "Hotel → Osaka Station area → JR Sagano route → Saga-Arashiyama", zh: "酒店 → 大阪站区域 → JR 嵯峨野方向 → 嵯峨岚山" },
+							transport: { en: "JR Train", zh: "JR 电车" },
+							transportDetail: { en: "This is a timing-sensitive day; treat all morning departures as non-optional.", zh: "今天是时间敏感型行程，早上的每一段都要准时。" },
+							estTime: { en: "70–90 min", zh: "约 70–90 分钟" },
+							tips: { en: "Leave with breakfast or a convenience-store snack already sorted.", zh: "最好出门前就把早餐或便利店点心处理好。" },
+							bestTime: { en: "As early as possible.", zh: "越早越好。" },
+							sakura: { en: "This day gives you bamboo, scenic rail, and river valley spring views in one loop.", zh: "今天把竹林、观光列车与河谷春景串成一整圈。" },
+							notes: { en: "Do not depend on finding a long breakfast stop in Arashiyama this early.", zh: "别把希望寄托在到岚山后再慢慢找早餐。" },
+							maps: "Saga-Arashiyama+Station",
+							food: "N/A"
+						},
+						{
+							time: "08:05",
+							title: { en: "Arashiyama Bamboo", zh: "岚山竹林" },
+							type: "sight",
+							duration: "60m",
+							route: { en: "Saga-Arashiyama → bamboo grove / Tenryu-ji side", zh: "嵯峨岚山 → 竹林 / 天龙寺周边" },
+							p2p: { en: "JR station → bamboo path", zh: "JR站 → 竹林步道" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "This is a short-distance walking segment from the station cluster.", zh: "这是从车站群步行即可抵达的区域。" },
+							estTime: { en: "10–20 min access + visit", zh: "步行约 10–20 分钟，加参观时间" },
+							tips: { en: "Photographs are best before 8:30 when the path is least congested.", zh: "8:30 前人相对最少，最适合拍照。" },
+							bestTime: { en: "Immediately on arrival.", zh: "到达后马上去最好。" },
+							sakura: { en: "Arashiyama’s spring appeal is not just bamboo; the broader area can also have mountain-side blossoms.", zh: "岚山春天的魅力不只竹林，周边山景也会有樱花点缀。" },
+							notes: { en: "Keep the stop disciplined so you do not risk your reserved train slot.", zh: "这段不要拖太久，以免影响后面的预约列车。" },
+							maps: "Arashiyama+Bamboo+Forest",
+							food: "% Arabica Coffee"
+						},
+						{
+							time: "11:00",
+							title: { en: "Romantic Train", zh: "嵯峨野小火车" },
+							type: "transport",
+							duration: "25m",
+							route: { en: "Torokko Saga → Torokko Kameoka", zh: "Torokko Saga → Torokko Kameoka" },
+							p2p: { en: "Board at Saga-side scenic railway station → disembark Kameoka", zh: "从嵯峨侧观光铁路站上车 → 龟冈下车" },
+							transport: { en: "Sagano Romantic Train", zh: "嵯峨野观光小火车" },
+							transportDetail: {
+								en: "The official railway site emphasizes Hozu River valley scenery throughout the ride; travel time is about 25 minutes.",
+								zh: "官方铁路网站强调全程可欣赏保津川峡谷景色；车程约 25 分钟。"
+							},
+							estTime: { en: "25 min", zh: "约 25 分钟" },
+							tips: { en: "Have your voucher and car/seat info ready before boarding time.", zh: "上车前先准备好凭证和车厢座位资讯。" },
+							bestTime: { en: "Fixed by your booking.", zh: "依预约时间固定。" },
+							sakura: { en: "Spring scenery can be excellent from the train windows, especially in the valley sections.", zh: "春天从车窗看河谷景色会很漂亮。" },
+							notes: { en: "Do not schedule shopping between the bamboo grove and the train.", zh: "竹林到小火车之间不要再插入购物行程。" },
+							maps: "Saga+Torokko+Station",
+							food: "N/A"
+						},
+						{
+							time: "11:45",
+							title: { en: "Lunch: Kameoka", zh: "午餐：龟冈站" },
+							type: "meal",
+							duration: "45m",
+							route: { en: "Torokko Kameoka area → quick lunch", zh: "Torokko Kameoka 区域 → 快速午餐" },
+							p2p: { en: "Kameoka side → near station / boarding-transfer area", zh: "龟冈侧 → 车站 / 乘船转乘区域附近" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Keep this short; the boat transfer matters more than a long lunch.", zh: "这段务必简短，后面的乘船转移更重要。" },
+							estTime: { en: "Short meal stop", zh: "短暂停留用餐" },
+							tips: { en: "Prioritize speed and warmth over destination dining here.", zh: "这里以快速、热食为主，不求名店。" },
+							bestTime: { en: "Right after the train.", zh: "小火车结束后立刻解决。" },
+							sakura: { en: "This is mainly a logistics meal stop.", zh: "这里主要是补给与衔接，不是景观重点。" },
+							notes: { en: "Leave time to locate the correct bus or boarding transfer.", zh: "务必预留找巴士或转运点的时间。" },
+							maps: "Kameoka+Station",
+							food: "Station-area quick lunch"
+						},
+						{
+							time: "13:00",
+							title: { en: "River Boat Ride", zh: "保津川漂流" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Torokko Kameoka / Kameoka side → boarding site → Hozugawa cruise to Arashiyama", zh: "Torokko Kameoka / 龟冈区域 → 乘船点 → 保津川下り到岚山" },
+							p2p: { en: "Torokko Kameoka → bus to Hozugawa-kudari Boarding Site → boat to Arashiyama", zh: "Torokko Kameoka → 巴士到 Hozugawa-kudari 乘船点 → 乘船到岚山" },
+							transport: { en: "Bus + boat", zh: "巴士 + 船" },
+							transportDetail: {
+								en: "Official Kyoto tourism guidance says the boarding site can be reached by bus from Torokko Kameoka Station; the boat ride then runs downriver toward Arashiyama.",
+								zh: "京都官方旅游资料说明，可从 Torokko Kameoka 搭巴士到乘船点，再从那里顺流而下到岚山。"
+							},
+							estTime: { en: "About 2 hr boat experience", zh: "乘船体验约 2 小时" },
+							tips: { en: "Keep a jacket handy and protect cameras/phones from splash or damp air.", zh: "请把外套和相机/手机防水准备好，河面风和水气会比较明显。" },
+							bestTime: { en: "Fixed by booking.", zh: "依预约时间固定。" },
+							sakura: { en: "Spring river-valley scenery is part of the appeal, but weather affects comfort a lot.", zh: "春季河谷风景很加分，但天气会明显影响舒适度。" },
+							notes: { en: "This is one of the least flexible segments of the whole trip — stay early, not just on time.", zh: "这是全程最不灵活的项目之一，最好提早到，而不是压线到。" },
+							maps: "Hozugawa+River+Boat+Dock",
+							food: "N/A"
+						},
+						{
+							time: "19:00",
+							title: { en: "Dinner: Chao Chao", zh: "晚餐：Chao Chao饺子" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Back from Kyoto → Osaka dinner", zh: "从京都返回 → 大阪晚餐" },
+							p2p: { en: "Arashiyama return → Osaka base → dinner", zh: "岚山回程 → 大阪住宿区 → 晚餐" },
+							transport: { en: "JR / Metro", zh: "JR / 地铁" },
+							transportDetail: { en: "Simplify the evening — today already has enough moving parts.", zh: "今晚尽量简单，今天的变量已经很多。" },
+							estTime: { en: "60–90 min return", zh: "回程约 60–90 分钟" },
+							tips: { en: "A quick gyoza dinner is a good recovery move after the boat.", zh: "坐完船后，快速吃顿饺子是很好的恢复型安排。" },
+							bestTime: { en: "As soon as practical after returning.", zh: "回到大阪后尽快处理。" },
+							sakura: { en: "Scenic day is done — tonight is for recovery.", zh: "今天景观强度已经很高，晚上以恢复为主。" },
+							notes: { en: "Stretch your legs after the boat and train day.", zh: "今天坐车又坐船，回到酒店可顺便拉伸。" },
+							maps: "Chao+Chao+Gyoza+Namba",
+							food: "Chao Chao Gyoza"
+						},
+						{
+							time: "20:30",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Dinner → hotel", zh: "晚餐 → 酒店" },
+							p2p: { en: "Namba / Shinsaibashi → hotel", zh: "难波 / 心斋桥 → 酒店" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Short return.", zh: "短距离返回。" },
+							estTime: { en: "5–15 min", zh: "约 5–15 分钟" },
+							tips: { en: "Rest your legs tonight — tomorrow has lots of walking in Nara too.", zh: "今晚让双腿休息，明天奈良也有很多步行。" },
+							bestTime: { en: "No late detours.", zh: "今晚不建议再绕路。" },
+							sakura: { en: "Tomorrow is more temple-park pacing than pure blossom chasing.", zh: "明天更偏寺院与公园步调，不是单纯追樱。" },
+							notes: { en: "Check next-day weather before sleeping.", zh: "睡前先看明天奈良天气。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        function updateStaticLabels() {
-            document.getElementById('btn-itinerary').innerText = uiText[currentLang].itinerary;
-            document.getElementById('btn-food').innerText = uiText[currentLang].food;
-            document.getElementById('btn-checklist').innerText = uiText[currentLang].checklist;
-            document.getElementById('btn-analysis').innerText = uiText[currentLang].analysis;
-        }
+				{
+					date: "Apr 03",
+					weekday: { en: "Fri", zh: "周五" },
+					ticket: { en: "ICOCA / Kintetsu", zh: "ICOCA / 近铁电车" },
+					reminders: [
+						{
+							en: "Kintetsu Nara is the best arrival anchor today; official Tōdai-ji access notes Osaka Namba to Kintetsu Nara is about 40 minutes.",
+							zh: "今天建议以近铁奈良站为落点；东大寺官方交通写明大阪难波到近铁奈良约 40 分钟。"
+						},
+						{
+							en: "You can walk from Kintetsu Nara to Tōdai-ji in about 20 minutes, or take a bus and walk 5 minutes from the temple bus stop.",
+							zh: "从近铁奈良站步行到东大寺约 20 分钟；也可搭巴士到站后步行约 5 分钟。"
+						},
+						{
+							en: "Do not feed deer with anything except deer crackers from approved sellers.",
+							zh: "喂鹿请只使用正规贩售的鹿仙贝。"
+						}
+					],
+					events: [
+						{
+							time: "08:15",
+							title: { en: "Depart Hotel", zh: "出发前往奈良" },
+							type: "hotel",
+							duration: "60m",
+							route: { en: "Osaka base → Kintetsu Osaka Namba → Kintetsu Nara", zh: "大阪住宿区 → 近铁大阪难波 → 近铁奈良" },
+							p2p: { en: "Hotel → Osaka Namba → Kintetsu Nara", zh: "酒店 → 大阪难波 → 近铁奈良" },
+							transport: { en: "Kintetsu Train", zh: "近铁电车" },
+							transportDetail: {
+								en: "Official Tōdai-ji access notes Osaka Namba to Kintetsu Nara takes about 40 minutes.",
+								zh: "东大寺官方交通写明：大阪难波到近铁奈良约 40 分钟。"
+							},
+							estTime: { en: "About 40–60 min including station access", zh: "含市区接驳约 40–60 分钟" },
+							tips: { en: "Aim for Kintetsu rather than JR for the easiest Nara Park approach.", zh: "今天优先搭近铁，比 JR 更接近奈良公园主区域。" },
+							bestTime: { en: "Morning departure gives the park a calmer feel.", zh: "早上出发能让奈良公园整体更从容。" },
+							sakura: { en: "Nara is more about temple-park atmosphere with spring color woven in.", zh: "奈良更偏寺院与公园氛围，樱花是整体景致的一部分。" },
+							notes: { en: "Buy deer crackers only after you decide you want the full deer interaction experience.", zh: "确定要认真跟鹿互动，再买鹿仙贝。" },
+							maps: "Kintetsu-Nara+Station",
+							food: "N/A"
+						},
+						{
+							time: "09:20",
+							title: { en: "Todai-ji Temple", zh: "东大寺" },
+							type: "sight",
+							duration: "90m",
+							route: { en: "Kintetsu Nara → Nara Park edge → Tōdai-ji", zh: "近铁奈良 → 奈良公园边缘 → 东大寺" },
+							p2p: { en: "Kintetsu Nara → 20 min walk, or bus to Tōdai-ji Daibutsuden / Kasuga Taisha-mae + 5 min walk", zh: "近铁奈良 → 步行约 20 分钟，或搭巴士到东大寺大佛殿 / 春日大社前后再步行约 5 分钟" },
+							transport: { en: "Walk or bus + walk", zh: "步行或巴士 + 步行" },
+							transportDetail: {
+								en: "Official temple access gives both options: about 20 minutes on foot from Kintetsu Nara, or bus then a short 5-minute walk.",
+								zh: "东大寺官方给出两种方式：从近铁奈良步行约 20 分钟，或搭巴士后再步行约 5 分钟。"
+							},
+							estTime: { en: "60–90 min", zh: "约 60–90 分钟" },
+							tips: { en: "Walk if energy is good; the park approach adds atmosphere.", zh: "若体力允许，建议步行进去，氛围更完整。" },
+							bestTime: { en: "Morning is best before the park fills up.", zh: "上午时段整体最好。" },
+							sakura: { en: "Temple + park compositions are best when you leave time to pause, not rush.", zh: "寺院与公园构图最怕赶，记得留停顿时间。" },
+							notes: { en: "Watch your belongings around deer in open areas.", zh: "在鹿多的区域请留意手上的地图与袋子。" },
+							maps: "Todai-ji",
+							food: "N/A"
+						},
+						{
+							time: "12:00",
+							title: { en: "Lunch: Mizuya Chaya", zh: "午餐：水谷茶屋" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Tōdai-ji / park area → Mizuya Chaya", zh: "东大寺 / 公园区域 → 水谷茶屋" },
+							p2p: { en: "Forest-path lunch stop within Nara Park area", zh: "奈良公园林间茶屋午餐点" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "This is a scenic in-park lunch, so keep expectations more atmospheric than quick-service.", zh: "这是风景型午餐点，氛围优先，不是极快速率型餐厅。" },
+							estTime: { en: "Walk-up park lunch stop", zh: "公园内步行午餐点" },
+							tips: { en: "This is a good place to slow down after the temple crowd.", zh: "这里很适合在寺院人潮后放慢节奏。" },
+							bestTime: { en: "Midday break before Kasuga Taisha.", zh: "中午休息后接春日大社最顺。" },
+							sakura: { en: "Shaded greenery plus spring atmosphere makes this a restorative stop.", zh: "林荫与春天气息让这里很适合休息恢复。" },
+							notes: { en: "If service runs slower than expected, shorten browsing elsewhere later.", zh: "若这里用餐比预期慢，后面就减少闲逛时间。" },
+							maps: "Mizuya+Chaya",
+							food: "Udon / matcha"
+						},
+						{
+							time: "13:30",
+							title: { en: "Kasuga Taisha", zh: "春日大社" },
+							type: "sight",
+							duration: "90m",
+							route: { en: "Nara Park → Kasuga Taisha approach", zh: "奈良公园 → 春日大社参道" },
+							p2p: { en: "Walk through park / forest, or use bus from Nara stations on other itineraries", zh: "穿过公园与树林步行，或从奈良站搭巴士" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: {
+								en: "Kasuga Taisha is also reachable by frequent bus from Kintetsu or JR Nara stations, but in your current order a park walk makes the most sense.",
+								zh: "春日大社也可从近铁或 JR 奈良站频繁搭巴士前往，但以你今天的顺序来说，直接公园步行最合理。"
+							},
+							estTime: { en: "60–90 min", zh: "约 60–90 分钟" },
+							tips: { en: "Look up for the forest mood, then slow down at the lantern areas.", zh: "先感受森林氛围，再在灯笼区域放慢脚步。" },
+							bestTime: { en: "Early afternoon after lunch.", zh: "午餐后下午前段最适合。" },
+							sakura: { en: "This is more sacred-forest mood than headline blossom density.", zh: "这里更偏圣域森林氛围，不是高密度樱花爆点。" },
+							notes: { en: "Good place to balance the more crowded Tōdai-ji feel with quieter pacing.", zh: "这里能中和东大寺较热闹的感受，节奏会安静很多。" },
+							maps: "Kasuga+Taisha",
+							food: "N/A"
+						},
+						{
+							time: "18:15",
+							title: { en: "Dinner: Yayoiken", zh: "晚餐：Yayoiken" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Nara → Osaka Namba → dinner", zh: "奈良 → 大阪难波 → 晚餐" },
+							p2p: { en: "Kintetsu Nara → Osaka Namba → Motomachi side dinner", zh: "近铁奈良 → 大阪难波 → 元町侧晚餐" },
+							transport: { en: "Kintetsu", zh: "近铁" },
+							transportDetail: { en: "Direct return structure; keep dinner practical.", zh: "回程结构直接，晚餐以实用为主。" },
+							estTime: { en: "40–60 min return + dinner", zh: "回程约 40–60 分钟，加用餐时间" },
+							tips: { en: "A teishoku set is a good reset after a long day outdoors.", zh: "在外面走了一整天后，定食类很适合恢复。" },
+							bestTime: { en: "Soon after returning to Osaka.", zh: "回到大阪后尽快吃。" },
+							sakura: { en: "No evening blossom stop today.", zh: "今天晚上不再安排赏樱。" },
+							notes: { en: "Check Kobe weather after dinner.", zh: "晚餐后顺便确认明天神户天气。" },
+							maps: "Yayoiken+Motomachi+Namba",
+							food: "Yayoiken"
+						},
+						{
+							time: "20:00",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Dinner → hotel", zh: "晚餐 → 酒店" },
+							p2p: { en: "Namba area → hotel", zh: "难波区域 → 酒店" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Short final walk.", zh: "短距离步行。" },
+							estTime: { en: "5–15 min", zh: "约 5–15 分钟" },
+							tips: { en: "Sleep on time — Kobe is another city-transfer day.", zh: "按时睡，明天又是跨城市的一天。" },
+							bestTime: { en: "No late shopping detours.", zh: "今晚不建议再绕去购物。" },
+							sakura: { en: "Tomorrow is more city-bay scenery than blossom-heavy.", zh: "明天重点会更偏城市与港湾景色。" },
+							notes: { en: "Pack a lighter day bag again.", zh: "明天继续轻装。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        function renderTabs() {
-            const container = document.getElementById('day-tabs');
-            container.innerHTML = tripData.map((day, idx) => `
-                <button onclick="changeDay(${idx})"
-                    class="flex-shrink-0 px-5 py-3 rounded-2xl border ${idx === currentDayIdx
-                        ? 'bg-pink-500 text-white border-pink-500 shadow-md'
-                        : 'bg-white text-slate-500 border-slate-100 hover:bg-pink-50'} transition-all">
-                    <p class="text-[10px] font-bold uppercase opacity-80">${day.weekday[currentLang]}</p>
-                    <p class="font-bold text-sm">${day.date}</p>
-                </button>
-            `).join('');
-        }
+				{
+					date: "Apr 04",
+					weekday: { en: "Sat", zh: "周六" },
+					ticket: { en: "ICOCA / JR Kobe", zh: "ICOCA / JR 神户线" },
+					reminders: [
+						{
+							en: "Kobe ropeway is an actual fixed ride segment today; the official site says the Nunobiki ropeway ride is about 10 minutes.",
+							zh: "今天神户缆车是固定项目；官网说明布引缆车单程约 10 分钟。"
+						},
+						{
+							en: "Let Chinatown be your flexible meal zone and Harborland your sunset/night zone.",
+							zh: "南京町适合作为弹性午餐区，Harborland 适合作为日落与夜景区。"
+						},
+						{
+							en: "This is a scenic-city day, so weather visibility matters more than blossom timing.",
+							zh: "今天是城市景观日，天气能见度比樱花时机更重要。"
+						}
+					],
+					events: [
+						{
+							time: "08:30",
+							title: { en: "Depart Hotel", zh: "出发前往神户" },
+							type: "hotel",
+							duration: "75m",
+							route: { en: "Osaka → JR → Sannomiya", zh: "大阪 → JR → 三宫" },
+							p2p: { en: "Hotel → Osaka Station/Umeda side → JR Special Rapid → Sannomiya", zh: "酒店 → 大阪站 / 梅田侧 → JR 新快速 → 三宫" },
+							transport: { en: "JR Special Rapid", zh: "JR 新快速" },
+							transportDetail: { en: "Keep this as a clean city-to-city move with minimal detours.", zh: "这一段尽量当作纯移动，不要加额外绕路。" },
+							estTime: { en: "45–75 min depending on hotel start point", zh: "视酒店位置约 45–75 分钟" },
+							tips: { en: "Get seated if you can; you have lots of walking later.", zh: "能坐就坐，后面还会走很多。" },
+							bestTime: { en: "Morning departure keeps Kobe flexible.", zh: "早上出发能让神户行程更有弹性。" },
+							sakura: { en: "Not a blossom-focused segment.", zh: "这一段不是赏樱重点。" },
+							notes: { en: "Aim to stay compact around Shin-Kobe / Motomachi / Harborland rather than zigzagging.", zh: "今天尽量把路线压缩在新神户、元町、港湾一带，不要来回折返。" },
+							maps: "Sannomiya+Station",
+							food: "N/A"
+						},
+						{
+							time: "09:45",
+							title: { en: "Shin-Kobe Ropeway", zh: "新神户缆车" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Sannomiya / Shin-Kobe → Nunobiki Ropeway → Herb Garden", zh: "三宫 / 新神户 → 布引缆车 → 香草园" },
+							p2p: { en: "City side station → ropeway base → garden summit area", zh: "市区车站 → 缆车山麓站 → 山上花园区域" },
+							transport: { en: "Walk + ropeway", zh: "步行 + 缆车" },
+							transportDetail: {
+								en: "Official ropeway information says the ride is about 10 minutes and opens panoramic views over Kobe, with spring flowers in the gardens.",
+								zh: "官方资料指出缆车单程约 10 分钟，可俯瞰神户市景，园区春季也有花卉景观。"
+							},
+							estTime: { en: "10 min ride each way + garden time", zh: "单程约 10 分钟，加园区停留时间" },
+							tips: { en: "If visibility is good, prioritize lookout spots first before lingering at cafes.", zh: "若能见度好，先看展望点，再慢慢去咖啡区。" },
+							bestTime: { en: "Late morning before lunch.", zh: "午餐前的上午时段。" },
+							sakura: { en: "Spring flowers here are broad seasonal scenery, not just sakura-only viewing.", zh: "这里是更广义的春季花景，并非只看樱花。" },
+							notes: { en: "Weather visibility can make or break this stop.", zh: "这站非常吃天气能见度。" },
+							maps: "Shin-Kobe+Ropeway",
+							food: "N/A"
+						},
+						{
+							time: "12:15",
+							title: { en: "Lunch: Chinatown", zh: "午餐：南京町" },
+							type: "meal",
+							duration: "90m",
+							route: { en: "Ropeway area → Motomachi / Nankinmachi", zh: "缆车区域 → 元町 / 南京町" },
+							p2p: { en: "Kobe city center → Chinatown street-food loop", zh: "神户市中心 → 南京町街头小吃区域" },
+							transport: { en: "Walk / local train if needed", zh: "步行 / 视情况搭短程电车" },
+							transportDetail: { en: "This is a flexible graze-and-walk lunch zone rather than a single fixed restaurant.", zh: "这里更适合边走边吃，不是单一餐厅型午餐。" },
+							estTime: { en: "60–90 min", zh: "约 60–90 分钟" },
+							tips: { en: "Share bites so you can try more than one stall.", zh: "建议分食，这样能多试几摊。" },
+							bestTime: { en: "Lunch window into early afternoon.", zh: "中午到下午前段最合适。" },
+							sakura: { en: "No sakura emphasis here.", zh: "这里不是赏樱点。" },
+							notes: { en: "This is the best place today to keep the meal informal and fun.", zh: "今天这里最适合用轻松、好玩的方式解决午餐。" },
+							maps: "Kobe+Chinatown+Nankinmachi",
+							food: "Steam buns / dumplings / duck"
+						},
+						{
+							time: "17:30",
+							title: { en: "Kobe Harborland", zh: "神户港乐园" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Motomachi / Meriken side → Harborland waterfront", zh: "元町 / 美利坚公园侧 → Harborland 海滨" },
+							p2p: { en: "City-center side → waterfront promenades", zh: "市中心侧 → 海滨步道" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Best handled as a waterfront stroll segment.", zh: "最适合当作海边散步段来安排。" },
+							estTime: { en: "90–120 min", zh: "约 90–120 分钟" },
+							tips: { en: "Arrive before sunset and stay into blue hour if weather cooperates.", zh: "若天气好，尽量在日落前到，并留到蓝调时段。" },
+							bestTime: { en: "Late afternoon into evening.", zh: "下午后段到晚上。" },
+							sakura: { en: "This is a port-nightscape slot, not a sakura slot.", zh: "这里是港口夜景段，不是赏樱段。" },
+							notes: { en: "Good place to slow down after earlier transit and ropeway movement.", zh: "前面移动不少，这里适合把节奏放慢。" },
+							maps: "Kobe+Harborland",
+							food: "N/A"
+						},
+						{
+							time: "19:30",
+							title: { en: "Dinner: Mosaic", zh: "晚餐：Mosaic购物城" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Harborland promenade → Mosaic dining", zh: "Harborland 海滨步道 → Mosaic 餐饮区" },
+							p2p: { en: "Waterfront walk → dinner with port view", zh: "海滨步行 → 港景晚餐" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Keep dinner nearby so you do not waste the Harborland night setting.", zh: "晚餐尽量就在附近解决，不要浪费港湾夜景氛围。" },
+							estTime: { en: "Short walk + dinner", zh: "短距离步行加用餐" },
+							tips: { en: "Today is a good night for a nicer sit-down meal if budget allows.", zh: "如果预算允许，今晚很适合安排一顿稍微正式一点的晚餐。" },
+							bestTime: { en: "After lights come on around the bay.", zh: "港湾灯光亮起后最佳。" },
+							sakura: { en: "No sakura focus.", zh: "这里没有赏樱重点。" },
+							notes: { en: "Port views matter more than chasing a famous name tonight.", zh: "今晚比起追名店，更重要的是港景体验。" },
+							maps: "Kobe+Harborland+umie",
+							food: "Waterfront dining"
+						},
+						{
+							time: "21:15",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Harborland / Kobe → Osaka hotel", zh: "Harborland / 神户 → 大阪酒店" },
+							p2p: { en: "Kobe rail return → Osaka base", zh: "神户铁路回程 → 大阪住宿区" },
+							transport: { en: "JR", zh: "JR" },
+							transportDetail: { en: "Straight city-to-city return.", zh: "直线式城市回程。" },
+							estTime: { en: "45–75 min", zh: "约 45–75 分钟" },
+							tips: { en: "Do not cut the return too tight if trains are busy at night.", zh: "若夜间车站较拥挤，回程不要压得太紧。" },
+							bestTime: { en: "Leave with enough margin to get back comfortably.", zh: "留足从容回程的时间。" },
+							sakura: { en: "Tomorrow returns to Osaka food + shopping energy.", zh: "明天回到大阪购物与美食节奏。" },
+							notes: { en: "Rest up; tomorrow is lighter but still walk-heavy.", zh: "好好休息，明天虽较轻松但仍会走很多。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        function markerClass(type) {
-            if (type === 'meal') return 'marker-meal';
-            if (type === 'hotel') return 'marker-hotel';
-            if (type === 'transport') return 'marker-transport';
-            return 'marker-sight';
-        }
+				{
+					date: "Apr 05",
+					weekday: { en: "Sun", zh: "周日" },
+					ticket: { en: "ICOCA", zh: "ICOCA" },
+					reminders: [
+						{
+							en: "This is your flexible Osaka day: keep it adaptive and cut slow queues if needed.",
+							zh: "今天是弹性大阪日，建议机动处理；若排队太久就果断调整。"
+						},
+						{
+							en: "Kuromon is in Osaka’s Minami / Namba area and works best earlier in the late afternoon rather than too late.",
+							zh: "黑门市场位于大阪南区 / 难波一带，较适合下午偏早时段，不要拖太晚。"
+						},
+						{
+							en: "Tonight is the best slot for your signature okonomiyaki finale.",
+							zh: "今晚最适合安排大阪烧收尾。"
+						}
+					],
+					events: [
+						{
+							time: "09:45",
+							title: { en: "Depart Hotel", zh: "出发" },
+							type: "hotel",
+							duration: "30m",
+							route: { en: "Hotel → Nakazakicho", zh: "酒店 → 中崎町" },
+							p2p: { en: "Hotel → subway → Nakazakicho", zh: "酒店 → 地铁 → 中崎町" },
+							transport: { en: "Subway", zh: "地铁" },
+							transportDetail: { en: "A lighter start than previous days.", zh: "今天比前几天出发更轻松。" },
+							estTime: { en: "20–30 min", zh: "约 20–30 分钟" },
+							tips: { en: "Use today to recover pace; no need to rush the morning.", zh: "今天可以回收节奏，早上不需要太赶。" },
+							bestTime: { en: "Late morning is fine.", zh: "晚一点的上午完全可以。" },
+							sakura: { en: "Today is not a dedicated blossom day.", zh: "今天不是专门追樱的一天。" },
+							notes: { en: "Good day to carry less.", zh: "今天适合轻装。" },
+							maps: "Nakazakicho+Station",
+							food: "N/A"
+						},
+						{
+							time: "10:15",
+							title: { en: "Nakazakicho", zh: "中崎町" },
+							type: "sight",
+							duration: "135m",
+							route: { en: "Station area → neighborhood café / vintage stroll", zh: "车站区域 → 街区咖啡 / 复古散步" },
+							p2p: { en: "Nakazakicho lanes on foot", zh: "中崎町巷弄步行" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "This is a pure wandering neighborhood segment.", zh: "这一段就是纯粹散步型街区体验。" },
+							estTime: { en: "60–135 min", zh: "约 60–135 分钟" },
+							tips: { en: "Let this be leisurely; do not over-structure it.", zh: "这一段就轻松走，不要排得太死。" },
+							bestTime: { en: "Late morning into lunch works well.", zh: "上午后段到午餐前都很适合。" },
+							sakura: { en: "More neighborhood mood than blossom target.", zh: "这里更重街区氛围，不是赏樱目标。" },
+							notes: { en: "Great place for coffee before Umeda lunch.", zh: "这里很适合先喝咖啡，再去梅田午餐。" },
+							maps: "Nakazakicho",
+							food: "Coffee / cafés"
+						},
+						{
+							time: "12:30",
+							title: { en: "Lunch: Ichiran Umeda", zh: "午餐：一兰拉面" },
+							type: "meal",
+							duration: "45m",
+							route: { en: "Nakazakicho → Umeda lunch", zh: "中崎町 → 梅田午餐" },
+							p2p: { en: "Neighborhood → Umeda station area", zh: "街区 → 梅田站区域" },
+							transport: { en: "Subway / walk", zh: "地铁 / 步行" },
+							transportDetail: { en: "Short central move inside north Osaka.", zh: "大阪北区内的短距离移动。" },
+							estTime: { en: "10–20 min", zh: "约 10–20 分钟" },
+							tips: { en: "Keep lunch quick so shopping and market timing stay comfortable.", zh: "午餐尽量快一点，后面购物和市场时间会更从容。" },
+							bestTime: { en: "Early lunch.", zh: "早点吃午餐更好。" },
+							sakura: { en: "No sakura emphasis.", zh: "不以赏樱为主。" },
+							notes: { en: "If the queue is long, swap to Hanshin Snack Park or another nearby quick option.", zh: "若排队太长，可改去 Hanshin Snack Park 或附近其他快餐方案。" },
+							maps: "Ichiran+Umeda",
+							food: "Ichiran ramen / quick alternatives"
+						},
+						{
+							time: "14:00",
+							title: { en: "Shinsaibashi Shopping", zh: "心斋桥购物" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Umeda → Shinsaibashi shopping street", zh: "梅田 → 心斋桥商店街" },
+							p2p: { en: "North Osaka → south Osaka main shopping corridor", zh: "大阪北区 → 南区主购物走廊" },
+							transport: { en: "Metro + walk", zh: "地铁 + 步行" },
+							transportDetail: { en: "Simple city-center transfer southbound.", zh: "很简单的市中心南下转移。" },
+							estTime: { en: "15–20 min transit + shopping", zh: "交通约 15–20 分钟，加购物时间" },
+							tips: { en: "Separate browsing from actual buying if you are watching luggage weight.", zh: "若担心行李重量，先看后买会更稳妥。" },
+							bestTime: { en: "Afternoon.", zh: "下午时段。" },
+							sakura: { en: "Urban shopping segment, not blossom-focused.", zh: "这是都市购物段，不是赏樱段。" },
+							notes: { en: "Keep track of time so you do not miss Kuromon at a good food hour.", zh: "记得控时，别错过黑门市场适合吃东西的时段。" },
+							maps: "Shinsaibashi-suji+Shopping+Street",
+							food: "N/A"
+						},
+						{
+							time: "16:00",
+							title: { en: "Kuromon Market", zh: "黑门市场" },
+							type: "sight",
+							duration: "60m",
+							route: { en: "Shinsaibashi / Namba side → Kuromon", zh: "心斋桥 / 难波侧 → 黑门市场" },
+							p2p: { en: "Namba district walk → Kuromon covered market", zh: "难波区域步行 → 黑门市场拱廊" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: {
+								en: "Official tourism pages place Kuromon in Osaka’s Minami / Namba district, so it fits naturally after Shinsaibashi.",
+								zh: "官方旅游资料把黑门市场归在大阪南区 / 难波一带，因此很适合接在心斋桥之后。"
+							},
+							estTime: { en: "45–60 min", zh: "约 45–60 分钟" },
+							tips: { en: "Go earlier rather than later for the best stall selection.", zh: "尽量早点去，摊位选择会更完整。" },
+							bestTime: { en: "Late afternoon, not too close to closing hours.", zh: "下午偏早，不要太接近收摊时间。" },
+							sakura: { en: "Food-market stop, not a blossom stop.", zh: "这里是美食市场，不是赏樱点。" },
+							notes: { en: "Seafood, beef, and small ready-to-eat bites are the strongest use of this stop.", zh: "这里最适合吃海鲜、和牛和各种即食小份小吃。" },
+							maps: "Kuromon+Ichiba+Market",
+							food: "Seafood snacks / market bites"
+						},
+						{
+							time: "19:00",
+							title: { en: "Dinner: Mizuno", zh: "晚餐：美津浓" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Kuromon / Namba → Dotonbori dinner", zh: "黑门 / 难波 → 道顿堀晚餐" },
+							p2p: { en: "Market area → Dotonbori → okonomiyaki dinner", zh: "市场区域 → 道顿堀 → 大阪烧晚餐" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "A natural Minami-area walk continuation.", zh: "这是大阪南区内很自然的步行衔接。" },
+							estTime: { en: "10–20 min", zh: "约 10–20 分钟" },
+							tips: { en: "This is the right night to do a queue-worthy Osaka classic.", zh: "今晚很适合为经典大阪烧排一次队。" },
+							bestTime: { en: "Dinner hour.", zh: "晚餐时段。" },
+							sakura: { en: "This is your Osaka food-finale segment.", zh: "这是大阪美食收尾段。" },
+							notes: { en: "Do not over-snack at Kuromon if Mizuno is a priority.", zh: "若今晚把 Mizuno 当重点，就别在黑门吃太撑。" },
+							maps: "Mizuno+Okonomiyaki",
+							food: "Mizuno Okonomiyaki"
+						},
+						{
+							time: "21:15",
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							type: "hotel",
+							duration: "N/A",
+							route: { en: "Dinner → hotel", zh: "晚餐 → 酒店" },
+							p2p: { en: "Dotonbori / Shinsaibashi → hotel", zh: "道顿堀 / 心斋桥 → 酒店" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Short last-night return.", zh: "最后一晚短距离返回。" },
+							estTime: { en: "5–15 min", zh: "约 5–15 分钟" },
+							tips: { en: "Final packing tonight; separate airport-train essentials from checked luggage.", zh: "今晚完成最终整理，把机场段必需品和托运行李分开。" },
+							bestTime: { en: "Do not delay packing until morning.", zh: "不要把整理行李拖到明早。" },
+							sakura: { en: "Tomorrow is logistics-first, not sightseeing-first.", zh: "明天以交通与收尾为主，不是观光日。" },
+							notes: { en: "Check outlet opening time and your flight buffer once more.", zh: "再确认一次 outlet 开门时间和航班缓冲。" },
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							food: "N/A"
+						}
+					]
+				},
 
-        function renderTimeline() {
-            const container = document.getElementById('timeline-list');
-            const day = tripData[currentDayIdx];
+				{
+					date: "Apr 06",
+					weekday: { en: "Mon", zh: "周一" },
+					ticket: { en: "Nankai to Airport", zh: "南海电铁前往机场" },
+					reminders: [
+						{
+							en: "Today is not for deep shopping; buy only if it does not create baggage stress.",
+							zh: "今天不是深度购物日，除非不会增加行李压力，否则不要买太多。"
+						},
+						{
+							en: "Rinku is a one-stop-before-airport convenience play, not a full extra sightseeing day.",
+							zh: "Rinku 的定位是机场前顺路补买，不是完整观光日。"
+						},
+						{
+							en: "Protect airport timing first; anything else is optional.",
+							zh: "今天所有安排都以机场时间为第一优先。"
+						}
+					],
+					events: [
+						{
+							time: "10:00",
+							title: { en: "Check out & Depart", zh: "退房出发" },
+							type: "hotel",
+							duration: "75m",
+							route: { en: "Hotel → Namba / Nankai → Rinku Town", zh: "酒店 → 难波 / 南海 → 临空城" },
+							p2p: { en: "Hotel → Nankai Namba → Rinku Town", zh: "酒店 → 南海难波 → 临空城" },
+							transport: { en: "Nankai Train", zh: "南海电车" },
+							transportDetail: { en: "Keep the departure simple and keep bags organized for easy platform movement.", zh: "今天移动尽量简单，行李也要整理成方便上月台的状态。" },
+							estTime: { en: "60–75 min including hotel checkout and station movement", zh: "含退房与进站约 60–75 分钟" },
+							tips: { en: "Separate passport, wallet, and flight essentials into one small pouch.", zh: "护照、钱包和机票相关物品请集中在一个小包里。" },
+							bestTime: { en: "On time, not late.", zh: "准时出发，不要拖。" },
+							sakura: { en: "No sakura focus today.", zh: "今天不以赏樱为主。" },
+							notes: { en: "Do a final room check before leaving the hotel.", zh: "离开酒店前做最后一次房间检查。" },
+							maps: "Nankai+Namba+Station",
+							food: "N/A"
+						},
+						{
+							time: "11:15",
+							title: { en: "Rinku Outlets", zh: "临空城奥特莱斯" },
+							type: "sight",
+							duration: "120m",
+							route: { en: "Rinku Town Station → outlet area", zh: "临空城站 → 奥特莱斯" },
+							p2p: { en: "Station → outlet shopping loop", zh: "车站 → 奥特莱斯购物区域" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Treat this as a controlled final stop, not an open-ended browse.", zh: "把这里当作受控的最后一站，不要无上限逛下去。" },
+							estTime: { en: "60–120 min max", zh: "最多约 60–120 分钟" },
+							tips: { en: "Use lockers if needed, but do not let that slow your airport buffer too much.", zh: "需要可用置物柜，但不要因此吃掉太多机场缓冲。" },
+							bestTime: { en: "Short targeted stop.", zh: "短时目标型停留。" },
+							sakura: { en: "No sakura focus.", zh: "无赏樱重点。" },
+							notes: { en: "Only buy what you are sure can be packed fast.", zh: "只买确定能快速打包的东西。" },
+							maps: "Rinku+Premium+Outlets",
+							food: "N/A"
+						},
+						{
+							time: "12:30",
+							title: { en: "Final Lunch", zh: "最后午餐" },
+							type: "meal",
+							duration: "45m",
+							route: { en: "Outlet area → quick lunch", zh: "奥特莱斯区域 → 快速午餐" },
+							p2p: { en: "On-site food court / nearby quick meal", zh: "现场美食区 / 附近快速午餐" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { en: "Fast lunch only; do not turn this into a long sit-down meal.", zh: "只安排快速午餐，不建议拖成久坐型用餐。" },
+							estTime: { en: "30–45 min", zh: "约 30–45 分钟" },
+							tips: { en: "Eat something reliable and familiar before the airport.", zh: "机场前吃稳妥、熟悉的东西最安全。" },
+							bestTime: { en: "Before leaving for KIX.", zh: "去机场前。" },
+							sakura: { en: "No sakura focus.", zh: "无赏樱重点。" },
+							notes: { en: "Keep wipes and a trash bag handy for the airport transfer after lunch.", zh: "午餐后前往机场时，身上备湿纸巾和小垃圾袋会更方便。" },
+							maps: "Rinku+Premium+Outlets+Food+Court",
+							food: "Outlet food court"
+						},
+						{
+							time: "14:15",
+							title: { en: "KIX Airport", zh: "抵达机场" },
+							type: "transport",
+							duration: "N/A",
+							route: { en: "Rinku Town → Kansai-Airport (1 stop)", zh: "临空城 → 关西机场（1站）" },
+							p2p: { en: "Rinku Town Station → Kansai-Airport Station", zh: "临空城站 → 关西机场站" },
+							transport: { en: "Train", zh: "电车" },
+							transportDetail: { en: "This is the last fixed timing segment; protect check-in time first.", zh: "这是今天最后一个固定时间段，优先保障值机时间。" },
+							estTime: { en: "About 10 min rail + airport walk time", zh: "铁路约 10 分钟，加机场步行时间" },
+							tips: { en: "Aim to be in check-in flow with buffer, not just arriving at the station on time.", zh: "重点不是刚好到机场站，而是要留出从容值机的缓冲。" },
+							bestTime: { en: "No later than planned.", zh: "不要晚于计划。" },
+							sakura: { en: "Trip end.", zh: "旅程结束。" },
+							notes: { en: "Do one final document check before entering the airport queue.", zh: "进机场排队前，再做一次证件确认。" },
+							maps: "Kansai+International+Airport",
+							food: "N/A"
+						}
+					]
+				}
+			],
+			checklist: [
+				{ cat: "Transport", en: "ICOCA Card (Pre-loaded)", zh: "ICOCA交通卡" },
+				{ cat: "Transport", en: "Nankai Rapi:t QR / Reservation", zh: "南海 Rapi:t 二维码 / 预约" },
+				{ cat: "Booked", en: "Sagano Romantic Train (Apr 2, 11am)", zh: "岚山小火车（4/2，11点）" },
+				{ cat: "Booked", en: "Hozugawa Boat (Apr 2, 1pm)", zh: "保津川漂流（4/2，1点）" },
+				{ cat: "Official", en: "Visit Japan Web QR", zh: "Visit Japan Web 二维码" }
+			],
+			food: [
+				{ name: "551 Horai", en: "Famous Pork Buns", zh: "大阪著名肉包", img: "🥟" },
+				{ name: "Mizuno", en: "Popular Okonomiyaki", zh: "人气大阪烧", img: "🍳" },
+				{ name: "Zundoya", en: "Rich Pork Broth Ramen", zh: "浓郁豚骨拉面", img: "🍜" }
+			]
+		};
 
-            container.innerHTML = day.events.map((ev, idx) => `
-                <div onclick="showDetail(${idx})" class="item-card p-4 rounded-2xl bg-white border border-slate-100 shadow-sm ${markerClass(ev.type)}">
-                    <div class="flex justify-between items-center gap-3">
-                        <div>
-                            <span class="text-[11px] font-bold text-slate-400">${ev.time}</span>
-                            <h3 class="font-bold text-slate-800">${ev.title[currentLang]}</h3>
-                            ${ev.region ? `<p class="text-xs text-slate-400 mt-1">${ev.region}</p>` : ''}
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-300 uppercase">${ev.type}</span>
-                    </div>
-                </div>
-            `).join('');
+		function switchTab(tabId) {
+			document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden-tab'));
+			document.getElementById('tab-' + tabId).classList.remove('hidden-tab');
 
-            showDetail(0);
-        }
+			document.querySelectorAll('.tab-btn').forEach(btn => {
+				btn.classList.remove('tab-active', 'text-pink-600', 'text-slate-900');
+				btn.classList.add('text-slate-400');
+			});
 
-        function renderMustTryList(items) {
-            if (!items || !items.length) return '';
-            return items.map(item => `
-                <div class="rounded-2xl bg-orange-50 border border-orange-100 p-4">
-                    <p class="font-bold text-slate-800">${item.name}</p>
-                    ${item.spot ? `<p class="text-xs text-orange-700 font-semibold mt-1">@ ${item.spot}</p>` : ''}
-                    ${item.desc ? `<p class="text-sm text-slate-600 mt-1">${item.desc}</p>` : ''}
-                </div>
-            `).join('');
-        }
+			const activeBtn = document.getElementById('btn-' + tabId);
+			if (activeBtn) {
+				activeBtn.classList.add('tab-active');
+				activeBtn.classList.remove('text-slate-400');
+			}
 
-        function getRegionalFallback(region) {
-            const items = foodGuide[region] || [];
-            return items.slice(0, 3).map(item => ({
-                name: item.name,
-                spot: region,
-                desc: item.desc
-            }));
-        }
+			if (tabId === 'analysis') renderChart();
+		}
 
-        function showDetail(idx) {
-            const ev = tripData[currentDayIdx].events[idx];
-            const detail = document.getElementById('detail-card');
-            const embedUrl = `https://maps.google.com/maps?q=${ev.maps}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
-            const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ev.maps}`;
-            const mustTryItems = ev.mustTry && ev.mustTry.length ? ev.mustTry : getRegionalFallback(ev.region);
+		function toggleLanguage() {
+			currentLang = currentLang === 'en' ? 'zh' : 'en';
+			document.getElementById('langBtn').innerText = currentLang === 'en' ? '中文 (简体)' : 'English';
+			updateUI();
+		}
 
-            detail.innerHTML = `
-                <div class="animate-in fade-in duration-300">
-                    <div class="flex flex-wrap items-center gap-2 mb-4">
-                        <span class="chip bg-pink-100 text-pink-600 uppercase">${ev.type}</span>
-                        ${ev.region ? `<span class="chip bg-slate-100 text-slate-600">${ev.region}</span>` : ''}
-                    </div>
+		function updateUI() {
+			renderDaySelector();
+			renderTimeline(currentDayIdx);
+			renderChecklist();
+			renderFood();
+			document.querySelectorAll('[data-en]').forEach(el => {
+				el.innerText = el.getAttribute(`data-${currentLang}`);
+			});
+		}
 
-                    <h2 class="text-3xl font-bold mb-2">${ev.title[currentLang]}</h2>
-                    <p class="text-slate-400 font-medium mb-8">${ev.time} • ${tripData[currentDayIdx].date}</p>
+		function renderDaySelector() {
+			const container = document.getElementById('day-tabs');
+			container.innerHTML = data.days.map((day, idx) => `
+				<button onclick="changeDay(${idx})" class="flex-shrink-0 px-6 py-3 rounded-2xl border-2 transition-all ${idx === currentDayIdx ? 'border-pink-500 bg-pink-500 text-white shadow-lg' : 'border-slate-100 bg-white text-slate-500 hover:border-pink-200'}">
+					<span class="block text-[10px] uppercase font-black opacity-70">${day.weekday[currentLang]}</span>
+					<span class="block font-bold">${day.date}</span>
+				</button>
+			`).join('');
+		}
 
-                    <div class="space-y-6">
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400">📍</div>
-                            <div>
-                                <h4 class="text-[10px] font-bold uppercase text-slate-400">${uiText[currentLang].activityRoute}</h4>
-                                <p class="font-semibold text-slate-700">${ev.route || '-'}</p>
-                            </div>
-                        </div>
+		function changeDay(idx) {
+			currentDayIdx = idx;
+			updateUI();
+		}
 
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400">💡</div>
-                            <div>
-                                <h4 class="text-[10px] font-bold uppercase text-slate-400">${uiText[currentLang].expertTip}</h4>
-                                <p class="text-slate-600 italic">"${ev.tips || uiText[currentLang].enjoy}"</p>
-                            </div>
-                        </div>
+		function renderReminders(day) {
+			const wrap = document.getElementById('daily-reminders');
+			wrap.innerHTML = `
+				<div class="reminder-card rounded-2xl p-4">
+					<div class="flex items-center gap-2 mb-3">
+						<span class="text-lg">📝</span>
+						<h4 class="text-sm font-black text-orange-600 uppercase tracking-wider">${ui[currentLang].dayReminders}</h4>
+					</div>
+					<div class="grid gap-2">
+						${day.reminders.map(item => `
+							<div class="bg-white/70 rounded-xl px-3 py-3 text-sm text-slate-700 border border-orange-100">
+								• ${item[currentLang]}
+							</div>
+						`).join('')}
+					</div>
+				</div>
+			`;
+		}
+		
+		function getEventClass(type) {
+			if (type === 'meal') return 'marker-meal';
+			if (type === 'hotel') return 'marker-hotel';
+			if (type === 'transport') return 'marker-transport';
+			if (type === 'sight') return 'marker-sight';
+			return 'bg-white border-slate-200';
+		}
 
-                        <div>
-                            <h4 class="text-[10px] font-bold uppercase text-orange-500 mb-3">${uiText[currentLang].nearbyFood}</h4>
-                            <div class="grid gap-3">
-                                ${mustTryItems.length ? renderMustTryList(mustTryItems) : `<p class="text-sm text-slate-500">${uiText[currentLang].noSpecificFood}</p>`}
-                            </div>
-                        </div>
+		function renderTimeline(idx) {
+			const day = data.days[idx];
 
-                        <div>
-                            <h4 class="text-[10px] font-bold uppercase text-slate-400 mb-3">${uiText[currentLang].liveMap}</h4>
-                            <div class="map-container">
-                                <iframe
-                                    src="${embedUrl}"
-                                    loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"
-                                    title="Map preview for ${ev.title.en}">
-                                </iframe>
-                            </div>
-                        </div>
-                    </div>
+			// render reminders
+			renderReminders(day);
 
-                    <a href="${mapUrl}" target="_blank" rel="noopener noreferrer"
-                        class="mt-8 block w-full py-4 bg-slate-900 text-white rounded-2xl text-center font-bold hover:bg-pink-600 transition-all shadow-lg">
-                        ${uiText[currentLang].openMaps}
-                    </a>
-                </div>
-            `;
-        }
+			const container = document.getElementById('timeline-list');
+			if (!container) return;
 
-        function renderFoodGuide() {
-            const container = document.getElementById('food-grid');
-            container.innerHTML = Object.entries(foodGuide).map(([region, foods]) => `
-                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                    <h3 class="font-bold text-lg mb-3">${region}</h3>
-                    <div class="space-y-3">
-                        ${foods.map(food => `
-                            <div class="bg-white rounded-xl p-3 border border-slate-100">
-                                <p class="font-semibold text-slate-800">${food.name}</p>
-                                <p class="text-sm text-slate-500 mt-1">${food.desc}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-        }
+			container.innerHTML = day.events.map((ev, i) => {
+				const colorClass = getEventClass(ev.type);
 
-        function changeDay(idx) {
-            currentDayIdx = idx;
-            updateUI();
-        }
+				return `
+					<div onclick="showDetail(${idx}, ${i})"
+						class="item-card cursor-pointer p-4 rounded-xl border ${colorClass}">
+						
+						<div class="flex justify-between items-center">
+							<div>
+								<span class="text-xs font-black opacity-60">${ev.time}</span>
+								<h3 class="font-bold">${ev.title[currentLang]}</h3>
+							</div>
+							<span class="text-[10px] px-2 py-1 bg-black/5 rounded font-bold">
+								${ev.duration}
+							</span>
+						</div>
+					</div>
+				`;
+			}).join('');
 
-        function updateUI() {
-            renderTabs();
-            renderTimeline();
-            renderFoodGuide();
-        }
+			showDetail(idx, 0);
+		}
 
-        window.onload = () => {
-            updateStaticLabels();
-            updateUI();
-        };
-    </script>
+		function mapsSearchUrl(mapsValue) {
+			if (!mapsValue) return '';
+			if (mapsValue.startsWith('http')) return mapsValue;
+			return `https://www.google.com/maps/search/?api=1&query=${mapsValue}`;
+		}
+
+		function mapsEmbedUrl(mapsValue) {
+			if (!mapsValue) return '';
+			const query = mapsValue.startsWith('http') ? mapsValue : mapsValue;
+			return `https://maps.google.com/maps?q=${query}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+		}
+
+		function infoBlock(title, value) {
+			return `
+				<div class="info-card rounded-2xl p-4">
+					<h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">${title}</h4>
+					<div class="text-slate-700 font-semibold">${value || '-'}</div>
+				</div>
+			`;
+		}
+
+		function showDetail(dayIdx, eventIdx) {
+			const ev = data.days[dayIdx].events[eventIdx];
+			const pane = document.getElementById('detail-card');
+			const mapUrl = mapsSearchUrl(ev.maps);
+			const embedUrl = mapsEmbedUrl(ev.maps);
+
+			pane.innerHTML = `
+				<div class="animate-in fade-in duration-500">
+					<div class="flex items-center gap-2 mb-2">
+						<span class="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter">${ev.type}</span>
+						<span class="text-slate-400 text-xs font-bold">${ev.time} Start</span>
+					</div>
+
+					<h2 class="text-3xl font-bold mb-6">${ev.title[currentLang]}</h2>
+
+					<div class="space-y-4">
+						${infoBlock(ui[currentLang].routePlan, ev.route[currentLang])}
+						${infoBlock(ui[currentLang].pointToPoint, ev.p2p[currentLang])}
+
+						<div class="grid md:grid-cols-2 gap-4">
+							${infoBlock(ui[currentLang].transportInfo, `
+								<div class="space-y-2">
+									<p>🚆 ${ev.transport[currentLang]}</p>
+									<p class="text-sm font-normal text-slate-600">${ev.transportDetail[currentLang]}</p>
+									<p class="text-sm font-bold text-pink-600">⏱ ${ev.estTime[currentLang]}</p>
+								</div>
+							`)}
+							${infoBlock(ui[currentLang].nearbyFood, `🍱 ${ev.food || 'N/A'}`)}
+						</div>
+
+						<div class="grid md:grid-cols-2 gap-4">
+							${infoBlock(ui[currentLang].bestTime, ev.bestTime[currentLang])}
+							${infoBlock(ui[currentLang].sakuraAdvice, ev.sakura[currentLang])}
+						</div>
+
+						${infoBlock(ui[currentLang].expertTips, `“${ev.tips[currentLang]}”`)}
+						${infoBlock(ui[currentLang].extraNotes, ev.notes[currentLang])}
+
+						${ev.maps ? `
+							<div>
+								<h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Map Preview</h4>
+								<div class="map-container">
+									<iframe src="${embedUrl}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+								</div>
+							</div>
+						` : ''}
+
+						${ev.maps ? `
+							<a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="block w-full text-center py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-pink-600 transition-all">
+								${ui[currentLang].openMaps}
+							</a>
+						` : `
+							<div class="text-center py-4 bg-slate-100 text-slate-500 rounded-2xl font-bold">
+								${ui[currentLang].noMap}
+							</div>
+						`}
+					</div>
+				</div>
+			`;
+		}
+
+		function renderChecklist() {
+			const grid = document.getElementById('checklist-grid');
+			grid.innerHTML = `
+				<div class="bg-white p-6 rounded-3xl border">
+					<h3 class="font-bold text-lg mb-4 text-pink-500">Ready to Go</h3>
+					<div class="space-y-3">
+						${data.checklist.map(item => `
+							<div class="flex items-center gap-3 text-sm p-3 bg-slate-50 rounded-xl">
+								<input type="checkbox" class="accent-pink-500 w-5 h-5">
+								<span><strong class="text-xs opacity-50 uppercase">${item.cat}:</strong> ${item[currentLang]}</span>
+							</div>
+						`).join('')}
+					</div>
+				</div>
+				<div class="bg-white p-6 rounded-3xl border">
+					<h3 class="font-bold text-lg mb-4 text-green-500">Smart Use Tips</h3>
+					<ul class="text-sm space-y-3 text-slate-600">
+						<li>✅ <strong>Osaka Amazing Pass</strong> day works best when stacked with metro rides and major Osaka sights.</li>
+						<li>✅ <strong>Keihan Day</strong>: make sure the train you board actually stops at Fushimi-inari.</li>
+						<li>✅ <strong>Arashiyama Day</strong>: keep vouchers easy to access and protect your schedule buffer.</li>
+						<li>✅ <strong>Nara Day</strong>: Kintetsu is usually the easiest arrival point for Nara Park / Tōdai-ji.</li>
+						<li>✅ <strong>Departure Day</strong>: airport timing beats outlet shopping every time.</li>
+					</ul>
+				</div>
+			`;
+		}
+
+		function renderFood() {
+			const grid = document.getElementById('food-grid');
+			grid.innerHTML = data.food.map(f => `
+				<div class="bg-white p-6 rounded-3xl border text-center hover:shadow-lg transition-shadow">
+					<div class="text-5xl mb-4">${f.img}</div>
+					<h4 class="font-bold text-lg">${f.name}</h4>
+					<p class="text-xs text-slate-400 font-bold uppercase mb-2">${f.en}</p>
+					<p class="text-sm text-slate-600">${f[currentLang]}</p>
+				</div>
+			`).join('');
+		}
+
+		function renderChart() {
+			const ctx = document.getElementById('activityChart').getContext('2d');
+			if (window.myChart) window.myChart.destroy();
+			window.myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: data.days.map(d => d.date),
+					datasets: [{
+						label: 'Transit Minutes (Estimated)',
+						data: [130, 90, 150, 105, 110, 130, 45],
+						borderColor: '#f472b6',
+						backgroundColor: 'rgba(244, 114, 182, 0.1)',
+						fill: true,
+						tension: 0.4
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					scales: { y: { beginAtZero: true } }
+				}
+			});
+		}
+
+		window.onload = updateUI;
+	</script>
 </body>
 </html>
