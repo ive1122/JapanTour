@@ -1550,11 +1550,6 @@
 				{ cat: "Booked", en: "Sagano Romantic Train (Apr 2, 11am)", zh: "岚山小火车（4/2，11点）" },
 				{ cat: "Booked", en: "Hozugawa Boat (Apr 2, 1pm)", zh: "保津川漂流（4/2，1点）" },
 				{ cat: "Official", en: "Visit Japan Web QR", zh: "Visit Japan Web 二维码" }
-			],
-			food: [
-				{ name: "551 Horai", en: "Famous Pork Buns", zh: "大阪著名肉包", img: "🥟" },
-				{ name: "Mizuno", en: "Popular Okonomiyaki", zh: "人气大阪烧", img: "🍳" },
-				{ name: "Zundoya", en: "Rich Pork Broth Ramen", zh: "浓郁豚骨拉面", img: "🍜" }
 			]
 		};
 
@@ -1576,7 +1571,7 @@
 			if (tabId === 'analysis') renderChart();
 		}
 
-		function toggleLanguage() {
+		function toggleLang() {
 			currentLang = currentLang === 'en' ? 'zh' : 'en';
 			document.getElementById('langBtn').innerText = currentLang === 'en' ? '中文 (简体)' : 'English';
 			updateUI();
@@ -1777,6 +1772,16 @@
 
 		function renderFood() {
 			const grid = document.getElementById('food-grid');
+			
+			if (!data.food || !Array.isArray(data.food)) {
+				grid.innerHTML = `
+					<div class="col-span-full text-sm text-slate-500">
+						No food data found.
+					</div>
+				`;
+				return;
+			}
+			
 			grid.innerHTML = data.food.map(f => `
 				<div class="bg-white p-6 rounded-3xl border text-center hover:shadow-lg transition-shadow">
 					<div class="text-5xl mb-4">${f.img}</div>
