@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Osaka-Kyoto Sakura 2026 | Full Experience Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
@@ -35,7 +34,7 @@
                 Japan 2026 🌸 <span class="text-slate-400 font-normal">| 8 Days</span>
             </h1>
             <button
-                onclick="toggleLang()"
+                onclick="toggleLanguage()"
                 id="langBtn"
                 class="text-xs font-bold bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-slate-200 transition-all uppercase tracking-tighter"
             >
@@ -49,8 +48,8 @@
 		<!-- Tabs -->
 		<nav class="flex gap-8 mb-8 border-b overflow-x-auto no-scrollbar whitespace-nowrap">
 			<button onclick="switchTab('itinerary')" class="tab-btn pb-4 tab-active" id="btn-itinerary">Itinerary</button>
+			<button onclick="switchTab('food')" class="tab-btn pb-4 text-slate-400" id="btn-food">Food Guide</button>
 			<button onclick="switchTab('checklist')" class="tab-btn pb-4 text-slate-400" id="btn-checklist">Checklist</button>
-			<button onclick="switchTab('cost')" class="tab-btn pb-4 text-slate-400" id="btn-cost">Cost</button>
 			<button onclick="switchTab('analysis')" class="tab-btn pb-4 text-slate-400" id="btn-analysis">Analytics</button>
 		</nav>
 
@@ -112,282 +111,35 @@
 
 		</section>
 
-		<!-- ================= COST ================= -->
-		<section id="tab-cost" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
-
-			<h2 class="text-2xl font-bold mb-6 text-emerald-600">💴 Trip Cost (2 Pax)</h2>
-
-			<!-- SUMMARY -->
-			<div class="grid md:grid-cols-4 gap-4 mb-8">
-
-				<div class="p-4 bg-slate-50 rounded-2xl">
-					<p class="text-xs text-slate-500 uppercase">Transport</p>
-					<p class="text-2xl font-bold">¥42,000 – ¥44,000</p>
-				</div>
-
-				<div class="p-4 bg-slate-50 rounded-2xl">
-					<p class="text-xs text-slate-500 uppercase">Meals</p>
-					<p class="text-2xl font-bold">¥41,000 – ¥72,000</p>
-				</div>
-
-				<div class="p-4 bg-slate-50 rounded-2xl">
-					<p class="text-xs text-slate-500 uppercase">Tickets</p>
-					<p class="text-2xl font-bold">¥24,000 – ¥27,000</p>
-				</div>
-
-				<div class="p-5 bg-emerald-500 text-white rounded-2xl shadow-lg">
-					<p class="text-xs uppercase opacity-80">Grand Total</p>
-					<p class="text-3xl font-bold mt-1">¥107,000 – ¥143,000</p>
-				</div>
-
-			</div>
-
-			<!-- QUICK NOTE -->
-			<div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-sm text-amber-800">
-				⚠️ Sagano Romantic Train and Hozugawa River Boat Ride are already booked and are included in the ticket total below.
-			</div>
-
-			<!-- TRANSPORT BREAKDOWN -->
-			<div class="mb-10">
-				<h3 class="font-bold text-lg mb-4 text-slate-700">🚆 Transport Breakdown (2 Pax)</h3>
-
-				<div class="grid md:grid-cols-2 gap-4">
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Mar 30 · KIX → Namba</p>
-								<p class="text-sm text-slate-500 mt-1">
-									Nankai Rapi:t airport transfer for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									Includes airport to city transfer only; evening in Minami is mostly walking.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">¥2,700</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Mar 31 · Osaka city transport</p>
-								<p class="text-sm text-slate-500 mt-1">
-									ICOCA / Metro rides only for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									No Amazing Pass recommended because Umeda Sky Building is after 3 PM and needs separate tickets.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">~¥2,000</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Apr 1 · Osaka ↔ Kyoto</p>
-								<p class="text-sm text-slate-500 mt-1">
-									Keihan / local transit estimate for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									Covers Kyoto day movement such as Fushimi Inari, Kiyomizu area, and return to Osaka.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">¥2,600 – ¥3,300</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Apr 2 · Osaka ↔ Arashiyama local rail</p>
-								<p class="text-sm text-slate-500 mt-1">
-									JR + local movement only
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									This transport estimate excludes the Sagano train and Hozugawa boat because those are counted in tickets.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">~¥3,800 – ¥4,500</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Apr 3 · Osaka ↔ Nara</p>
-								<p class="text-sm text-slate-500 mt-1">
-									Kintetsu round-trip for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									Best-value simple day trip transport.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">~¥2,700</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Apr 4 · Osaka ↔ Kobe</p>
-								<p class="text-sm text-slate-500 mt-1">
-									JR round-trip for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									Ropeway is not included here; ropeway is counted in tickets below.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">~¥1,700 – ¥2,000</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Apr 5 · Osaka local transport</p>
-								<p class="text-sm text-slate-500 mt-1">
-									Metro + walking day for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									Light transport day around Nakazakicho, Umeda, Shinsaibashi, Kuromon, and Dotonbori.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">¥800 – ¥1,400</p>
-						</div>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<div class="flex justify-between items-start gap-4">
-							<div>
-								<p class="font-semibold">Apr 6 · Namba → Rinku → KIX</p>
-								<p class="text-sm text-slate-500 mt-1">
-									Airport transfer day for 2 people
-								</p>
-								<p class="text-xs text-slate-400 mt-2">
-									Range depends on whether you buy the Rinku outlet rail bundle or just pay standard fares.
-								</p>
-							</div>
-							<p class="font-bold text-pink-600 whitespace-nowrap">¥2,000 – ¥3,500</p>
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- MEAL BREAKDOWN -->
-			<div class="mb-10">
-				<h3 class="font-bold text-lg mb-4 text-slate-700">🍜 Meal Estimate (2 Pax)</h3>
-
-				<div class="grid md:grid-cols-2 gap-4">
-
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Mar 30 · Arrival dinner</p><p class="text-orange-600 font-bold">¥3,000 – ¥5,000</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Mar 31 · Osaka day meals</p><p class="text-orange-600 font-bold">¥5,000 – ¥8,000</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 1 · Kyoto day meals</p><p class="text-orange-600 font-bold">¥6,000 – ¥9,600</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 2 · Arashiyama day meals</p><p class="text-orange-600 font-bold">¥6,000 – ¥10,000</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 3 · Nara day meals</p><p class="text-orange-600 font-bold">¥5,000 – ¥8,000</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 4 · Kobe day meals</p><p class="text-orange-600 font-bold">¥7,000 – ¥16,000</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 5 · Osaka food day</p><p class="text-orange-600 font-bold">¥7,000 – ¥12,000</p></div>
-					<div class="p-4 bg-slate-50 rounded-xl"><p class="font-semibold">Apr 6 · Final lunch</p><p class="text-orange-600 font-bold">¥2,000 – ¥3,600</p></div>
-
-				</div>
-			</div>
-
-			<!-- TICKET BREAKDOWN -->
-			<div class="mb-10">
-				<h3 class="font-bold text-lg mb-4 text-slate-700">🎟️ Ticket Breakdown (2 Pax)</h3>
-
-				<div class="grid md:grid-cols-2 gap-4">
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Umeda Sky Building</p>
-						<p class="text-sm text-slate-500">After 3 PM, separate ticket needed</p>
-						<p class="text-pink-600 font-bold">¥4,000</p>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Kiyomizu-dera</p>
-						<p class="text-pink-600 font-bold">¥800</p>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Todai-ji</p>
-						<p class="text-pink-600 font-bold">¥1,200</p>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Kobe Ropeway</p>
-						<p class="text-pink-600 font-bold">¥4,000</p>
-					</div>
-
-					<div class="p-4 bg-green-50 border border-green-200 rounded-xl">
-						<p class="font-semibold">Sagano Romantic Train</p>
-						<p class="text-sm text-green-600">✔ Already Booked</p>
-						<p class="font-bold">¥1,760</p>
-					</div>
-
-					<div class="p-4 bg-green-50 border border-green-200 rounded-xl">
-						<p class="font-semibold">Hozugawa River Boat Ride</p>
-						<p class="text-sm text-green-600">✔ Already Booked</p>
-						<p class="font-bold">¥12,000</p>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- OPTIONAL TICKETS -->
-			<div>
-				<h3 class="font-bold text-lg mb-4 text-slate-700">🟡 Optional Tickets</h3>
-
-				<div class="grid md:grid-cols-2 gap-4">
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Osaka Castle Interior</p>
-						<p class="text-pink-600 font-bold">¥1,200</p>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Nishinomaru Garden</p>
-						<p class="text-pink-600 font-bold">¥400 – ¥700</p>
-					</div>
-
-					<div class="p-4 bg-slate-50 rounded-xl">
-						<p class="font-semibold">Tenryu-ji</p>
-						<p class="text-pink-600 font-bold">¥1,000 – ¥1,600</p>
-					</div>
-
-				</div>
-			</div>
-
-		</section>
-		
 		<!-- ================= ANALYTICS ================= -->
 		<section id="tab-analysis" class="tab-content hidden-tab bg-white p-8 rounded-3xl border shadow-sm">
+
 			<h2 class="text-2xl font-bold mb-4 text-purple-600">📊 Trip Statistics</h2>
 
-			<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+			<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
 				<div class="p-4 bg-slate-50 rounded-2xl">
 					<p class="text-xs text-slate-500 uppercase">Total Days</p>
 					<p class="text-2xl font-bold">8 Days</p>
 				</div>
+
 				<div class="p-4 bg-slate-50 rounded-2xl">
 					<p class="text-xs text-slate-500 uppercase">Estimated Steps</p>
 					<p class="text-2xl font-bold">120,000+</p>
 				</div>
+
 				<div class="p-4 bg-slate-50 rounded-2xl">
 					<p class="text-xs text-slate-500 uppercase">Regions</p>
 					<p class="text-2xl font-bold">Osaka / Kyoto / Nara / Kobe</p>
 				</div>
+
 				<div class="p-4 bg-slate-50 rounded-2xl">
 					<p class="text-xs text-slate-500 uppercase">Signature Eats</p>
 					<p class="text-2xl font-bold">20+</p>
 				</div>
+
 			</div>
 
-			<div class="h-[320px]">
-				<canvas id="activityChart"></canvas>
-			</div>
 		</section>
 
 	</main>
@@ -1550,28 +1302,92 @@
 				{ cat: "Booked", en: "Sagano Romantic Train (Apr 2, 11am)", zh: "岚山小火车（4/2，11点）" },
 				{ cat: "Booked", en: "Hozugawa Boat (Apr 2, 1pm)", zh: "保津川漂流（4/2，1点）" },
 				{ cat: "Official", en: "Visit Japan Web QR", zh: "Visit Japan Web 二维码" }
+			],
+			food: [
+				{ name: "551 Horai", en: "Famous Pork Buns", zh: "大阪著名肉包", img: "🥟" },
+				{ name: "Mizuno", en: "Popular Okonomiyaki", zh: "人气大阪烧", img: "🍳" },
+				{ name: "Zundoya", en: "Rich Pork Broth Ramen", zh: "浓郁豚骨拉面", img: "🍜" }
+			]
+		};
+
+		const exactTransit = {
+			0: [
+				{ en: "Terminal 1 Arrivals → follow Railway signs → Kansai-Airport Station. Handle immigration, bags, and Wi-Fi before going down to the rail level.", zh: "T1 到达层 → 跟随 Railway 指示 → 关西机场站。先完成入境、取行李与领取网络设备，再下到铁路层。" },
+				{ en: "Kansai-Airport Station → board Nankai Limited Express Rapi:t → Nankai Namba Station. Use the reserved-seat carriage shown on your ticket/QR.", zh: "关西机场站 → 搭乘南海特急 Rapi:t → 南海难波站。按车票 / 二维码所示车厢与座位搭乘。" },
+				{ en: "Nankai Namba Station → walk underground toward Osaka Metro Namba / Shinsaibashi-suji side → continue on foot to the hotel. Public-transport-only route is train + walk, no taxi needed.", zh: "南海难波站 → 沿地下通道往大阪地铁难波 / 心斋桥筋方向步行 → 继续步行到酒店。用公共交通的话搭车到难波后步行即可，无需出租车。" },
+				{ en: "Hotel → walk south through the Shinsaibashi / Dotonbori area. No train needed for tonight's dinner zone.", zh: "酒店 → 沿心斋桥 / 道顿堀一带步行南下。今晚晚餐区不需要搭车。" },
+				{ en: "Stay on foot: Glico Sign / Ebisu Bridge area → canal walk → Hozenji Yokocho.", zh: "全程步行：固力果招牌 / 戎桥一带 → 沿运河散步 → 法善寺横丁。" },
+				{ en: "Hozenji / Dotonbori area → walk back north toward the hotel in Shinsaibashi.", zh: "法善寺 / 道顿堀一带 → 步行往北回到心斋桥酒店。" }
+			],
+			1: [
+				{ en: "Hotel → Shinsaibashi Station → Osaka Metro Midosuji Line to Hommachi → transfer to Chuo Line → Tanimachi 4-chome Station → walk to Osaka Castle Park.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到本町 → 转中央线 → 谷町四丁目站 → 步行到大阪城公园。" },
+				{ en: "Use Tanimachi 4-chome as your main access point. Walk via Otemon side into Osaka Castle Park / Nishinomaru side.", zh: "以谷町四丁目为主要进场点，从大手门方向步行进入大阪城公园 / 西之丸方向。" },
+				{ en: "After castle views, keep lunch on foot near the castle-side / Tanimachi area so you do not waste time on extra transfers.", zh: "看完大阪城后，午餐建议直接在城边 / 谷町一带步行解决，避免多余转乘。" },
+				{ en: "Castle area → walk to JR Osakajokoen Station → JR Osaka Loop Line → Sakuranomiya Station → walk to the riverside path.", zh: "大阪城区域 → 步行到 JR 大阪城公园站 → 搭 JR 环状线 → 樱之宫站 → 步行到河边步道。" },
+				{ en: "JR Sakuranomiya Station → JR Osaka Station by Osaka Loop Line → walk from Osaka/Umeda station area to Umeda Sky Building.", zh: "JR 樱之宫站 → 搭 JR 环状线到大阪站 → 从大阪 / 梅田站区域步行到梅田蓝天大厦。" },
+				{ en: "Walk back to Umeda Station → Osaka Metro Midosuji Line southbound → Shinsaibashi Station → walk to dinner.", zh: "步行回梅田站 → 搭大阪地铁御堂筋线南下 → 心斋桥站 → 步行去晚餐。" },
+				{ en: "Dinner area is close to the hotel; return on foot only.", zh: "晚餐区离酒店很近，直接步行返回即可。" }
+			],
+			2: [
+				{ en: "Hotel → Shinsaibashi Station → Midosuji Line to Yodoyabashi → walk to Keihan Yodoyabashi → Keihan Main Line to Fushimi-inari Station. Avoid trains that skip Fushimi-inari.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到淀屋桥 → 步行到京阪淀屋桥站 → 搭京阪本线到伏见稻荷站。注意不要搭不停伏见稻荷的班次。" },
+				{ en: "Keihan Fushimi-inari Station is about a 5-minute walk to the shrine; JR Inari Station is even closer if you ever switch to JR.", zh: "京阪伏见稻荷站步行约 5 分钟到神社；若改搭 JR，稻荷站会更近。" },
+				{ en: "Keep lunch near the shrine approach: simple walk only, no extra train needed.", zh: "午餐就放在神社参道附近，直接步行即可，不必再搭车。" },
+				{ en: "Fushimi-inari area → Keihan Fushimi-inari Station → Keihan Main Line northbound to Kiyomizu-Gojo → walk uphill to Kiyomizu-dera.", zh: "伏见稻荷区域 → 京阪伏见稻荷站 → 搭京阪本线北上到清水五条 → 上坡步行至清水寺。" },
+				{ en: "Kiyomizu area → walk to Kiyomizu-michi bus stop → Kyoto City Bus toward Ginkakuji-michi / east Kyoto side → walk into Philosopher's Path.", zh: "清水寺区域 → 步行到清水道巴士站 → 搭京都市巴士往银阁寺道 / 东山北侧 → 步行进入哲学之道。" },
+				{ en: "Philosopher's Path area → bus toward Keihan Sanjo (or equivalent Keihan access) → Keihan Main Line back to Yodoyabashi → Midosuji Line to Namba/Shinsaibashi dinner area.", zh: "哲学之道区域 → 搭巴士往京阪三条（或其他京阪接驳点）→ 京阪本线回淀屋桥 → 转御堂筋线到难波 / 心斋桥晚餐区。" },
+				{ en: "Dinner area → hotel by walk.", zh: "晚餐区 → 步行回酒店。" }
+			],
+			3: [
+				{ en: "Hotel → Shinsaibashi Station → Midosuji Line to Umeda → walk to JR Osaka Station → JR Kyoto Line to Kyoto → transfer to JR Sagano Line → Saga-Arashiyama Station.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到梅田 → 步行到 JR 大阪站 → 搭 JR 京都线到京都 → 转 JR 嵯峨野线到嵯峨岚山站。" },
+				{ en: "JR Saga-Arashiyama Station → walk to Bamboo Grove / Tenryu-ji side. Go straight there for the quietest morning photos.", zh: "JR 嵯峨岚山站 → 步行到竹林 / 天龙寺一带。建议一到就直奔竹林，最容易拍到人少画面。" },
+				{ en: "Bamboo Grove area → walk to Torokko Saga Station → board booked Sagano Romantic Train to Torokko Kameoka.", zh: "竹林区域 → 步行到 Torokko Saga 站 → 搭乘已预约的嵯峨野小火车到 Torokko Kameoka。" },
+				{ en: "Torokko Kameoka side → keep lunch near the station / shuttle side because you need to reposition for the boat.", zh: "Torokko Kameoka 一侧 → 午餐尽量吃在车站 / 接驳区附近，因为后面还要衔接船班。" },
+				{ en: "Torokko Kameoka Station → local shuttle/bus to Hozugawa-kudari boarding site → board the booked Hozugawa River Boat Ride to Arashiyama.", zh: "Torokko Kameoka 站 → 搭当地接驳巴士到保津川下り乘船处 → 搭乘已预约的保津川漂流到岚山。" },
+				{ en: "Arashiyama dock / central area → walk back to JR Saga-Arashiyama → JR Sagano Line to Kyoto → transfer to JR Kyoto Line to Osaka → final Metro/walk back for dinner.", zh: "岚山码头 / 中心区 → 步行回 JR 嵯峨岚山站 → JR 嵯峨野线到京都 → 转 JR 京都线到大阪 → 最后再转地铁 / 步行去晚餐。" },
+				{ en: "Dinner area → hotel by walk.", zh: "晚餐区 → 步行回酒店。" }
+			],
+			4: [
+				{ en: "Hotel → Shinsaibashi Station → Midosuji Line to Namba → walk to Kintetsu Osaka-Namba Station → Kintetsu Nara Line Rapid Express to Kintetsu Nara.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到难波 → 步行到近铁大阪难波站 → 搭近铁奈良线快速急行到近铁奈良。" },
+				{ en: "Kintetsu Nara Station → walk about 20 minutes through the Nara Park side to Todai-ji; bus is optional but walking is cleaner for your route.", zh: "近铁奈良站 → 穿过奈良公园方向步行约 20 分钟到东大寺；虽然可搭巴士，但就你路线来说步行更顺。" },
+				{ en: "Todai-ji / park side → continue on foot through the forested park corridor to Mizuya Chaya.", zh: "东大寺 / 公园侧 → 沿林间公园步道继续步行到水谷茶屋。" },
+				{ en: "Mizuya Chaya → walk onward through Nara Park to Kasuga Taisha.", zh: "水谷茶屋 → 沿奈良公园继续步行前往春日大社。" },
+				{ en: "Kasuga Taisha / park area → walk back toward Kintetsu Nara Station → Kintetsu Nara Line Rapid Express to Osaka-Namba → short walk to dinner.", zh: "春日大社 / 公园区域 → 步行返回近铁奈良站 → 搭近铁奈良线快速急行回大阪难波 → 短距离步行到晚餐地点。" },
+				{ en: "Dinner area → hotel by walk.", zh: "晚餐区 → 步行回酒店。" }
+			],
+			5: [
+				{ en: "Hotel → Shinsaibashi Station → Midosuji Line to Umeda / Osaka Station area → JR Special Rapid to Sannomiya → Kobe Subway to Shin-Kobe if needed for the ropeway approach.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到梅田 / 大阪站区域 → JR 新快速到三宫 → 视情况转神户地铁到新神户，前往缆车。" },
+				{ en: "Sannomiya / Shin-Kobe area → walk to the Kobe Nunobiki Ropeway base → ride ropeway up to the Herb Gardens.", zh: "三宫 / 新神户区域 → 步行到神户布引缆车山麓站 → 搭缆车上山到香草园。" },
+				{ en: "Ropeway / hill area → return down → move toward Motomachi / Nankinmachi by subway + short walk, or by JR one stop depending on where you exit.", zh: "缆车 / 山上区域 → 下山后前往元町 / 南京町，可搭地铁加短距离步行，或依下山位置改搭 JR 一站。" },
+				{ en: "Motomachi / Meriken side → for the waterfront, either walk toward Harborland or use the Kobe Municipal Subway Kaigan Line to Harborland Station.", zh: "元町 / 美利坚公园一带 → 若去海边夜景，可步行前往 Harborland，或搭神户地铁海岸线到 Harborland 站。" },
+				{ en: "Harborland / Mosaic area → stay on foot for dinner.", zh: "Harborland / Mosaic 一带 → 晚餐直接步行移动即可。" },
+				{ en: "Harborland or nearby JR Kobe / Sannomiya area → JR Kobe Line Special Rapid back to Osaka → Midosuji Line to Shinsaibashi → walk to hotel.", zh: "Harborland 附近或 JR 神户 / 三宫区域 → 搭 JR 神户线新快速回大阪 → 转御堂筋线到心斋桥 → 步行回酒店。" }
+			],
+			6: [
+				{ en: "Hotel → Shinsaibashi Station → Midosuji Line to Umeda / Higashi-Umeda area → transfer to Tanimachi Line → Nakazakicho Station.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到梅田 / 东梅田区域 → 转谷町线 → 中崎町站。" },
+				{ en: "Nakazakicho is a walking neighborhood; no internal train move needed while exploring cafés / vintage lanes.", zh: "中崎町是散步型街区，在里面逛咖啡店 / 复古小巷时不需要再搭车。" },
+				{ en: "Nakazakicho → Umeda can be done by walk or one short subway hop; walking is easiest if the weather is nice.", zh: "中崎町 → 梅田可步行或搭一小段地铁；天气好时步行最轻松。" },
+				{ en: "Umeda → Shinsaibashi by Osaka Metro Midosuji Line southbound.", zh: "梅田 → 搭大阪地铁御堂筋线南下到心斋桥。" },
+				{ en: "Shinsaibashi / Namba side → walk or use a short Metro transfer to Nippombashi for Kuromon Market; public-transport-clean version is Midosuji Line to Namba then Sennichimae Line to Nippombashi.", zh: "心斋桥 / 难波一带 → 可步行或短程转地铁到日本桥去黑门市场；若要最清晰的公共交通路线，可先搭御堂筋线到难波，再转千日前线到日本桥。" },
+				{ en: "Kuromon → Dotonbori / Mizuno area by walk through the Namba side streets.", zh: "黑门 → 穿过难波街区步行到道顿堀 / 美津浓一带。" },
+				{ en: "Dinner area → hotel by walk.", zh: "晚餐区 → 步行回酒店。" }
+			],
+			7: [
+				{ en: "Hotel → Shinsaibashi Station → Midosuji Line to Namba → walk to Nankai Namba Station → Nankai Airport Express to Rinku Town.", zh: "酒店 → 心斋桥站 → 搭御堂筋线到难波 → 步行到南海难波站 → 搭南海机场急行到临空城。" },
+				{ en: "Rinku Town Station → walk to Rinku Premium Outlets.", zh: "临空城站 → 步行到 Rinku Premium Outlets。" },
+				{ en: "Outlets / food court area is fully walkable; no extra train needed before lunch.", zh: "Outlet / 美食区完全可以步行移动，午餐前不需要再搭车。" },
+				{ en: "Rinku Town Station → airport line → Kansai-Airport Station (1 stop) → walk into KIX terminal check-in area.", zh: "临空城站 → 搭机场线 → 关西机场站（1 站）→ 步行进入 KIX 航站楼值机区域。" }
 			]
 		};
 
 		function switchTab(tabId) {
-			document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden-tab'));
-			document.getElementById('tab-' + tabId).classList.remove('hidden-tab');
-
-			document.querySelectorAll('.tab-btn').forEach(btn => {
-				btn.classList.remove('tab-active', 'text-pink-600', 'text-slate-900');
-				btn.classList.add('text-slate-400');
-			});
-
-			const activeBtn = document.getElementById('btn-' + tabId);
-			if (activeBtn) {
-				activeBtn.classList.add('tab-active');
-				activeBtn.classList.remove('text-slate-400');
-			}
-
+			document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+			document.getElementById(tabId).classList.remove('hidden');
+			document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active', 'text-pink-600'));
+			event.target.classList.add('tab-active');
 			if (tabId === 'analysis') renderChart();
 		}
 
-		function toggleLang() {
+		function toggleLanguage() {
 			currentLang = currentLang === 'en' ? 'zh' : 'en';
 			document.getElementById('langBtn').innerText = currentLang === 'en' ? '中文 (简体)' : 'English';
 			updateUI();
@@ -1620,14 +1436,6 @@
 				</div>
 			`;
 		}
-		
-		function getEventClass(type) {
-			if (type === 'meal') return 'marker-meal';
-			if (type === 'hotel') return 'marker-hotel';
-			if (type === 'transport') return 'marker-transport';
-			if (type === 'sight') return 'marker-sight';
-			return 'bg-white border-slate-200';
-		}
 
 		function renderTimeline(idx) {
 			const day = data.days[idx];
@@ -1639,7 +1447,9 @@
 			if (!container) return;
 
 			container.innerHTML = day.events.map((ev, i) => {
-				const colorClass = getEventClass(ev.type);
+				let colorClass = 'bg-white border-slate-200';
+				if(ev.type === 'meal') colorClass = 'marker-meal';
+				if(ev.type === 'hotel') colorClass = 'marker-hotel';
 
 				return `
 					<div onclick="showDetail(${idx}, ${i})"
@@ -1677,7 +1487,7 @@
 			return `
 				<div class="info-card rounded-2xl p-4">
 					<h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">${title}</h4>
-					<div class="text-slate-700 font-semibold">${value || '-'}</div>
+					<p class="text-slate-700 font-semibold">${value || '-'}</p>
 				</div>
 			`;
 		}
@@ -1698,8 +1508,11 @@
 					<h2 class="text-3xl font-bold mb-6">${ev.title[currentLang]}</h2>
 
 					<div class="space-y-4">
+						<!--
 						${infoBlock(ui[currentLang].routePlan, ev.route[currentLang])}
 						${infoBlock(ui[currentLang].pointToPoint, ev.p2p[currentLang])}
+						-->
+						${exactTransit[dayIdx] && exactTransit[dayIdx][eventIdx] ? infoBlock(ui[currentLang].routePlan, exactTransit[dayIdx][eventIdx][currentLang]) : ""}
 
 						<div class="grid md:grid-cols-2 gap-4">
 							${infoBlock(ui[currentLang].transportInfo, `
@@ -1772,16 +1585,6 @@
 
 		function renderFood() {
 			const grid = document.getElementById('food-grid');
-			
-			if (!data.food || !Array.isArray(data.food)) {
-				grid.innerHTML = `
-					<div class="col-span-full text-sm text-slate-500">
-						No food data found.
-					</div>
-				`;
-				return;
-			}
-			
 			grid.innerHTML = data.food.map(f => `
 				<div class="bg-white p-6 rounded-3xl border text-center hover:shadow-lg transition-shadow">
 					<div class="text-5xl mb-4">${f.img}</div>
