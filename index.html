@@ -604,98 +604,50 @@
 				{
 					date: "Mar 31",
 					weekday: { en: "Tue", zh: "周二" },
-					ticket: { en: "ICOCA / Regular fares", zh: "ICOCA / 单次车资" },
-					reminders: [
-						{
-							en: "Do not use Osaka Amazing Pass today — Umeda Sky Building is only fully covered until 15:00, and after that it is just 10% off.",
-							zh: "今天不建议使用 Osaka Amazing Pass——梅田蓝天大厦仅在 15:00 前可完整使用，15:00 后只有 9 折优惠。"
-						},
-						{
-							en: "HEP Five Ferris Wheel is closed for renovation, so it cannot be used to increase pass value today.",
-							zh: "HEP Five 摩天轮正在整修，今天也不能用来提高票券价值。"
-						},
-						{
-							en: "Add Nishinomaru Garden while at Osaka Castle for the classic sakura + castle composition.",
-							zh: "在大阪城时加入西之丸庭园，可拍到最经典的樱花＋城堡构图。"
-						}
-					],
+					reminder: {
+						en: "No pass needed. Use ICOCA. Plan Umeda Sky around sunset (~6:17 PM).",
+						zh: "无需周游卡，使用ICOCA。梅田蓝天大厦建议安排在日落时间（约18:17）。"
+					},
 					events: [
 						{
-							time: "08:15",
-							title: { en: "Depart Hotel", zh: "出发" },
+							time: "08:30",
 							type: "hotel",
-							duration: "30m",
-							route: { en: "Hotel → Tanimachi 4-chome", zh: "酒店 → 谷町四丁目" },
-							p2p: { en: "Shinsaibashi / Namba side → Osaka Metro → Tanimachi 4-chome", zh: "心斋桥 / 难波区域 → 大阪地铁 → 谷町四丁目" },
-							transport: { en: "Osaka Metro", zh: "大阪地铁" },
+							title: { en: "Depart Hotel", zh: "酒店出发" },
+							route: "Shinsaibashi → Tanimachiyonchome",
+							transport: "Osaka Metro (Midosuji → Chuo Line)",
 							transportDetail: {
-								en: "Tanimachi 4-chome is one of the recommended subway approaches for Osaka Castle.",
-								zh: "谷町四丁目是前往大阪城常用且推荐的地铁进场点之一。"
+								en: "Midosuji Line (Shinsaibashi → Hommachi), transfer to Chuo Line → Tanimachiyonchome",
+								zh: "御堂筋线（心斋桥→本町），转中央线→谷町四丁目"
 							},
-							estTime: { en: "20–30 min depending on hotel start point", zh: "视酒店出发点约 20–30 分钟" },
-							tips: { en: "Charge your ICOCA and phone before leaving.", zh: "出门前把 ICOCA 和手机都准备好。" },
-							bestTime: { en: "Early departure helps you get castle photos before crowds build.", zh: "早点出发能在游客变多前拍到更好的大阪城。" },
-							sakura: { en: "The castle moat area is one of Osaka’s headline blossom zones.", zh: "大阪城护城河一带是大阪最代表性的赏樱区域之一。" },
-							notes: { en: "Use Otemon Gate approach if you want a classic castle arrival feeling.", zh: "若想走经典进场路线，可从大手门方向进入。" },
-							maps: "Tanimachi+4-chome+Station",
-							food: "N/A"
+							duration: "25 min",
+							tips: "Morning commute hour — slightly crowded.",
+							maps: "Tanimachiyonchome+Station"
 						},
 						{
-							time: "09:00",
+							time: "09:15",
+							type: "sight",
 							title: { en: "Osaka Castle Park", zh: "大阪城公园" },
-							type: "sight",
-							duration: "120m",
-							route: { en: "Tanimachi 4-chome → Otemon area → castle grounds", zh: "谷町四丁目 → 大手门区域 → 城内" },
-							p2p: { en: "Tanimachi 4-chome / Osakajokoen / Morinomiya are all workable access points", zh: "谷町四丁目 / 大阪城公园 / 森之宫都可作为进出点" },
-							transport: { en: "Walk from station", zh: "从车站步行" },
-							transportDetail: {
-								en: "Official Osaka tourism guidance notes Tanimachi 4-chome, JR Osakajokoen, and Morinomiya as practical access points.",
-								zh: "官方大阪观光资料提到谷町四丁目、JR大阪城公园站与森之宫都是实用进出口。"
+							route: "Walk from station",
+							transport: "Walk",
+							duration: "2.5 hrs",
+							tips: "Visit Nishinomaru Garden for best sakura view.",
+							notes: {
+								en: "Castle tower ticket ~¥600 if entering. Wide park — expect walking.",
+								zh: "天守阁门票约600日元（如入内）。园区较大，需要步行。"
 							},
-							estTime: { en: "1.5–2 hr including photo stops", zh: "含拍照约 1.5–2 小时" },
-							tips: { en: "Do the main castle grounds first, then continue into Nishinomaru Garden.", zh: "先走大阪城主区域，再接西之丸庭园。" },
-							bestTime: { en: "Morning light is cleaner and crowds are easier.", zh: "上午光线更干净，人潮也更好控制。" },
-							sakura: { en: "The moat perimeter and outer grounds are excellent blossom areas.", zh: "护城河周边与外圈草地都是很好的赏樱区域。" },
-							notes: { en: "This is a large park — do not underestimate intra-park walking time.", zh: "大阪城公园范围很大，不要低估园内步行时间。" },
-							maps: "Osaka+Castle+Park",
-							food: "N/A"
-						},
-						{
-							time: "10:45",
-							title: { en: "Nishinomaru Garden", zh: "西之丸庭园" },
-							type: "sight",
-							duration: "60m",
-							route: { en: "Castle grounds → Nishinomaru Garden", zh: "大阪城区域 → 西之丸庭园" },
-							p2p: { en: "Main castle area → Nishinomaru Garden sakura zone", zh: "大阪城主区域 → 西之丸庭园赏樱区" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "This is inside the Osaka Castle area and is best reached on foot as part of the same visit.",
-								zh: "这里位于大阪城园区内，最适合直接步行接续。"
-							},
-							estTime: { en: "45–60 min", zh: "约 45–60 分钟" },
-							tips: { en: "This is the best place today for the postcard-style castle + blossom framing.", zh: "今天最适合拍经典城堡配樱花构图的就是这里。" },
-							bestTime: { en: "Late morning.", zh: "上午后段最佳。" },
-							sakura: { en: "One of Osaka’s best-known sakura viewpoints.", zh: "大阪最有代表性的赏樱点之一。" },
-							notes: { en: "This is a better classic add than HEP Five for your current day.", zh: "以你今天的安排来说，这比 HEP Five 更值得加入。" },
-							maps: "Nishinomaru+Garden+Osaka+Castle",
-							food: "N/A"
+							maps: "Osaka+Castle+Park"
 						},
 						{
 							time: "12:00",
-							title: { en: "Lunch: Tonkatsu Daiki", zh: "午餐：大木炸猪排" },
 							type: "meal",
-							duration: "60m",
-							route: { en: "Castle area → nearby lunch stop", zh: "大阪城区域 → 午餐点" },
-							p2p: { en: "Walk out from castle side to lunch area", zh: "从大阪城步行到午餐点" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "Keep lunch near your current area to avoid breaking the day’s rhythm.", zh: "午餐尽量吃在当前区域附近，避免打断行程节奏。" },
-							estTime: { en: "10–20 min access plus meal", zh: "步行约 10–20 分钟，加用餐时间" },
-							tips: { en: "Go a little early if possible; lunchtime queues can build fast.", zh: "能提早一点就提早，午餐排队很容易变长。" },
-							bestTime: { en: "Right after Osaka Castle / Nishinomaru.", zh: "大阪城 / 西之丸结束后直接吃最顺。" },
-							sakura: { en: "Lunch break between your two best Osaka scenic walks.", zh: "这是两段大阪景观行程之间的休息点。" },
-							notes: { en: "Hydrate here before heading to the riverside walk.", zh: "这里顺便补水，准备下午河岸散步。" },
-							maps: "Tonkatsu+Daiki+Osaka",
-							food: "Tonkatsu Daiki"
+							title: { en: "Lunch: Tonkatsu Daiki", zh: "午餐：大木炸猪排" },
+							route: "Near castle area",
+							transport: "Walk",
+							duration: "1 hr",
+							mustTry: [
+								{ n: "Tonkatsu Set", s: "Daiki", d: "Juicy premium pork cutlet" }
+							],
+							maps: "Tonkatsu+Daiki+Osaka"
 						},
 						{
 							time: "13:30",
@@ -715,58 +667,74 @@
 							food: "Mint Museum area / coffee break"
 						},
 						{
-							time: "16:30",
-							title: { en: "Umeda Sky Building", zh: "梅田蓝天大厦" },
+							time: "16:00",
+							title: { en: "Tenjinbashisuji Shopping Street", zh: "天神桥筋商店街" },
 							type: "sight",
-							duration: "90m",
-							route: { en: "Sakuranomiya → Umeda / Osaka station area → Umeda Sky Building", zh: "樱之宫 → 梅田 / 大阪站区域 → 梅田蓝天大厦" },
-							p2p: { en: "JR / Metro to Umeda side → walk to observatory entrance", zh: "JR / 地铁到梅田侧 → 步行到观景台入口" },
-							transport: { en: "Train + walk", zh: "电车 + 步行" },
+							duration: "60m",
+							route: { en: "Sakuranomiya → Tenma Station → Tenjinbashisuji Shopping Street", zh: "樱之宫 → 天满站 → 天神桥筋商店街" },
+							p2p: { en: "JR Sakuranomiya → JR Tenma → short walk into arcade street", zh: "JR樱之宫 → JR天满 → 短距离步行进入商店街" },
+							transport: { en: "JR Osaka Loop Line + walk", zh: "JR环状线 + 步行" },
 							transportDetail: {
-								en: "The observatory is open 9:30–22:30, but Osaka Amazing Pass only fully covers admission until 15:00.",
-								zh: "观景设施营业时间为 9:30–22:30，但 Osaka Amazing Pass 仅在 15:00 前可完整使用。"
+								en: "Take JR Osaka Loop Line from Sakuranomiya to Tenma (1 stop, about 3 minutes), then walk about 3–5 minutes to the shopping street.",
+								zh: "从樱之宫搭 JR 环状线到天满（1站，约3分钟），再步行约3–5分钟到商店街。"
 							},
-							estTime: { en: "20–30 min access + 60–90 min visit", zh: "交通约 20–30 分钟，参观约 60–90 分钟" },
-							tips: { en: "Since you are visiting after 3 PM, just buy a regular ticket instead of relying on a pass.", zh: "因为你会在 15:00 后到，这里直接买普通票最合理。" },
-							bestTime: { en: "Late afternoon into sunset.", zh: "下午后段到日落时最好。" },
+							estTime: { en: "Short train hop + 45–60 min browse / snack break", zh: "短程电车加 45–60 分钟逛街 / 吃点心" },
+							tips: { en: "Use this as a buffer stop for snacks, coffee, and a short rest before heading to Umeda for sunset.", zh: "这里适合作为去梅田前的缓冲点，可吃点心、喝咖啡、顺便休息。" },
+							bestTime: { en: "Late afternoon before heading to Umeda.", zh: "前往梅田前的下午后段最适合。" },
+							sakura: { en: "This is not a sakura stop — it is your urban buffer before the skyline highlight.", zh: "这里不是赏樱点，而是前往天际线景点前的城市缓冲段。" },
+							notes: { en: "Leave by about 17:00 so you can comfortably reach Umeda Sky before sunset.", zh: "建议约17:00离开，这样能从容赶上梅田蓝天大厦的日落时段。" },
+							maps: "Tenjinbashisuji+Shopping+Street",
+							food: "Croquettes / coffee / local snacks"
+						},
+						{
+							time: "17:20",
+							title: { en: "Umeda Sky Building (Sunset & Night View)", zh: "梅田蓝天大厦（日落 + 夜景）" },
+							type: "sight",
+							duration: "110m",
+							route: { en: "Tenma → Umeda / Osaka Station area → Umeda Sky Building", zh: "天满 → 梅田 / 大阪站区域 → 梅田蓝天大厦" },
+							p2p: { en: "JR Tenma → JR Osaka Station → 10–15 min walk to Umeda Sky Building", zh: "JR天满 → JR大阪站 → 步行约10–15分钟到梅田蓝天大厦" },
+							transport: { en: "JR Osaka Loop Line + walk", zh: "JR环状线 + 步行" },
+							transportDetail: {
+								en: "Take JR Osaka Loop Line from Tenma to Osaka Station (1 stop, about 2 minutes), then walk about 10–15 minutes to the observatory entrance.",
+								zh: "从天满搭 JR 环状线到大阪站（1站，约2分钟），再步行约10–15分钟到观景台入口。"
+							},
+							estTime: { en: "Short train ride + 90 min stay for sunset and night view", zh: "短程电车加约90分钟停留看日落与夜景" },
+							tips: { en: "Arrive before sunset to secure a good viewing spot, then stay through twilight into full night view.", zh: "建议在日落前到达抢一个好位置，再一路待到暮光和完整夜景。" },
+							bestTime: { en: "Target arrival around 17:20–17:30.", zh: "建议目标到达时间为 17:20–17:30 左右。" },
 							sakura: { en: "This is skyline viewing, not a blossom stop.", zh: "这里是城市天际线景点，不是赏樱点。" },
-							notes: { en: "With HEP Five closed and Umeda after 3 PM, Amazing Pass no longer has strong value today.", zh: "在 HEP Five 关闭、且梅田安排在 15:00 后的情况下，Amazing Pass 今天已没有明显价值。" },
+							notes: {
+								en: "Sunset on Mar 31 is around 6:17 PM. Stay until about 7:00 PM to enjoy the full transition from golden hour to sunset to night skyline.",
+								zh: "3月31日日落约为18:17。建议停留到19:00左右，完整体验金色时刻、日落到夜景的变化。"
+							},
 							maps: "Umeda+Sky+Building",
 							food: "N/A"
 						},
 						{
-							time: "19:00",
+							time: "19:30",
 							title: { en: "Dinner: Shinsaibashi", zh: "晚餐：心斋桥" },
 							type: "meal",
 							duration: "60m",
 							route: { en: "Umeda → Shinsaibashi dinner area", zh: "梅田 → 心斋桥晚餐区" },
-							p2p: { en: "Midosuji corridor southbound to Shinsaibashi", zh: "沿御堂筋线往南到心斋桥" },
+							p2p: { en: "Umeda / Osaka Station area → Midosuji Line → Shinsaibashi", zh: "梅田 / 大阪站区域 → 御堂筋线 → 心斋桥" },
 							transport: { en: "Osaka Metro Midosuji Line", zh: "大阪地铁御堂筋线" },
-							transportDetail: { en: "This is one of the simplest north-south moves in central Osaka.", zh: "这是大阪市中心最简单的南北移动之一。" },
+							transportDetail: { en: "Walk back to Umeda Station, then take Midosuji Line southbound to Shinsaibashi.", zh: "步行回到梅田站后，搭御堂筋线南下到心斋桥。" },
 							estTime: { en: "15–20 min", zh: "约 15–20 分钟" },
 							tips: { en: "A ramen dinner is easier than a long queue meal after a full walking day.", zh: "走了一整天后，拉面这种快节奏晚餐会更轻松。" },
-							bestTime: { en: "After sunset, once you are done with Umeda views.", zh: "看完梅田景色后再回来吃晚餐最合理。" },
+							bestTime: { en: "After sunset and night skyline.", zh: "看完日落与夜景后再吃晚餐最合理。" },
 							sakura: { en: "No sakura emphasis tonight.", zh: "今晚不再以赏樱为主。" },
 							notes: { en: "Prep Kyoto day items before sleeping: pass, umbrella, camera battery.", zh: "睡前先整理明天京都需要的票券、雨具和相机电量。" },
 							maps: "Ramen+Zundoya+Shinsaibashi",
 							food: "Ramen Zundoya"
 						},
 						{
-							time: "20:15",
-							title: { en: "Back to Hotel", zh: "返回酒店" },
+							time: "21:00",
 							type: "hotel",
-							duration: "N/A",
-							route: { en: "Dinner area → hotel", zh: "晚餐区 → 酒店" },
-							p2p: { en: "Shinsaibashi → hotel", zh: "心斋桥 → 酒店" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "Very short urban walk.", zh: "市区短距离步行。" },
-							estTime: { en: "5–10 min", zh: "约 5–10 分钟" },
-							tips: { en: "Pack lighter for Kyoto; tomorrow has more transfers and hills.", zh: "明天京都移动更多、坡也更多，尽量轻装。" },
-							bestTime: { en: "Return early enough to recharge and reorganize.", zh: "尽量早点回去整理与充电。" },
-							sakura: { en: "Tomorrow is Kyoto’s iconic blossom day.", zh: "明天进入京都经典赏樱日。" },
-							notes: { en: "Sleep earlier than night one if possible.", zh: "最好比第一晚更早休息。" },
-							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
-							food: "N/A"
+							title: { en: "Back to Hotel", zh: "返回酒店" },
+							route: "Walk",
+							transport: "Walk",
+							duration: "-",
+							tips: "Rest well — Kyoto day tomorrow.",
+							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi"
 						}
 					]
 				},
@@ -1550,19 +1518,19 @@
 				{
 					date: "Apr 05",
 					weekday: { en: "Sun", zh: "周日" },
-					ticket: { en: "ICOCA", zh: "ICOCA" },
+					ticket: { en: "ICOCA / teamLab ticket", zh: "ICOCA / teamLab 门票" },
 					reminders: [
 						{
-							en: "This is your flexible Osaka day: keep it adaptive and cut slow queues if needed.",
-							zh: "今天是弹性大阪日，建议机动处理；若排队太久就果断调整。"
+							en: "This is a lighter Osaka day, but start dinner earlier if you want to reduce the okonomiyaki queue before teamLab.",
+							zh: "今天是较轻松的大阪日，但如果晚上要去 teamLab，建议晚餐提早一点，减少大阪烧排队时间。"
 						},
 						{
-							en: "Add Namba Yasaka Shrine as a quick stop — it is a classic Osaka urban shrine with a very distinctive lion-head stage.",
-							zh: "今天可加入难波八阪神社作为快闪停留——它是大阪市区很经典的神社，而且有非常特别的狮子头舞台。"
+							en: "Kuromon closes relatively early, so keep market browsing before late afternoon.",
+							zh: "黑门市场收摊较早，建议在下午后段之前完成逛市场。"
 						},
 						{
-							en: "Tonight is the best slot for your signature okonomiyaki finale.",
-							zh: "今晚最适合安排大阪烧收尾。"
+							en: "teamLab is best treated as a dedicated night stop after dinner, not something to squeeze in between shopping stops.",
+							zh: "teamLab 最适合当作晚餐后的独立夜间行程，不建议夹在购物点之间。"
 						}
 					],
 					events: [
@@ -1572,14 +1540,17 @@
 							type: "hotel",
 							duration: "30m",
 							route: { en: "Hotel → Nakazakicho", zh: "酒店 → 中崎町" },
-							p2p: { en: "Hotel → subway → Nakazakicho", zh: "酒店 → 地铁 → 中崎町" },
-							transport: { en: "Subway", zh: "地铁" },
-							transportDetail: { en: "A lighter start than previous days.", zh: "今天比前几天出发更轻松。" },
+							p2p: { en: "Shinsaibashi / hotel area → Umeda side → Nakazakicho", zh: "心斋桥 / 酒店区域 → 梅田侧 → 中崎町" },
+							transport: { en: "Osaka Metro", zh: "大阪地铁" },
+							transportDetail: {
+								en: "Take Midosuji Line toward Umeda, then transfer if needed to reach Nakazakicho.",
+								zh: "先搭御堂筋线往梅田方向，再视情况转线到中崎町。"
+							},
 							estTime: { en: "20–30 min", zh: "约 20–30 分钟" },
-							tips: { en: "Use today to recover pace; no need to rush the morning.", zh: "今天可以回收节奏，早上不需要太赶。" },
-							bestTime: { en: "Late morning is fine.", zh: "晚一点的上午完全可以。" },
-							sakura: { en: "Today is not a dedicated blossom day.", zh: "今天不是专门追樱的一天。" },
-							notes: { en: "Good day to carry less.", zh: "今天适合轻装。" },
+							tips: { en: "Slow start day — no need to rush this morning.", zh: "今天是慢节奏日，早上不需要太赶。" },
+							bestTime: { en: "Late morning is perfectly fine.", zh: "较晚的上午出发也完全没问题。" },
+							sakura: { en: "Today is not focused on sakura viewing.", zh: "今天不是以赏樱为主的一天。" },
+							notes: { en: "Use today to recover a bit from the heavier intercity days.", zh: "今天可稍微回收前几天跨城行程的体力。" },
 							maps: "Nakazakicho+Station",
 							food: "N/A"
 						},
@@ -1588,117 +1559,181 @@
 							title: { en: "Nakazakicho", zh: "中崎町" },
 							type: "sight",
 							duration: "120m",
-							route: { en: "Station area → neighborhood café / vintage stroll", zh: "车站区域 → 街区咖啡 / 复古散步" },
+							route: { en: "Station area → vintage cafés / indie shops walk", zh: "车站区域 → 复古咖啡 / 小店散步" },
 							p2p: { en: "Nakazakicho lanes on foot", zh: "中崎町巷弄步行" },
 							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "This is a pure wandering neighborhood segment.", zh: "这一段就是纯粹散步型街区体验。" },
+							transportDetail: {
+								en: "This is a pure neighborhood walking segment with no complicated transport.",
+								zh: "这里是纯步行型街区行程，不涉及复杂交通。"
+							},
 							estTime: { en: "60–120 min", zh: "约 60–120 分钟" },
-							tips: { en: "Let this be leisurely; do not over-structure it.", zh: "这一段就轻松走，不要排得太死。" },
+							tips: { en: "Take this slowly — cafés and small shops are the main point here.", zh: "这里建议慢慢走，重点就是咖啡店和小店氛围。" },
 							bestTime: { en: "Late morning into lunch works well.", zh: "上午后段到午餐前都很适合。" },
-							sakura: { en: "More neighborhood mood than blossom target.", zh: "这里更重街区氛围，不是赏樱目标。" },
-							notes: { en: "Great place for coffee before moving south later.", zh: "这里很适合先喝咖啡，再往南移动。" },
+							sakura: { en: "This is more about neighborhood mood than seasonal flowers.", zh: "这里更偏街区氛围，不是季节花景重点。" },
+							notes: { en: "Good place for a slow coffee before heading into busier Osaka areas later.", zh: "很适合先慢慢喝杯咖啡，再进入下午较热闹的大阪区域。" },
 							maps: "Nakazakicho",
-							food: "Coffee / cafés"
+							food: "Coffee / café break"
 						},
 						{
 							time: "12:30",
 							title: { en: "Lunch: Umeda", zh: "午餐：梅田" },
 							type: "meal",
-							duration: "45m",
-							route: { en: "Nakazakicho → Umeda lunch", zh: "中崎町 → 梅田午餐" },
-							p2p: { en: "Neighborhood → Umeda station area", zh: "街区 → 梅田站区域" },
-							transport: { en: "Subway / walk", zh: "地铁 / 步行" },
-							transportDetail: { en: "Short central move inside north Osaka.", zh: "大阪北区内的短距离移动。" },
-							estTime: { en: "10–20 min", zh: "约 10–20 分钟" },
-							tips: { en: "Keep lunch quick so the afternoon south-Osaka flow stays comfortable.", zh: "午餐尽量快一点，后面南大阪段会更从容。" },
-							bestTime: { en: "Early lunch.", zh: "早点吃午餐更好。" },
-							sakura: { en: "No sakura emphasis.", zh: "不以赏樱为主。" },
-							notes: { en: "If queues are long, switch to a faster nearby option.", zh: "若排队太长，可改去附近更快的方案。" },
+							duration: "50m",
+							route: { en: "Nakazakicho → Umeda lunch area", zh: "中崎町 → 梅田午餐区域" },
+							p2p: { en: "Nakazakicho → Umeda station area", zh: "中崎町 → 梅田站区域" },
+							transport: { en: "Walk / short Metro hop", zh: "步行 / 短程地铁" },
+							transportDetail: {
+								en: "This is a very short move inside north Osaka.",
+								zh: "这是大阪北区内很短的移动。"
+							},
+							estTime: { en: "10–20 min access + lunch", zh: "约 10–20 分钟移动，加午餐时间" },
+							tips: { en: "Keep lunch practical and not too heavy — dinner comes earlier today.", zh: "午餐建议实用、不必太重，因为今天晚餐会提早。" },
+							bestTime: { en: "Early lunch keeps the rest of the day more relaxed.", zh: "稍早吃午餐，会让后面的行程更从容。" },
+							sakura: { en: "No sakura emphasis here.", zh: "这里没有赏樱重点。" },
+							notes: { en: "Hanshin Snack Park or similar quick options fit well here.", zh: "Hanshin Snack Park 或类似的快速午餐很适合这里。" },
 							maps: "Hanshin+Department+Store",
-							food: "Umeda quick lunch"
+							food: "Quick Osaka lunch"
 						},
 						{
-							time: "14:00",
+							time: "13:40",
 							title: { en: "Shinsaibashi Shopping", zh: "心斋桥购物" },
 							type: "sight",
 							duration: "90m",
 							route: { en: "Umeda → Shinsaibashi shopping street", zh: "梅田 → 心斋桥商店街" },
-							p2p: { en: "North Osaka → south Osaka main shopping corridor", zh: "大阪北区 → 南区主购物走廊" },
-							transport: { en: "Metro + walk", zh: "地铁 + 步行" },
-							transportDetail: { en: "Simple city-center transfer southbound.", zh: "很简单的市中心南下转移。" },
-							estTime: { en: "15–20 min transit + shopping", zh: "交通约 15–20 分钟，加购物时间" },
-							tips: { en: "Separate browsing from actual buying if you are watching luggage weight.", zh: "若担心行李重量，先看后买会更稳妥。" },
-							bestTime: { en: "Afternoon.", zh: "下午时段。" },
-							sakura: { en: "Urban shopping segment, not blossom-focused.", zh: "这是都市购物段，不是赏樱段。" },
-							notes: { en: "Keep track of time so you can still add Namba Yasaka and Kuromon comfortably.", zh: "记得控时，这样还能舒服地加入难波八阪神社与黑门市场。" },
+							p2p: { en: "Umeda → Midosuji Line → Shinsaibashi", zh: "梅田 → 御堂筋线 → 心斋桥" },
+							transport: { en: "Osaka Metro Midosuji Line", zh: "大阪地铁御堂筋线" },
+							transportDetail: {
+								en: "Take Midosuji Line southbound to Shinsaibashi.",
+								zh: "搭御堂筋线南下到心斋桥。"
+							},
+							estTime: { en: "15–20 min transit + shopping time", zh: "交通约 15–20 分钟，加购物时间" },
+							tips: { en: "Separate browsing from actual buying if you are managing luggage space.", zh: "若在控制行李空间，建议先看后买。" },
+							bestTime: { en: "Early to mid afternoon.", zh: "下午前中段最适合。" },
+							sakura: { en: "Urban shopping segment, not a blossom stop.", zh: "这是都市购物段，不是赏樱点。" },
+							notes: { en: "Keep an eye on time so Kuromon still lands before the market quiets down.", zh: "注意控时，确保黑门市场还在比较热闹的时段。" },
 							maps: "Shinsaibashi-suji+Shopping+Street",
 							food: "N/A"
 						},
 						{
-							time: "15:45",
-							title: { en: "Namba Yasaka Shrine", zh: "难波八阪神社" },
-							type: "sight",
-							duration: "30m",
-							route: { en: "Shinsaibashi / Namba side → Namba Yasaka Shrine", zh: "心斋桥 / 难波区域 → 难波八阪神社" },
-							p2p: { en: "Minami area → shrine with giant lion-head stage", zh: "南区一带 → 巨大狮子头神社" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "This is an easy short detour in the Namba side of your current route.", zh: "这是一段很容易加入的难波侧短绕行。" },
-							estTime: { en: "20–30 min", zh: "约 20–30 分钟" },
-							tips: { en: "This is a quick-win stop: very distinctive, very Osaka, and does not take long.", zh: "这是很高回报的快闪点：很特别、很大阪，而且不费时。" },
-							bestTime: { en: "Mid to late afternoon.", zh: "下午中后段。" },
-							sakura: { en: "Not a sakura stop; this is a shrine-architecture stop.", zh: "这里不是赏樱点，而是神社建筑风格重点。" },
-							notes: { en: "Best treated as a photo stop rather than a long stay.", zh: "最适合当作拍照型短停点。" },
-							maps: "Namba+Yasaka+Shrine",
-							food: "N/A"
-						},
-						{
-							time: "16:30",
+							time: "15:20",
 							title: { en: "Kuromon Market", zh: "黑门市场" },
 							type: "sight",
-							duration: "60m",
-							route: { en: "Namba Yasaka / Namba side → Kuromon", zh: "难波八阪 / 难波一带 → 黑门市场" },
-							p2p: { en: "Namba district walk → Kuromon covered market", zh: "难波区域步行 → 黑门市场拱廊" },
+							duration: "55m",
+							route: { en: "Shinsaibashi → Kuromon Market", zh: "心斋桥 → 黑门市场" },
+							p2p: { en: "Shinsaibashi side → walk south/east into Kuromon", zh: "心斋桥一带 → 步行到黑门市场" },
 							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "This remains a natural Minami-area continuation.", zh: "这里仍然是大阪南区内很自然的接续。" },
-							estTime: { en: "45–60 min", zh: "约 45–60 分钟" },
-							tips: { en: "Go earlier rather than later for the best stall selection.", zh: "尽量早点去，摊位选择会更完整。" },
-							bestTime: { en: "Late afternoon, not too close to closing hours.", zh: "下午偏早，不要太接近收摊时间。" },
-							sakura: { en: "Food-market stop, not a blossom stop.", zh: "这里是美食市场，不是赏樱点。" },
-							notes: { en: "Seafood, beef, and small ready-to-eat bites are the strongest use of this stop.", zh: "这里最适合吃海鲜、和牛和各种即食小份小吃。" },
+							transportDetail: {
+								en: "This is a natural Minami-area walking continuation.",
+								zh: "这是大阪南区内很自然的步行接续。"
+							},
+							estTime: { en: "10–15 min walk + market time", zh: "步行约 10–15 分钟，加市场停留时间" },
+							tips: { en: "Go earlier rather than later for the best stall selection.", zh: "尽量早点来，摊位选择会更完整。" },
+							bestTime: { en: "Mid to late afternoon, before stalls begin winding down.", zh: "下午中后段、但要在摊位明显收档前到达。" },
+							sakura: { en: "Food market stop, not a blossom stop.", zh: "这里是美食市场，不是赏樱点。" },
+							notes: { en: "Do not overeat here if okonomiyaki dinner is a priority.", zh: "如果晚餐把大阪烧当重点，就不要在这里吃太饱。" },
 							maps: "Kuromon+Ichiba+Market",
 							food: "Seafood snacks / market bites"
 						},
 						{
-							time: "19:00",
-							title: { en: "Dinner: Mizuno", zh: "晚餐：美津浓" },
-							type: "meal",
-							duration: "60m",
-							route: { en: "Kuromon / Namba → Dotonbori dinner", zh: "黑门 / 难波 → 道顿堀晚餐" },
-							p2p: { en: "Market area → Dotonbori → okonomiyaki dinner", zh: "市场区域 → 道顿堀 → 大阪烧晚餐" },
+							time: "16:25",
+							title: { en: "Namba Yasaka Shrine", zh: "难波八阪神社" },
+							type: "sight",
+							duration: "25m",
+							route: { en: "Kuromon → Namba Yasaka Shrine", zh: "黑门 → 难波八阪神社" },
+							p2p: { en: "Kuromon / Namba side → shrine with giant lion-head stage", zh: "黑门 / 难波一带 → 巨大狮子头神社" },
 							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "A natural Minami-area walk continuation.", zh: "这是大阪南区内很自然的步行衔接。" },
-							estTime: { en: "10–20 min", zh: "约 10–20 分钟" },
-							tips: { en: "This is the right night to do a queue-worthy Osaka classic.", zh: "今晚很适合为经典大阪烧排一次队。" },
-							bestTime: { en: "Dinner hour.", zh: "晚餐时段。" },
-							sakura: { en: "This is your Osaka food-finale segment.", zh: "这是大阪美食收尾段。" },
-							notes: { en: "Do not over-snack at Kuromon if Mizuno is a priority.", zh: "若今晚把 Mizuno 当重点，就别在黑门吃太撑。" },
-							maps: "Mizuno+Okonomiyaki",
-							food: "Mizuno Okonomiyaki"
+							transportDetail: {
+								en: "This is an easy short detour in the Namba side of your current route.",
+								zh: "这是你当前路线里很容易加入的短绕行。"
+							},
+							estTime: { en: "20–25 min", zh: "约 20–25 分钟" },
+							tips: { en: "Treat this as a quick, high-value photo stop.", zh: "把这里当作高回报的快闪拍照点即可。" },
+							bestTime: { en: "Late afternoon.", zh: "下午后段。" },
+							sakura: { en: "Not a sakura stop; this is a shrine architecture / photo stop.", zh: "这里不是赏樱点，而是神社建筑与拍照重点。" },
+							notes: { en: "This fits much better here than on your busier Osaka sightseeing day.", zh: "这个点放在今天，比放在较忙的大阪观光日里合理得多。" },
+							maps: "Namba+Yasaka+Shrine",
+							food: "N/A"
 						},
 						{
-							time: "21:15",
+							time: "17:35",
+							title: { en: "Dinner: Dotonbori Okonomiyaki", zh: "晚餐：道顿堀大阪烧" },
+							type: "meal",
+							duration: "70m",
+							route: { en: "Namba Yasaka Shrine → Dotonbori dinner", zh: "难波八阪神社 → 道顿堀晚餐" },
+							p2p: { en: "Namba side → Dotonbori okonomiyaki dinner", zh: "难波一带 → 道顿堀大阪烧晚餐" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: {
+								en: "This is still a natural Minami-area continuation on foot.",
+								zh: "这仍然是大阪南区内很自然的步行接续。"
+							},
+							estTime: { en: "10–15 min walk + dinner", zh: "步行约 10–15 分钟，加晚餐时间" },
+							tips: { en: "Going earlier helps reduce queues. If Mizuno looks too long, switch immediately instead of waiting too much.", zh: "提早一点吃可减少排队。若 Mizuno 队伍太长，就立刻换店，不要耗太多时间。" },
+							bestTime: { en: "Early dinner is best today so teamLab stays comfortable later.", zh: "今天晚餐提早一点最好，后面的 teamLab 会更从容。" },
+							sakura: { en: "This is your Osaka food-finale segment rather than a sakura segment.", zh: "这是大阪美食收尾段，不是赏樱段。" },
+							notes: {
+								en: "Primary pick: Mizuno. Good alternatives: Chibo, Ajinoya, or Fukutaro if the queue is too long.",
+								zh: "首选：Mizuno。若排队太长，可改 Chibo、Ajinoya 或 Fukutaro。"
+							},
+							maps: "Mizuno+Okonomiyaki",
+							food: "Mizuno / Chibo / Ajinoya / Fukutaro"
+						},
+						{
+							time: "19:10",
+							title: { en: "Transfer to teamLab Botanical Garden Osaka", zh: "前往 teamLab Botanical Garden Osaka" },
+							type: "transport",
+							duration: "35m",
+							route: { en: "Namba / Dotonbori area → Nagai Park", zh: "难波 / 道顿堀区域 → 长居公园" },
+							p2p: { en: "Namba area → Osaka Metro Midosuji Line → Nagai Station → walk to teamLab", zh: "难波一带 → 大阪地铁御堂筋线 → 长居站 → 步行到 teamLab" },
+							transport: { en: "Osaka Metro Midosuji Line + walk", zh: "大阪地铁御堂筋线 + 步行" },
+							transportDetail: {
+								en: "Take Midosuji Line southbound to Nagai, then walk into Nagai Park to the teamLab entrance.",
+								zh: "搭御堂筋线南下到长居站，再步行进入长居公园前往 teamLab 入口。"
+							},
+							estTime: { en: "20–35 min depending on your exact dinner exit point", zh: "视晚餐结束地点约 20–35 分钟" },
+							tips: { en: "Head out promptly after dinner so you reach teamLab in a comfortable evening window.", zh: "晚餐后尽快出发，这样抵达 teamLab 的时间会更舒服。" },
+							bestTime: { en: "After dark.", zh: "入夜后最适合。" },
+							sakura: { en: "This is a night-light experience, not a sakura stop.", zh: "这里是夜间灯光艺术体验，不是赏樱点。" },
+							notes: { en: "Keep your teamLab ticket ready before entering the station.", zh: "进站前先把 teamLab 门票准备好。" },
+							maps: "Nagai+Park+Osaka",
+							food: "N/A"
+						},
+						{
+							time: "19:50",
+							title: { en: "teamLab Botanical Garden Osaka", zh: "teamLab Botanical Garden Osaka" },
+							type: "sight",
+							duration: "90m",
+							route: { en: "Nagai Park night walk / installation experience", zh: "长居公园夜间步行 / 灯光装置体验" },
+							p2p: { en: "Nagai Station area → park entrance → teamLab route", zh: "长居站一带 → 公园入口 → teamLab 动线" },
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: {
+								en: "Once inside Nagai Park, follow the teamLab route through the garden installations.",
+								zh: "进入长居公园后，依 teamLab 动线步行参观装置。"
+							},
+							estTime: { en: "75–90 min", zh: "约 75–90 分钟" },
+							tips: { en: "This works best as a dedicated night stop, not something squeezed into the daytime shopping flow.", zh: "这里最适合当作独立夜间景点，不要夹在白天购物行程中间。" },
+							bestTime: { en: "After full darkness.", zh: "天色完全变暗后最佳。" },
+							sakura: { en: "This is a digital night-garden experience rather than a seasonal blossom stop.", zh: "这是数位夜间花园体验，不是季节赏樱点。" },
+							notes: { en: "Wear comfortable shoes and keep your phone battery healthy for low-light photos.", zh: "请穿舒适鞋，并预留手机电量拍夜景照片。" },
+							maps: "teamLab+Botanical+Garden+Osaka",
+							food: "N/A"
+						},
+						{
+							time: "21:35",
 							title: { en: "Back to Hotel", zh: "返回酒店" },
 							type: "hotel",
-							duration: "N/A",
-							route: { en: "Dinner → hotel", zh: "晚餐 → 酒店" },
-							p2p: { en: "Dotonbori / Shinsaibashi → hotel", zh: "道顿堀 / 心斋桥 → 酒店" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "Short last-night return.", zh: "最后一晚短距离返回。" },
-							estTime: { en: "5–15 min", zh: "约 5–15 分钟" },
-							tips: { en: "Final packing tonight; separate airport-train essentials from checked luggage.", zh: "今晚完成最终整理，把机场段必需品和托运行李分开。" },
-							bestTime: { en: "Do not delay packing until morning.", zh: "不要把整理行李拖到明早。" },
-							sakura: { en: "Tomorrow is logistics-first, not sightseeing-first.", zh: "明天以交通与收尾为主，不是观光日。" },
-							notes: { en: "Check outlet opening time and your flight buffer once more.", zh: "再确认一次 outlet 开门时间和航班缓冲。" },
+							duration: "45m",
+							route: { en: "teamLab / Nagai → hotel", zh: "teamLab / 长居 → 酒店" },
+							p2p: { en: "Nagai Station → Osaka Metro Midosuji Line → hotel area", zh: "长居站 → 大阪地铁御堂筋线 → 酒店区域" },
+							transport: { en: "Osaka Metro Midosuji Line + walk", zh: "大阪地铁御堂筋线 + 步行" },
+							transportDetail: {
+								en: "Take Midosuji Line back north, then walk from your nearest station to the hotel.",
+								zh: "搭御堂筋线北上回程，再从最近车站步行回酒店。"
+							},
+							estTime: { en: "30–45 min", zh: "约 30–45 分钟" },
+							tips: { en: "Keep the return simple — tomorrow is still a transit day.", zh: "回程尽量简单，明天仍是交通收尾日。" },
+							bestTime: { en: "As soon as you finish teamLab.", zh: "teamLab 结束后尽快回去最好。" },
+							sakura: { en: "No more sakura segments tonight.", zh: "今晚没有其他赏樱安排。" },
+							notes: { en: "Do final packing tonight if not already done.", zh: "若还没整理好，今晚请完成最后打包。" },
 							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
 							food: "N/A"
 						}
