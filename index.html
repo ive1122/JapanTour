@@ -430,7 +430,32 @@
 				noMap: "此项目没有地图链接"
 			}
 		};
+		
+		const defaultBilingual = (en = "N/A", zh = "N/A") => ({ en, zh });
 
+		function normalizeEvent(ev) {
+			return {
+				time: ev.time || "",
+				title: ev.title || defaultBilingual("Untitled", "未命名"),
+				type: ev.type || "sight",
+				duration: ev.duration || "0m",
+				route: typeof ev.route === "string" ? defaultBilingual(ev.route, ev.route) : (ev.route || defaultBilingual()),
+				p2p: typeof ev.p2p === "string" ? defaultBilingual(ev.p2p, ev.p2p) : (ev.p2p || defaultBilingual()),
+				transport: typeof ev.transport === "string" ? defaultBilingual(ev.transport, ev.transport) : (ev.transport || defaultBilingual()),
+				transportDetail: typeof ev.transportDetail === "string"
+					? defaultBilingual(ev.transportDetail, ev.transportDetail)
+					: (ev.transportDetail || defaultBilingual()),
+				estTime: typeof ev.estTime === "string" ? defaultBilingual(ev.estTime, ev.estTime) : (ev.estTime || defaultBilingual()),
+				tips: typeof ev.tips === "string" ? defaultBilingual(ev.tips, ev.tips) : (ev.tips || defaultBilingual()),
+				bestTime: typeof ev.bestTime === "string" ? defaultBilingual(ev.bestTime, ev.bestTime) : (ev.bestTime || defaultBilingual()),
+				sakura: typeof ev.sakura === "string" ? defaultBilingual(ev.sakura, ev.sakura) : (ev.sakura || defaultBilingual()),
+				notes: typeof ev.notes === "string" ? defaultBilingual(ev.notes, ev.notes) : (ev.notes || defaultBilingual()),
+				maps: ev.maps || "",
+				food: ev.food || "N/A",
+				mustTry: Array.isArray(ev.mustTry) ? ev.mustTry : []
+			};
+		}
+		
 		const data = {
 			days: [
 				{
@@ -604,49 +629,101 @@
 				{
 					date: "Mar 31",
 					weekday: { en: "Tue", zh: "周二" },
-					reminder: {
+					reminders: [{
 						en: "No pass needed. Use ICOCA. Plan Umeda Sky around sunset (~6:17 PM).",
 						zh: "无需周游卡，使用ICOCA。梅田蓝天大厦建议安排在日落时间（约18:17）。"
-					},
+					}],
 					events: [
 						{
 							time: "08:30",
-							type: "hotel",
 							title: { en: "Depart Hotel", zh: "酒店出发" },
-							route: "Shinsaibashi → Tanimachiyonchome",
-							transport: "Osaka Metro (Midosuji → Chuo Line)",
-							transportDetail: {
-								en: "Midosuji Line (Shinsaibashi → Hommachi), transfer to Chuo Line → Tanimachiyonchome",
-								zh: "御堂筋线（心斋桥→本町），转中央线→谷町四丁目"
+							type: "hotel",
+							duration: "25m",
+							route: { 
+								en: "Shinsaibashi → Hommachi → Tanimachiyonchome", 
+								zh: "心斋桥 → 本町 → 谷町四丁目" 
 							},
-							duration: "25 min",
-							tips: "Morning commute hour — slightly crowded.",
+							p2p: { 
+								en: "Hotel → Osaka Castle area", 
+								zh: "酒店 → 大阪城区域" 
+							},
+							transport: { en: "Osaka Metro", zh: "大阪地铁" },
+							transportDetail: { 
+								en: "Midosuji Line to Hommachi, transfer to Chuo Line → Tanimachiyonchome", 
+								zh: "御堂筋线至本町，换乘中央线至谷町四丁目" 
+							},
+							estTime: { en: "20–30 min total transit", zh: "约20–30分钟" },
+							bestTime: { en: "Morning gives best lighting and fewer crowds.", 
+								zh: "上午光线好且人少。" },
+							tips: { 
+								en: "Morning commute hour — trains may be slightly crowded.", 
+								zh: "早高峰时间，地铁会稍微拥挤。" 
+							},
 							maps: "Tanimachiyonchome+Station"
 						},
 						{
 							time: "09:15",
-							type: "sight",
 							title: { en: "Osaka Castle Park", zh: "大阪城公园" },
-							route: "Walk from station",
-							transport: "Walk",
-							duration: "2.5 hrs",
-							tips: "Visit Nishinomaru Garden for best sakura view.",
-							notes: {
-								en: "Castle tower ticket ~¥600 if entering. Wide park — expect walking.",
-								zh: "天守阁门票约600日元（如入内）。园区较大，需要步行。"
+							type: "sight",
+							duration: "150m",
+							route: { 
+								en: "Station → Osaka Castle inner grounds → Nishinomaru Garden", 
+								zh: "车站 → 大阪城园区 → 西之丸庭园" 
+							},
+							p2p: { 
+								en: "Station exit → castle grounds → sakura lawn", 
+								zh: "地铁出口 → 城内区域 → 樱花草坪" 
+							},
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { 
+								en: "Flat walking route with multiple entrances — follow signs toward Nishinomaru Garden.", 
+								zh: "路线平坦，有多个入口，跟随指示前往西之丸庭园。" 
+							},
+							estTime: { en: "10–15 min walk + 2–2.5 hrs explore", zh: "步行10–15分钟 + 游览约2–2.5小时" },
+							tips: { 
+								en: "Go straight to Nishinomaru Garden first for the iconic castle + sakura view before crowds build.", 
+								zh: "建议先直奔西之丸庭园，避开人群拍经典城堡+樱花画面。" 
+							},
+							bestTime: { 
+								en: "Morning gives best lighting and fewer crowds.", 
+								zh: "上午光线好且人少。" 
+							},
+							sakura: { 
+								en: "One of Osaka’s top sakura spots with wide open viewing lawns.", 
+								zh: "大阪最经典赏樱地之一，草坪开阔视野好。" 
+							},
+							notes: { 
+								en: "Castle tower entry ~¥600 if interested. Expect a lot of walking inside the park.", 
+								zh: "天守阁门票约600日元，如入内参观。园区较大需多步行。" 
 							},
 							maps: "Osaka+Castle+Park"
 						},
 						{
 							time: "12:00",
-							type: "meal",
 							title: { en: "Lunch: Tonkatsu Daiki", zh: "午餐：大木炸猪排" },
-							route: "Near castle area",
-							transport: "Walk",
-							duration: "1 hr",
+							type: "meal",
+							duration: "60m",
+							route: { 
+								en: "Osaka Castle area → nearby tonkatsu restaurant", 
+								zh: "大阪城区域 → 附近炸猪排店" 
+							},
+							p2p: { 
+								en: "Park exit → restaurant", 
+								zh: "公园出口 → 餐厅" 
+							},
+							transport: { en: "Walk", zh: "步行" },
+							transportDetail: { 
+								en: "Short walk from castle area depending on exit used.", 
+								zh: "根据出口不同，步行距离略有差异。" 
+							},
+							estTime: { en: "10–15 min walk + 45–60 min meal", zh: "步行10–15分钟 + 用餐45–60分钟" },
 							mustTry: [
-								{ n: "Tonkatsu Set", s: "Daiki", d: "Juicy premium pork cutlet" }
+								{ n: "Tonkatsu Set", s: "Daiki", d: "Juicy thick-cut pork cutlet" }
 							],
+							tips: { 
+								en: "Arrive slightly before peak lunch to avoid queue.", 
+								zh: "建议稍早到达，避开排队。" 
+							},
 							maps: "Tonkatsu+Daiki+Osaka"
 						},
 						{
@@ -742,20 +819,10 @@
 				{
 					date: "Apr 01",
 					weekday: { en: "Wed", zh: "周三" },
-					ticket: { en: "ICOCA / Keihan Pass", zh: "ICOCA / 京阪观光券" },
+					ticket: { en: "Keihan Pass / ICOCA", zh: "京阪电铁券 / ICOCA" },
 					reminders: [
-						{
-							en: "Keihan is useful today, but note that limited express trains do not stop at Fushimi-inari Station.",
-							zh: "今天京阪很好用，但请注意特急列车不停 Fushimi-inari 站。"
-						},
-						{
-							en: "Keep Fushimi Inari efficient today — lower and mid sections are enough if you also want Kiyomizu, Ninenzaka, Gion, and Philosopher’s Path.",
-							zh: "今天伏见稻荷建议走精华版即可——如果还要兼顾清水寺、二年坂、祇园和哲学之道，下段到中段就够了。"
-						},
-						{
-							en: "Lunch and dessert are placed in Higashiyama / Gion so the afternoon flows better and feels less rushed.",
-							zh: "午餐和甜点都安排在东山 / 祇园一带，这样下午路线更顺，也不会太赶。"
-						}
+						{ en: "High fatigue day (20k+ steps). Wear your most supportive shoes.", zh: "高强度步行日（2万步以上）。请穿着最舒适的鞋子。" },
+						{ en: "Kyoto buses will be extremely packed; use trains or taxis as suggested.", zh: "京都巴士会非常拥挤；建议按提示搭乘电铁或出租车。" }
 					],
 					events: [
 						{
@@ -763,262 +830,195 @@
 							title: { en: "Depart Hotel", zh: "出发前往京都" },
 							type: "hotel",
 							duration: "75m",
-							route: { en: "Osaka base → Yodoyabashi / Keihan → Fushimi-inari area", zh: "大阪住宿区 → 淀屋桥 / 京阪 → 伏见稻荷区域" },
+							route: { en: "Osaka base → Yodoyabashi → Fushimi-inari", zh: "大阪住宿区 → 淀屋桥 → 伏见稻荷" },
 							p2p: { en: "Hotel → Keihan Main Line → Fushimi-inari Station", zh: "酒店 → 京阪本线 → 伏见稻荷站" },
 							transport: { en: "Keihan Main Line", zh: "京阪本线" },
 							transportDetail: {
-								en: "At Yodoyabashi, board only a Keihan train marked Local, Sub-express, or Express, and confirm Fushimi-inari appears on the platform display / stop list before boarding.",
-								zh: "在淀屋桥时，只搭乘标示为 Local（普通）、Sub-express（准急）或 Express（急行）的京阪列车，并在上车前确认月台显示或停靠站列表里有 Fushimi-inari。"
+								en: "Board Local, Sub-express, or Express at Yodoyabashi. Confirm Fushimi-inari stops on the platform display.",
+								zh: "在淀屋桥搭乘 Local（普通）、Sub-express（准急）或 Express（急行）。上车前确认显示屏有停靠 Fushimi-inari。"
 							},
-							estTime: { en: "About 60–75 min from Osaka base depending on connection", zh: "视转乘情况约 60–75 分钟" },
+							estTime: { en: "60–75 min", zh: "60–75 分钟" },
 							tips: {
-								en: "Do not board just because it is the fastest train. Check the departure board: if Fushimi-inari is shown in the stop list, you are safe; if not, wait for the next train.",
-								zh: "不要因为看起来最快就直接上车。先看发车看板：如果停靠站列表里有 Fushimi-inari 就可以搭；如果没有，就等下一班。"
+								en: "Check the departure board: if Fushimi-inari is in the stop list, you are safe; if not, wait for the next train.",
+								zh: "看发车看板：如果停靠站列表里有 Fushimi-inari 就可以搭；如果没有，就等下一班。"
 							},
-							bestTime: { en: "Earlier is dramatically better for Fushimi Inari.", zh: "越早到，对伏见稻荷体验越有帮助。" },
-							sakura: { en: "Today mixes shrine gates, old Kyoto streets, Gion atmosphere, and blossom walks.", zh: "今天是神社、老京都街区、祇园氛围与樱花步道混合型行程。" },
-							notes: { 
-								en: "Simple rule: Local / Sub-express / Express are the safest choices for Fushimi Inari. When unsure, ask station staff before entering the train.",
-								zh: "简单规则：前往伏见稻荷时，Local / Sub-express / Express 最稳妥。若仍不确定，上车前先问站务人员。"
+							bestTime: { en: "Earlier is better for crowd-free photos.", zh: "越早到，越容易拍到没人干扰的照片。" },
+							sakura: { en: "Shrine gates & early morning light.", zh: "神社鸟居与晨光美景。" },
+							notes: { 
+								en: "Simple rule: Local / Sub-express / Express are the safest choices for Fushimi Inari.",
+								zh: "简单规则：前往伏见稻荷时，Local / Sub-express / Express 最稳妥。"
 							},
 							maps: "Yodoyabashi+Station",
 							food: "N/A"
 						},
 						{
-							time: "08:45",
-							title: { en: "Fushimi Inari Taisha", zh: "伏见稻荷大社" },
+							time: "09:00",
+							title: { en: "Fushimi Inari-taisha", zh: "伏见稻荷大社" },
 							type: "sight",
-							duration: "85m",
-							route: { en: "Fushimi-inari Station / JR Inari → shrine entrance → lower torii paths", zh: "伏见稻荷站 / JR 稻荷站 → 神社入口 → 下段千本鸟居步道" },
-							p2p: { en: "Keihan Fushimi-inari Station → shrine → lower / mid torii walk", zh: "京阪伏见稻荷站 → 神社 → 下段 / 中段鸟居步道" },
-							transport: { en: "Train + walk", zh: "电车 + 步行" },
-							transportDetail: {
-								en: "Keihan Fushimi-inari Station is a short walk from the shrine; JR Inari is even closer.",
-								zh: "京阪伏见稻荷站步行即可到神社；JR 稻荷站会更近一些。"
-							},
-							estTime: { en: "75–85 min is enough for the strongest lower and mid sections", zh: "走精华的下段与中段约 75–85 分钟就足够" },
-							tips: { en: "Do not try to summit the mountain today — protect time for Higashiyama and Gion later.", zh: "今天不建议登顶；把时间留给后面的东山与祇园。" },
-							bestTime: { en: "Early morning before tour buses pile in.", zh: "早上、旅行团到之前最理想。" },
-							sakura: { en: "This stop is more torii-and-shrine atmosphere than peak blossom density.", zh: "这里更偏重鸟居与神社氛围，不是樱花最密集的一站。" },
-							notes: { en: "Keeping this stop tighter makes the rest of Kyoto much more enjoyable.", zh: "把这里收紧一点，后面的京都段会轻松很多。" },
+							duration: "90m",
+							route: { en: "Fushimi-inari Station → Main Shrine → Senbon Torii", zh: "伏见稻荷站 → 正殿 → 千本鸟居" },
+							p2p: { en: "Fushimi-inari Station → 5 min walk", zh: "伏见稻荷站 → 步行5分钟" },
+							transport: { en: "Walking", zh: "步行" },
+							transportDetail: { en: "Follow the signs from the station directly to the vermilion gates.", zh: "从车站按照指示牌直接前往朱红色大门。" },
+							estTime: { en: "90 min exploring", zh: "游览约 90 分钟" },
+							tips: { en: "Walk past the first dense crowd to the 'Senbon Torii' split for the best photography.", zh: "走过最初的人群到“千本鸟居”分岔口，那里拍照效果最好。" },
+							bestTime: { en: "09:00 AM before tour groups arrive.", zh: "上午9点前，在大批旅行团抵达之前。" },
+							sakura: { en: "Contrast of vermilion gates and seasonal greenery.", zh: "朱红鸟居与季节性绿植的鲜明对比。" },
+							notes: { en: "Check the street stalls near the station for grilled mochi (beef-free).", zh: "车站附近的街头小摊有烤麻糬（不含牛肉），值得尝试。" },
 							maps: "Fushimi+Inari+Taisha",
-							food: "Inari sushi / shrine approach snacks"
+							food: "Grilled Mochi / Tea"
 						},
 						{
-							time: "10:30",
-							title: { en: "Transfer to Kiyomizu Area", zh: "前往清水寺区域" },
-							type: "transport",
-							duration: "45m",
-							route: { en: "Fushimi area → Keihan / local transit → Kiyomizu-Gojo side", zh: "伏见区域 → 京阪 / 市内交通 → 清水五条侧" },
-							p2p: { en: "Fushimi-inari Station → Kiyomizu-Gojo area → uphill approach", zh: "伏见稻荷站 → 清水五条区域 → 上坡接近寺院" },
-							transport: { en: "Keihan + walk", zh: "京阪 + 步行" },
-							transportDetail: {
-								en: "The rail segment is straightforward, but the final uphill approach takes time and energy.",
-								zh: "电车段不复杂，但最后上坡接近寺院会比较花时间和体力。"
-							},
-							estTime: { en: "35–45 min total", zh: "全程约 35–45 分钟" },
-							tips: { en: "Do not underestimate the uphill section in Higashiyama.", zh: "不要低估东山区域最后那段上坡。" },
-							bestTime: { en: "Late morning transfer keeps the day balanced.", zh: "上午后段移动，整天节奏会更平衡。" },
-							sakura: { en: "You are now moving into the most classic Kyoto street-and-temple zone.", zh: "现在正进入京都最经典的寺院与街景区域。" },
-							notes: { en: "This is where the day shifts from shrine atmosphere into old Kyoto streets.", zh: "这里开始从神社氛围切换到老京都街区风格。" },
-							maps: "Kiyomizu-Gojo+Station",
-							food: "N/A"
-						},
-						{
-							time: "11:15",
-							title: { en: "Kiyomizu-dera", zh: "清水寺" },
+							time: "11:00",
+							title: { en: "Kiyomizu-dera Temple", zh: "清水寺" },
 							type: "sight",
 							duration: "75m",
-							route: { en: "Kiyomizu-Gojo side → slope streets → Kiyomizu-dera", zh: "清水五条侧 → 坡道街区 → 清水寺" },
-							p2p: { en: "Station area → uphill walk → Kiyomizu-dera precinct", zh: "车站区域 → 上坡步行 → 清水寺区域" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "This is mainly a walking segment once you reach the base area.",
-								zh: "到了山脚区域后，基本就是步行段。"
-							},
-							estTime: { en: "60–75 min", zh: "约 60–75 分钟" },
-							tips: { en: "See the main stage first, then descend naturally into the preserved streets below.", zh: "先看清水寺主舞台，再自然往下走进保留街区。" },
-							bestTime: { en: "Late morning into early afternoon.", zh: "上午后段到下午前段。" },
-							sakura: { en: "Temple terraces and surrounding slopes are especially photogenic in blossom season.", zh: "樱花季时寺院舞台与周边坡道非常上镜。" },
-							notes: { en: "Do not leave this area too quickly — your next classic Kyoto spots are directly below.", zh: "不要太快离开这里，下面紧接着就是京都最经典的街区段。" },
+							route: { en: "Fushimi-inari → Kiyomizu-Gojo → Kiyomizu-dera", zh: "伏见稻荷 → 清水五条 → 清水寺" },
+							p2p: { en: "Keihan Line → 20 min uphill walk", zh: "京阪电铁 → 20分钟上坡步行" },
+							transport: { en: "Keihan Line + Walking", zh: "京阪本线 + 步行" },
+							transportDetail: { en: "Exit Keihan Kiyomizu-Gojo and walk up Chawan-zaka to reach the temple.", zh: "从京阪清水五条站出站，沿着茶碗坂走上山抵达寺庙。" },
+							estTime: { en: "75 min", zh: "75 分钟" },
+							tips: { en: "Head straight to the wooden stage for the panoramic view of the pagoda surrounded by sakura.", zh: "直接前往木质大舞台，拍摄被樱花环绕的三重塔全景。" },
+							bestTime: { en: "Late morning for clear views over the city.", zh: "上午晚些时候，城市上空的视野最清晰。" },
+							sakura: { en: "Stunning pink blossoms framing the ancient wooden architecture.", zh: "粉嫩樱花簇拥着古老的木质建筑。" },
+							notes: { en: "The temple grounds are large; focus on the Main Hall and the Otowa Waterfall.", zh: "寺庙范围很大；重点关注大殿和音羽之瀑。" },
 							maps: "Kiyomizu-dera",
-							food: "Kyoto sweets / yatsuhashi"
-						},
-						{
-							time: "12:30",
-							title: { en: "Ninenzaka & Sannenzaka Walk", zh: "二年坂・三年坂散步" },
-							type: "sight",
-							duration: "45m",
-							route: { en: "Kiyomizu-dera → Sannenzaka → Ninenzaka → Yasaka Pagoda area", zh: "清水寺 → 三年坂 → 二年坂 → 八坂塔一带" },
-							p2p: { en: "Temple exit → downhill preserved streets → Yasaka Pagoda / Higashiyama lanes", zh: "寺院出口 → 下坡传统街道 → 八坂塔 / 东山巷弄" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "This is the classic old-Kyoto walking section directly below Kiyomizu-dera, so no transport is needed.",
-								zh: "这里就是清水寺下方最经典的老京都街区，全程不需要搭车。"
-							},
-							estTime: { en: "40–45 min depending on photo stops", zh: "依拍照停留约 40–45 分钟" },
-							tips: { en: "Walk downhill naturally instead of backtracking.", zh: "顺着下坡自然走，不要折返。" },
-							bestTime: { en: "Early afternoon while there is still good light on the streets.", zh: "下午前段、街区还有好光线时最美。" },
-							sakura: { en: "This stop is more about preserved Kyoto atmosphere than dense sakura, but it is one of the most iconic Kyoto experiences.", zh: "这里更偏重传统京都街景氛围，不是高密度樱花点，但绝对是最经典的京都体验之一。" },
-							notes: { en: "This should happen before lunch because you are already flowing downhill through the street.", zh: "这里应排在午餐前，因为你已经顺着街区往下走了。" },
-							maps: "Ninenzaka+Kyoto",
-							food: "Matcha soft serve / yatsuhashi / dango"
-						},
-						{
-							time: "13:20",
-							title: { en: "Lunch: Higashiyama / Gion Edge", zh: "午餐：东山 / 祇园边缘" },
-							type: "meal",
-							duration: "55m",
-							route: { en: "Ninenzaka / Sannenzaka → nearby lunch stop", zh: "二年坂 / 三年坂 → 附近午餐点" },
-							p2p: { en: "Historic street zone → nearby lunch", zh: "传统街区 → 附近午餐" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "Keeping lunch here removes backtracking and gives you a real energy reset before the afternoon.",
-								zh: "把午餐放在这里可以减少折返，也能在下午前真正补充体力。"
-							},
-							estTime: { en: "Short walk + lunch", zh: "短距离步行加午餐" },
-							tips: { en: "A proper seated lunch here is better than eating too early near Fushimi Inari.", zh: "在这里好好坐下来吃午餐，会比在伏见稻荷太早吃更合理。" },
-							bestTime: { en: "Right after the downhill Higashiyama street walk.", zh: "走完东山下坡经典街区后最顺。" },
-							sakura: { en: "This keeps your strongest Kyoto street section in the middle of the day instead of compressing it too late.", zh: "这样能把京都最经典的街区段放在白天中段，而不是压缩到太后面。" },
-							notes: { en: "Good area for light Kyoto-style lunch and sweets.", zh: "很适合安排轻量京都风午餐。" },
-							maps: "Ninenzaka+Kyoto",
-							food: "Kyoto café lunch / udon / set meal"
-						},
-						{
-							time: "14:20",
-							title: { en: "Gion (Hanamikoji Street)", zh: "祇园（花见小路）" },
-							type: "sight",
-							duration: "40m",
-							route: { en: "Yasaka / Higashiyama → Gion Hanamikoji", zh: "八坂 / 东山 → 祇园花见小路" },
-							p2p: { en: "Higashiyama preserved streets → Gion / Hanamikoji Street", zh: "东山保留街区 → 祇园 / 花见小路" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "This is a natural continuation from Ninenzaka and lunch; no extra transport is needed.",
-								zh: "从二年坂和午餐点接祇园非常自然，不需要额外搭车。"
-							},
-							estTime: { en: "35–40 min", zh: "约 35–40 分钟" },
-							tips: { en: "Short visit is enough — keep the energy for the final sakura walk later.", zh: "简单逛就够了，把体力留给后面的赏樱步道。" },
-							bestTime: { en: "Mid-afternoon.", zh: "下午中段。" },
-							sakura: { en: "Gion is more about Kyoto atmosphere and preserved streets than sakura density.", zh: "祇园更重京都氛围与保留街区感，不是樱花密度取胜。" },
-							notes: { en: "This remains realistic because Fushimi Inari was shortened earlier.", zh: "因为前面缩短了伏见稻荷，所以这里仍是合理可行的。" },
-							maps: "Hanamikoji+Street+Kyoto",
-							food: "Tea houses / snack stop"
-						},
-						{
-							time: "15:05",
-							title: { en: "Matcha Dessert Break (Gion)", zh: "抹茶甜点休息（祇园）" },
-							type: "meal",
-							duration: "40m",
-							route: { en: "Gion stroll → nearby dessert stop", zh: "祇园散步 → 附近甜点休息" },
-							p2p: { en: "Hanamikoji area → dessert café", zh: "花见小路一带 → 甜点店" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "All dessert stops here are within walking distance in Gion / Higashiyama.",
-								zh: "这里的甜点店都在祇园 / 东山范围内，步行即可。"
-							},
-							estTime: { en: "30–40 min rest break", zh: "约 30–40 分钟休息" },
-							tips: { en: "This is the intentional rest point that makes the afternoon feel much easier.", zh: "这是刻意安排的休息点，会让整个下午轻松很多。" },
-							bestTime: { en: "Mid-afternoon rest before the final transfer.", zh: "最终转移前的下午休息最合理。" },
-							sakura: { en: "A cultural Kyoto pause rather than a blossom stop.", zh: "这是京都文化感的休息点，不是赏樱点。" },
-							notes: { en: "Good picks: Tsujiri, matcha parfait, warabi mochi, or a lighter café stop.", zh: "推荐：祇园辻利、抹茶百汇、蕨饼，或较轻量的咖啡休息。" },
-							maps: "Tsujiri+Gion+Kyoto",
-							food: "Matcha parfait / warabi mochi / dessert break"
-						},
-						{
-							time: "16:00",
-							title: { en: "Transfer to Philosopher's Path", zh: "前往哲学之道" },
-							type: "transport",
-							duration: "30m",
-							route: { en: "Gion / Higashiyama side → local bus or taxi approach → Philosopher’s Path access", zh: "祇园 / 东山区域 → 公车或出租车接近 → 哲学之道入口" },
-							p2p: { en: "Gion area → Philosopher’s Path access point", zh: "祇园区域 → 哲学之道入口" },
-							transport: { en: "Bus preferred / taxi if behind", zh: "优先巴士 / 若落后可改出租车" },
-							transportDetail: {
-								en: "Kyoto buses can be slow; if you are clearly behind, taking a taxi here is the smartest time-saving move.",
-								zh: "京都公车容易慢；若明显落后，这一段改搭出租车是最省时间的决定。"
-							},
-							estTime: { en: "20–30 min", zh: "约 20–30 分钟" },
-							tips: { en: "This is the only fragile transfer of the day, so stay flexible.", zh: "这是今天最脆弱的一段转移，务必保持弹性。" },
-							bestTime: { en: "Leave Gion before the evening traffic gets worse.", zh: "尽量在傍晚交通更拥挤前离开祇园。" },
-							sakura: { en: "The goal is to protect enough time for the final blossom walk.", zh: "这段的目的就是确保最后一段赏樱步道还有足够时间。" },
-							notes: { en: "If the day is badly delayed, skip this transfer and end in Gion instead.", zh: "若当天严重延误，可直接放弃这段，把祇园当作京都收尾。" },
-							maps: "Philosopher's+Path+Kyoto",
 							food: "N/A"
 						},
 						{
-							time: "16:35",
+							time: "12:15",
+							title: { en: "Ninenzaka & Sannenzaka Walk", zh: "二年坂 & 三年坂漫步" },
+							type: "sight",
+							duration: "60m",
+							route: { en: "Kiyomizu-dera Exit → Sannenzaka → Ninenzaka", zh: "清水寺出口 → 三年坂 → 二年坂" },
+							p2p: { en: "Downhill walk from the temple's main gate", zh: "从寺庙大门开始下坡步行" },
+							transport: { en: "Walking", zh: "步行" },
+							transportDetail: { en: "Pedestrian-only stone-paved streets through preserved districts.", zh: "穿过保护区且仅限步行的石板街道。" },
+							estTime: { en: "60 min including photo stops", zh: "包含拍照停靠约 60 分钟" },
+							tips: { en: "The iconic photo of Hokan-ji Temple (Yasaka Pagoda) is taken from the top of Sannenzaka looking down.", zh: "经典的法观寺（八坂塔）照片是从三年坂顶端向下俯拍的。" },
+							bestTime: { en: "Midday light is great for capturing the textures of the wooden buildings.", zh: "正午光线非常适合捕捉木质建筑的质感。" },
+							sakura: { en: "Look for weeping cherry trees peeking over traditional earthen walls.", zh: "留意从传统土墙后探出头来的垂枝樱。" },
+							notes: { en: "Many shops here sell traditional crafts and 'no-beef' snacks like Mitarashi Dango.", zh: "这里的许多商店出售传统工艺品和御手洗团子等不含牛肉的小吃。" },
+							maps: "Sannenzaka",
+							food: "Mitarashi Dango / Matcha"
+						},
+						{
+							time: "13:30",
+							title: { en: "Lunch: Tonkatsu Katsukura", zh: "午餐：名代猪排 Katsukura" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Ninenzaka → Gion area", zh: "二年坂 → 祇园区域" },
+							p2p: { en: "15 min walk downhill toward Shijo-dori", zh: "向四条通方向下坡步行15分钟" },
+							transport: { en: "Walking", zh: "步行" },
+							transportDetail: { en: "Transition from the hills of Higashiyama into the Gion district.", zh: "从东山的山丘地带进入祇园地区。" },
+							estTime: { en: "15 min walk", zh: "步行 15 分钟" },
+							tips: { en: "This shop specializes in premium pork; it is a safe, high-quality beef-free environment.", zh: "这家店专注于高级炸猪排；不涉及牛肉，环境优质安全。" },
+							bestTime: { en: "1:30 PM is slightly after the peak lunch rush.", zh: "1:30 PM 刚好避开了正午的用餐高峰。" },
+							sakura: { en: "N/A - Indoor dining", zh: "N/A - 室内用餐" },
+							notes: { en: "Kyoto-style tonkatsu is known for its light, crispy panko breadcrumbs.", zh: "京都风味的炸猪排以其轻盈酥脆的面包糠而闻名。" },
+							maps: "Katsukura+Gion",
+							food: "Premium Pork Tonkatsu"
+						},
+						{
+							time: "15:00",
+							title: { en: "Buffer: Taxi to Ginkaku-ji", zh: "缓冲建议：打车前往银阁寺" },
+							type: "transport",
+							duration: "20m",
+							route: { en: "Gion area → Northeast Kyoto", zh: "祇园区域 → 京都东北部" },
+							p2p: { en: "Taxi Stand near Shijo-dori → Ginkaku-ji entrance", zh: "四条通附近的计程车站 → 银阁寺入口" },
+							transport: { en: "Taxi", zh: "出租车" },
+							transportDetail: { en: "Avoid the #100/203 buses which will be stuck in traffic and standing-room only.", zh: "避开100/203路巴士，那时会非常拥堵且完全没有座位。" },
+							estTime: { en: "15–20 min", zh: "15–20 分钟" },
+							tips: { en: "Expect to pay about ¥2,000. It is worth it to save your legs for the cherry blossom walk.", zh: "预计车费约 2,000 日元。为了接下来的樱花步道保存体力非常值得。" },
+							bestTime: { en: "Mid-afternoon to catch the soft light on the path.", zh: "下午中段，捕捉哲学之道的柔和光线。" },
+							sakura: { en: "N/A - Transit", zh: "N/A - 交通中" },
+							notes: { en: "Show the driver 'Ginkaku-ji' on your phone map.", zh: "给司机看手机地图上的“银阁寺”。" },
+							maps: "Ginkaku-ji",
+							food: "N/A"
+						},
+						{
+							time: "15:30",
 							title: { en: "Philosopher's Path", zh: "哲学之道" },
 							type: "sight",
 							duration: "60m",
-							route: { en: "Approach point → canal-side walking path", zh: "入口区域 → 沿运河步道" },
-							p2p: { en: "Access point → best sakura section of Philosopher’s Path", zh: "入口区域 → 哲学之道精华赏樱段" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: {
-								en: "Do the best partial stretch rather than forcing a full-length walk.",
-								zh: "建议只走最精华的一段，而不是硬走全程。"
-							},
-							estTime: { en: "45–60 min partial walk", zh: "精华段约 45–60 分钟" },
-							tips: { en: "If you are tired, shorten this and protect the return instead.", zh: "如果已经累了，就缩短这里，把体力留给回程。" },
-							bestTime: { en: "Late afternoon if light remains.", zh: "若还有光线，傍晚前后很美。" },
-							sakura: { en: "This is still one of Kyoto’s best cherry-blossom walks, even in a shortened version.", zh: "即使缩短，这里依然是京都最好的赏樱步道之一。" },
-							notes: { en: "This is now a better-balanced Kyoto day: Fushimi, Kiyomizu, Ninenzaka, lunch, Gion, dessert, then a shorter Philosopher’s Path.", zh: "现在这会是更平衡的京都日：伏见稻荷、清水寺、二年坂、午餐、祇园、甜点休息，最后接较精简的哲学之道。" },
-							maps: "Philosopher's+Path+Kyoto",
-							food: "Matcha tea / sweets nearby"
+							route: { en: "Ginkaku-ji → Canal walk south → Honen-in", zh: "银阁寺 → 沿运河向南走 → 法然院" },
+							p2p: { en: "Walk downhill from Ginkaku-ji directly onto the path", zh: "从银阁寺下坡直接进入步道" },
+							transport: { en: "Walking", zh: "步行" },
+							transportDetail: { en: "A flat, easy stroll alongside the canal.", zh: "沿着运河的平坦轻松步道。" },
+							estTime: { en: "60 min stroll", zh: "漫步约 60 分钟" },
+							tips: { en: "Stop at a small canal-side cafe for a matcha rest if needed.", zh: "如果有需要，可以在运河边的小咖啡馆喝杯抹茶休息一下。" },
+							bestTime: { en: "Late afternoon for the 'Sakura Tunnel' effect.", zh: "傍晚前，可以拍到完美的“樱花隧道”效果。" },
+							sakura: { en: "Dense cherry blossom trees hanging over the water.", zh: "浓密的樱花树垂落在水面上。" },
+							notes: { en: "This is one of Japan's Top 100 Cherry Blossom spots.", zh: "这是日本百大赏樱名所之一。" },
+							maps: "Philosopher's+Path",
+							food: "Matcha / Wagashi"
 						},
 						{
-							time: "17:45",
-							title: { en: "Return to Osaka", zh: "返回大阪" },
-							type: "transport",
-							duration: "75m",
-							route: { en: "Kyoto → Keihan / Metro return → Osaka base", zh: "京都 → 京阪 / 地铁回程 → 大阪住宿区" },
-							p2p: { en: "Kyoto side → Keihan return → Yodoyabashi / Osaka Metro → Namba / Shinsaibashi", zh: "京都一侧 → 京阪回程 → 淀屋桥 / 大阪地铁 → 难波 / 心斋桥" },
-							transport: { en: "Keihan / Metro", zh: "京阪 / 地铁" },
-							transportDetail: {
-								en: "Leave before the evening gets too heavy; this return timing works better than pushing dinner too late.",
-								zh: "不要拖到太晚才回程；这个回程时间比把晚餐拖太晚更舒服。"
-							},
-							estTime: { en: "60–75 min depending on transfer", zh: "视转乘约 60–75 分钟" },
-							tips: { en: "Keep return simple and skip extra detours.", zh: "回程尽量简单，不要再额外绕路。" },
-							bestTime: { en: "Late afternoon / early evening departure.", zh: "傍晚前后回程最合理。" },
-							sakura: { en: "Your Kyoto blossom day is complete by this point.", zh: "到这里为止，今天的京都赏樱重点已经完成。" },
-							notes: { en: "You now avoid the awkward long gap that used to happen before dinner.", zh: "这样就能避免原本晚餐前那段尴尬的长空档。" },
-							maps: "Yodoyabashi+Station",
+							time: "17:00",
+							title: { en: "Keage Incline", zh: "蹴上铁道" },
+							type: "sight",
+							duration: "45m",
+							route: { en: "Nanzen-ji area → Keage Station", zh: "南禅寺区域 → 蹴上站" },
+							p2p: { en: "10 min walk from the south end of Philosopher's Path", zh: "从哲学之道南端步行10分钟" },
+							transport: { en: "Walking", zh: "步行" },
+							transportDetail: { en: "Walk through the Nanzen-ji grounds to reach the incline.", zh: "穿过南禅寺境内即可到达铁道。" },
+							estTime: { en: "45 min for photos", zh: "停留拍照约 45 分钟" },
+							tips: { en: "The old railway tracks provide a unique leading line for honeymoon portraits.", zh: "废弃的旧铁道为蜜月写真提供了独特的透视构图。" },
+							bestTime: { en: "Sunset light makes the pink blossoms glow.", zh: "夕阳斜照会让粉色樱花呈现出发光的效果。" },
+							sakura: { en: "Massive cherry trees lining an old abandoned railway.", zh: "废弃铁道两旁种满了巨大的樱花树。" },
+							notes: { en: "Be careful walking on the uneven stones between tracks.", zh: "在铁轨间的石块上行走时请小心脚下。" },
+							maps: "Keage+Incline",
 							food: "N/A"
 						},
 						{
-							time: "19:00",
-							title: { en: "Dinner: Gyoza Ohsho", zh: "晚餐：王将饺子" },
-							type: "meal",
+							time: "18:30",
+							title: { en: "Maruyama Park Night Sakura", zh: "圆山公园夜樱" },
+							type: "sight",
 							duration: "60m",
-							route: { en: "Back in Osaka → quick dinner near Namba", zh: "回到大阪 → 难波附近快晚餐" },
-							p2p: { en: "Osaka return point → dinner", zh: "大阪回程落点 → 晚餐" },
-							transport: { en: "Metro / walk", zh: "地铁 / 步行" },
-							transportDetail: {
-								en: "Dinner soon after return feels more natural after today’s Kyoto route.",
-								zh: "以今天的京都路线来说，回到大阪后不久就吃晚餐会自然很多。"
-							},
-							estTime: { en: "Dinner soon after return", zh: "回到大阪后尽快吃晚餐" },
-							tips: { en: "Fast, salty, comforting dinner is a good call tonight.", zh: "今晚吃快速、咸香、舒服的晚餐最合理。" },
-							bestTime: { en: "Soon after getting back to Osaka.", zh: "回到大阪后不久就吃最好。" },
-							sakura: { en: "Sakura day is over; protect tomorrow’s energy.", zh: "今天赏樱段已结束，把体力留给明天。" },
-							notes: { en: "Charge cameras tonight for Arashiyama.", zh: "今晚记得给相机和手机充足电，明天去岚山。" },
-							maps: "Gyoza+no+Ohsho+Namba",
-							food: "Gyoza no Ohsho"
+							route: { en: "Keage → Maruyama Park (Gion)", zh: "蹴上 → 圆山公园（祇园）" },
+							p2p: { en: "Taxi (5 min) or Walk (20 min)", zh: "出租车（5分钟）或步行（20分钟）" },
+							transport: { en: "Taxi/Walking", zh: "出租车/步行" },
+							transportDetail: { en: "Short trip back toward the Gion area.", zh: "返回祇园区域的短途行程。" },
+							estTime: { en: "15 min", zh: "15 分钟" },
+							tips: { en: "Look for the legendary 'Gion Shidare' (Weeping Cherry) lit up in the center.", zh: "寻找公园中心那棵被灯光照亮的传奇“祇园枝垂樱”。" },
+							bestTime: { en: "18:30 - Just as the blue hour ends and lights are brightest.", zh: "18:30 - 蓝调时刻刚结束，灯光最亮的时刻。" },
+							sakura: { en: "Golden night illumination on weeping cherry trees.", zh: "枝垂樱上的金色夜间灯光秀。" },
+							notes: { en: "Many food stalls here, but double-check for beef ingredients before buying.", zh: "这里有很多小吃摊，但购买前请务必确认是否含有牛肉。" },
+							maps: "Maruyama+Park",
+							food: "Festival Snacks"
 						},
 						{
-							time: "20:15",
-							title: { en: "Back to Hotel", zh: "返回酒店" },
+							time: "19:45",
+							title: { en: "Dinner: Ramen or Gyoza in Gion", zh: "晚餐：祇园拉面或饺子" },
+							type: "meal",
+							duration: "60m",
+							route: { en: "Maruyama Park → Gion-Shijo area", zh: "圆山公园 → 祇园四条区域" },
+							p2p: { en: "10 min walk downhill to Shijo-dori", zh: "向四条通方向下坡步行10分钟" },
+							transport: { en: "Walking", zh: "步行" },
+							transportDetail: { en: "Explore the narrow alleys of Gion for cozy cooked food spots.", zh: "在祇园的小巷中寻找舒适的熟食店。" },
+							estTime: { en: "10 min walk", zh: "步行 10 分钟" },
+							tips: { en: "Look for shops offering Tonkotsu Ramen or Fried Rice to stay beef-free.", zh: "寻找提供猪骨拉面或炒饭的店，确保避开牛肉。" },
+							bestTime: { en: "Before 8:00 PM to avoid late-night drink crowds.", zh: "晚上8点前，避开深夜的饮酒人群。" },
+							sakura: { en: "The lit-up streets of Gion are incredibly atmospheric.", zh: "灯火通明的祇园街道非常有氛围。" },
+							notes: { en: "Gion has many hidden gems; don't be afraid to enter smaller shops.", zh: "祇园有很多隐藏的小店，不要害怕进入较小的餐厅。" },
+							maps: "Gion+Shijo",
+							food: "Ramen / Gyoza"
+						},
+						{
+							time: "21:00",
+							title: { en: "Return to Osaka", zh: "返回大阪" },
 							type: "hotel",
-							duration: "N/A",
-							route: { en: "Dinner → hotel", zh: "晚餐 → 酒店" },
-							p2p: { en: "Namba area → hotel", zh: "难波区域 → 酒店" },
-							transport: { en: "Walk", zh: "步行" },
-							transportDetail: { en: "Short return on foot.", zh: "短距离步行返回。" },
-							estTime: { en: "5–15 min", zh: "约 5–15 分钟" },
-							tips: { en: "Sleep early; Arashiyama rewards early starts more than almost anywhere else.", zh: "早点睡；岚山比多数地方更值得早出发。" },
-							bestTime: { en: "Do not let this become a late night.", zh: "这晚尽量不要拖太晚。" },
-							sakura: { en: "Tomorrow’s scenic train and river route can be spectacular in blossom season.", zh: "明天的岚山观光列车和河道段在樱花季会非常精彩。" },
-							notes: { en: "Prepare vouchers tonight.", zh: "今晚把预订凭证先整理好。" },
-							maps: "Smile+Hotel+Premium+Osaka+Shinsaibashi",
+							duration: "75m",
+							route: { en: "Gion-Shijo → Yodoyabashi → Shinsaibashi", zh: "祇园四条 → 淀屋桥 → 心斋桥" },
+							p2p: { en: "Gion-Shijo Station → Yodoyabashi Station → Hotel", zh: "祇园四条站 → 淀屋桥站 → 酒店" },
+							transport: { en: "Keihan Main Line + Osaka Metro", zh: "京阪本线 + 大阪地铁" },
+							transportDetail: { en: "Take the Keihan Limited Express (Red/Yellow train) to Yodoyabashi, then transfer to the Midosuji Line.", zh: "搭乘京阪特急（红黄车身）到淀屋桥，然后换乘御堂筋线。" },
+							estTime: { en: "60–75 min", zh: "60–75 分钟" },
+							tips: { en: "Keihan Limited Express trains are the same price as local ones but much faster.", zh: "京阪特急列车与普通列车价格相同，但速度快得多。" },
+							bestTime: { en: "By 21:00 to ensure a seat on the train back.", zh: "晚上9点前出发，以确保回程有座位。" },
+							sakura: { en: "Night view of the Kamogawa River from the station bridge.", zh: "从车站大桥上欣赏鸭川的夜景。" },
+							notes: { en: "Ensure your ICOCA has enough balance for the return trip.", zh: "确保你的 ICOCA 卡内有足够的余额支付回程车费。" },
+							maps: "Gion-Shijo+Station",
 							food: "N/A"
 						}
 					]
@@ -2043,7 +2043,7 @@
 		}
 
 		function showDetail(dayIdx, eventIdx) {
-			const ev = data.days[dayIdx].events[eventIdx];
+			const ev = normalizeEvent(data.days[dayIdx].events[eventIdx]);
 			const pane = document.getElementById('detail-card');
 			const mapUrl = mapsSearchUrl(ev.maps);
 			const embedUrl = mapsEmbedUrl(ev.maps);
